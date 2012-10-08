@@ -39,14 +39,34 @@ long getSymbolTableMaxId() {
     return maxId;
 }
 
-long registerSymbol(char *symbolVal, char *attribute) {
+entry *getSymbolEntry(char *symbolVal, char *attribute) {
     entry *tmpCursor = head;
     while(tmpCursor != NULL) {
         if(strcmp(tmpCursor->symbolVal, symbolVal) == 0
            && strcmp(tmpCursor->attribute, attribute) == 0) {
-            return tmpCursor->address;
+            return tmpCursor;
         }
         tmpCursor = tmpCursor->next;
+    }
+    return NULL;
+}
+
+entry *getSymbolEntryByAddr(long address) {
+    entry *tmpCursor = head;
+    while(tmpCursor != NULL) {
+        if(tmpCursor->address == address) {
+            return tmpCursor;
+        }
+        tmpCursor = tmpCursor->next;
+    }
+    return NULL;
+}
+
+
+long registerSymbol(char *symbolVal, char *attribute) {
+    entry *tmpCursor = getSymbolEntry(symbolVal, attribute);
+    if(tmpCursor != NULL) {
+        return tmpCursor->address;
     }
     if(tail == NULL) {
         tail = (entry *)(malloc(sizeof(entry)));
