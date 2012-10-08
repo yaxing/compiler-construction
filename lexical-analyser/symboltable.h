@@ -2,7 +2,6 @@
 //  symboltable.h
 //  compiler-lexer
 //
-//  Created by Yaxing Chen on 10/8/12.
 //  Copyright (c) 2012 Yaxing Chen. All rights reserved.
 //
 
