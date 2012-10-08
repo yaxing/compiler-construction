@@ -1,5 +1,11 @@
 %option noyywrap
 %{
+    //
+    //  symboltable.h
+    //  compiler-lexer
+    //
+    //  Copyright (c) 2012 Yaxing Chen. All rights reserved.
+    //
     #include<stdio.h>
     #include <string.h>
     #define AND  0;
