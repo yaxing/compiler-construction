@@ -44,10 +44,11 @@
     #define BRACE_R  39;
     #define BRACKET_L  40;
     #define BRACKET_R  41;
-    #define NUM  42;
-    #define ID  43;
-    #define STRING  44;
-    #define UNK  45;
+    #define INT 42;
+    #define NUM  43;
+    #define ID  44;
+    #define STRING  45;
+    #define UNK  46;
     
     char *symbol_names[] = {
         "AND",
@@ -92,6 +93,7 @@
         "BRACE_R",
         "BRACKET_L",
         "BRACKET_R",
+        "INT",
         "NUM",
         "ID",
         "STRING",
@@ -139,6 +141,7 @@ var {return VAR;}
 while {return WHILE;}
 
 {id} {return ID;}
+{int} {return INT;}
 {number} {return NUM;}
 {string} {return STRING;}
 
