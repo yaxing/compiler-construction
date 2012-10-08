@@ -39,6 +39,8 @@ long getSymbolTableMaxId() {
     return maxId;
 }
 
+//get a symbol table entry by symbol value and attribute
+//@return entry pointer
 entry *getSymbolEntry(char *symbolVal, char *attribute) {
     entry *tmpCursor = head;
     while(tmpCursor != NULL) {
@@ -51,6 +53,8 @@ entry *getSymbolEntry(char *symbolVal, char *attribute) {
     return NULL;
 }
 
+//get a symbol table entry by address
+//@return entry pointer
 entry *getSymbolEntryByAddr(long address) {
     entry *tmpCursor = head;
     while(tmpCursor != NULL) {
@@ -62,7 +66,8 @@ entry *getSymbolEntryByAddr(long address) {
     return NULL;
 }
 
-
+//register a symbol into symbol table
+//@return long the address of registered entry
 long registerSymbol(char *symbolVal, char *attribute) {
     entry *tmpCursor = getSymbolEntry(symbolVal, attribute);
     if(tmpCursor != NULL) {
