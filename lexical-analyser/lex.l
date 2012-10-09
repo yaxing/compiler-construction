@@ -127,7 +127,10 @@ ws     {delim}+
 number [+-]?{digit}+([\.]{digit}+)?
 expnumber {number}[eE]{number}
 comments \{[^{}]*\}
-invalidId {digit}+{id}
+invalidIdStart [^a-zA-Z \n\t\r]
+invalidIdEnd [^a-zA-Z0-9 \n\t\r]
+invalidIdChar [^a-zA-Z0-9 \n\t\r_]
+invalidId ({invalidIdStart}+{id}{invalidIdEnd}+)|({invalidIdStart}+{id})|({id}{invalidIdEnd}+)
 
 %%
 {ws} {/*discard*/}
