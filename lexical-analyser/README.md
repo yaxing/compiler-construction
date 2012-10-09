@@ -14,6 +14,8 @@ How to run
 
 ./lexer.out <input program file>
 
+(*.pas are test files)
+
 
 Symbol table
 ------------
