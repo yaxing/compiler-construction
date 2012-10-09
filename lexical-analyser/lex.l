@@ -1,7 +1,7 @@
 %option noyywrap
 %{
     //
-    //  symboltable.h
+    //  lexical specification
     //  compiler-lexer
     //
     //  Copyright (c) 2012 Yaxing Chen. All rights reserved.
