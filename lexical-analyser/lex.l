@@ -9,6 +9,11 @@
     #include <stdio.h>
     #include "symboltable.h"
     
+    enum ERRORTYPE {
+        INVALID_ID = -1,
+        UNK_CHAR = -2
+    };
+	
     enum KEYS {
         AND = 0,
         BEG = 1,
@@ -55,8 +60,7 @@
         INT = 42,
         NUM = 43,
         ID = 44,
-        STRING = 45,
-        UNK = 46
+        STRING = 45
     };
     
     char *symbol_names[] = {
@@ -105,8 +109,7 @@
         "INT",
         "NUM",
         "ID",
-        "STRING",
-        "UNK"
+        "STRING"
     };
     
     long yylval = 0;
@@ -117,11 +120,13 @@ letter [a-zA-Z]
 char   [.]
 digit  [0-9]
 id     {letter}({letter}|{digit}|_)*
-int    {digit}+
+int    [+-]?{digit}+
 string \"[^\"]*\"
 ws     {delim}+
-number [+-]?{int}+([\.]{int}+)?
+number [+-]?{digit}+([\.]{digit}+)?
+expnumber {number}[eE]{number}
 comments \{[^{}]*\}
+invalidId {digit}+{id}
 
 %%
 {ws} {/*discard*/}
@@ -151,10 +156,12 @@ type {return TYPE;}
 var {return VAR;}
 while {return WHILE;}
 
-{id} {yylval = registerSymbol(yytext, "id"); return ID;}
-{int} {yylval = registerSymbol(yytext, "int"); return INT;}
-{number} {yylval = registerSymbol(yytext, "num");return NUM;}
-{string} {yylval = registerSymbol(yytext, "string");return STRING;}
+{invalidId} {return INVALID_ID;}
+{id} {yylval = registerSymbol(yytext, "ID"); return ID;}
+{int} {yylval = registerSymbol(yytext, "INT"); return INT;}
+{expnumber} {yylval = registerSymbol(yytext, "NUM");return NUM;}
+{number} {yylval = registerSymbol(yytext, "NUM");return NUM;}
+{string} {yylval = registerSymbol(yytext, "STRING");return STRING;}
 
 "+" {return OP_ADD;}
 "*" {return OP_MUL;}
@@ -176,8 +183,21 @@ while {return WHILE;}
 "[" {return BRACKET_L;}
 "]" {return BRACKET_R;}
 
-. {return UNK;}
+. {return UNK_CHAR;}
 %%
+
+void errorHandler(int errorType, char *msg) {
+    switch(errorType) {
+        case INVALID_ID:
+            printf("Invalid ID: %s\n", yytext);
+            break;
+        case UNK_CHAR:
+            printf("Unknown symbol: %s\n", yytext);
+            break;
+        default:
+            printf("Lexical error: %s\n", msg);
+    }
+}
 
 int main(int argc, char *argv[]){
     argc --;
@@ -185,12 +205,17 @@ int main(int argc, char *argv[]){
     yyin = fopen(argv[0], "r");
     int token = 0;
     while(token = yylex()) {
-        printf("Token: %s", symbol_names[token]);
-        if(token == ID || token == INT || token == NUM || token == STRING) {
-            entry *tableEntry = getSymbolEntryByAddr(yylval);
-            printf("  Lexeme: %s  Addr: %ld  Attr: %s", yytext, yylval, tableEntry->attribute);
+        if(token < 0) {
+            errorHandler(token, yytext);
         }
-        printf("\n");
+        else {
+            printf("Token: %s", symbol_names[token]);
+            if(token == ID || token == INT || token == NUM || token == STRING) {
+                entry *tableEntry = getSymbolEntryByAddr(yylval);
+                printf("  Lexeme: %s  Addr: %ld  Attr: %s", yytext, yylval, tableEntry->attribute);
+            }
+            printf("\n");
+        }
     }
     return 0;
 }
