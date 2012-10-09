@@ -160,10 +160,10 @@ type {return TYPE;}
 var {return VAR;}
 while {return WHILE;}
 
+{expnumber} {yylval = registerSymbol(yytext, "NUM");return NUM;}
 {invalidId} {return INVALID_ID;}
 {id} {yylval = registerSymbol(yytext, "ID"); return ID;}
 {int} {yylval = registerSymbol(yytext, "INT"); return INT;}
-{expnumber} {yylval = registerSymbol(yytext, "NUM");return NUM;}
 {number} {yylval = registerSymbol(yytext, "NUM");return NUM;}
 {string} {yylval = registerSymbol(yytext, "STRING");return STRING;}
 

@@ -375,21 +375,21 @@ struct yy_trans_info
 static yyconst flex_int16_t yy_accept[150] =
     {   0,
         0,    0,   53,   51,    1,    1,   51,   47,   48,   33,
-       32,   42,   34,   41,   28,   43,   44,   36,   35,   38,
-       27,   49,   50,   27,   27,   27,   27,   27,   27,   27,
-       27,   27,   27,   27,   27,   27,   27,   51,    0,   26,
-        1,    0,    0,   31,   26,   28,   46,    0,   26,   45,
-       37,   40,   39,   26,   27,   26,   27,   27,   27,   27,
-        8,   27,   27,   27,   27,    4,   27,   27,   16,   17,
-       27,   27,   27,   22,   27,   27,   27,    0,    0,   26,
-        2,   26,   26,   26,   31,   26,   26,   26,   26,   30,
-       26,   26,    3,   27,   27,    7,   27,   10,   11,   27,
+       32,   42,   34,   41,   29,   43,   44,   36,   35,   38,
+       28,   49,   50,   28,   28,   28,   28,   28,   28,   28,
+       28,   28,   28,   28,   28,   28,   28,   51,    0,   27,
+        1,    0,    0,   31,   27,   29,   46,    0,   27,   45,
+       37,   40,   39,   27,   28,   27,   28,   28,   28,   28,
+        8,   28,   28,   28,   28,    4,   28,   28,   16,   17,
+       28,   28,   28,   22,   28,   28,   28,    0,    0,   27,
+        2,   27,   27,   27,   31,   27,   27,   27,   27,   30,
+       27,   26,    3,   28,   28,    7,   28,   10,   11,   28,
 
-       14,   15,   27,   27,   27,   27,   24,   27,    2,   26,
-       26,   26,    2,   29,   26,   27,   27,    9,   27,   27,
-       27,   27,   27,   21,   23,   27,    0,   29,   13,    5,
-       27,   27,   27,   27,   27,   25,   27,   27,   27,   27,
-       20,    6,   27,   27,   19,   12,   27,   18,    0
+       14,   15,   28,   28,   28,   28,   24,   28,    2,   27,
+       27,   27,    2,   26,   27,   28,   28,    9,   28,   28,
+       28,   28,   28,   21,   23,   28,    0,   26,   13,    5,
+       28,   28,   28,   28,   28,   25,   28,   28,   28,   28,
+       20,    6,   28,   28,   19,   12,   28,   18,    0
     } ;
 
 static yyconst flex_int32_t yy_ec[256] =
@@ -1132,22 +1132,22 @@ YY_RULE_SETUP
 case 26:
 YY_RULE_SETUP
 #line 163 "lex.l"
-{return INVALID_ID;}
+{yylval = registerSymbol(yytext, "NUM");return NUM;}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
 #line 164 "lex.l"
-{yylval = registerSymbol(yytext, "ID"); return ID;}
+{return INVALID_ID;}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
 #line 165 "lex.l"
-{yylval = registerSymbol(yytext, "INT"); return INT;}
+{yylval = registerSymbol(yytext, "ID"); return ID;}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
 #line 166 "lex.l"
-{yylval = registerSymbol(yytext, "NUM");return NUM;}
+{yylval = registerSymbol(yytext, "INT"); return INT;}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
