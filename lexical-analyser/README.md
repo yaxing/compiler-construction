@@ -1,18 +1,18 @@
 This is a lexical analyser based on FLEX
 
-1. How to compile
+How to compile
 
 flex lex.l
 
 gcc lex.yy.c -o lexer.out
 
 
-2. How to run
+How to run
 
 ./lexer.out <input program file>
 
 
-3. Symbol table
+Symbol table
 
 A preliminary symbol table is implemented in symboltable.h;
 
