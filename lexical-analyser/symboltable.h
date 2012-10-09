@@ -9,6 +9,7 @@
 #define compiler_lexer_symboltable_h
 #include "stdlib.h"
 #include "string.h"
+
 typedef struct SymbolEntry {
     long address;
     char *symbolVal;
@@ -18,8 +19,10 @@ typedef struct SymbolEntry {
 
 //head points to the first entry in the table
 entry *head = NULL;
+
 //tail points to the last entry in the table
 entry *tail = NULL;
+
 long maxId = 0;
 
 void initTable () {
@@ -40,6 +43,7 @@ long getSymbolTableMaxId() {
 
 //get a symbol table entry by symbol value and attribute
 //@return entry pointer
+//
 entry *getSymbolEntry(char *symbolVal, char *attribute) {
     entry *tmpCursor = head;
     while(tmpCursor != NULL) {
@@ -54,6 +58,7 @@ entry *getSymbolEntry(char *symbolVal, char *attribute) {
 
 //get a symbol table entry by address
 //@return entry pointer
+//
 entry *getSymbolEntryByAddr(long address) {
     entry *tmpCursor = head;
     while(tmpCursor != NULL) {
@@ -67,6 +72,7 @@ entry *getSymbolEntryByAddr(long address) {
 
 //register a symbol into symbol table
 //@return long the address of registered entry
+//
 long registerSymbol(char *symbolVal, char *attribute) {
     entry *tmpCursor = getSymbolEntry(symbolVal, attribute);
     if(tmpCursor != NULL) {

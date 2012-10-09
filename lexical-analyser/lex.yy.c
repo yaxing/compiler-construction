@@ -537,55 +537,58 @@ char *yytext;
     //
     //  Copyright (c) 2012 Yaxing Chen. All rights reserved.
     //
-    #include<stdio.h>
-    #include <string.h>
-    #define AND  0;
-    #define BEG  1;
-    #define FORWARD 2;
-    #define DIV  3;
-    #define DO  4;
-    #define ELSE  5;
-    #define END  6;
-    #define FOR  7;
-    #define FUNCTION  8;
-    #define IF  9;
-    #define ARRAY  10;
-    #define MOD  11;
-    #define NOT  12;
-    #define OF  13;
-    #define OR  14;
-    #define PROCEDURE  15;
-    #define PROGRAM  16;
-    #define RECORD  17;
-    #define THEN  18;
-    #define TO  19;
-    #define TYPE  20;
-    #define VAR  21;
-    #define WHILE  22;
-    #define OP_ADD  23;
-    #define OP_MUL  24;
-    #define OP_MIN  25;
-    #define OP_RELOP  26;
-    #define OP_LESS  27;
-    #define OP_LESS_EQ  28;
-    #define OP_GREATER  29;
-    #define OP_GREATER_EQ  30;
-    #define OP_NOT_EQ  31;
-    #define DOT  32;
-    #define COMMA  33;
-    #define COLON  34;
-    #define SEMICOLON  35;
-    #define EQUAL  36;
-    #define DOUBLE_DOT  37;
-    #define BRACE_L  38;
-    #define BRACE_R  39;
-    #define BRACKET_L  40;
-    #define BRACKET_R  41;
-    #define INT 42;
-    #define NUM  43;
-    #define ID  44;
-    #define STRING  45;
-    #define UNK  46;
+    #include <stdio.h>
+    #include "symboltable.h"
+    
+    enum KEYS {
+        AND = 0,
+        BEG = 1,
+        FORWARD = 2,
+        DIV = 3,
+        DO = 4,
+        ELSE = 5,
+        END = 6,
+        FOR = 7,
+        FUNCTION = 8,
+        IF = 9,
+        ARRAY = 10,
+        MOD = 11,
+        NOT = 12,
+        OF = 13,
+        OR = 14,
+        PROCEDURE = 15,
+        PROGRAM = 16,
+        RECORD = 17,
+        THEN = 18,
+        TO = 19,
+        TYPE = 20,
+        VAR = 21,
+        WHILE = 22,
+        OP_ADD = 23,
+        OP_MUL = 24,
+        OP_MIN = 25,
+        OP_RELOP = 26,
+        OP_LESS = 27,
+        OP_LESS_EQ = 28,
+        OP_GREATER = 29,
+        OP_GREATER_EQ = 30,
+        OP_NOT_EQ = 31,
+        DOT = 32,
+        COMMA = 33,
+        COLON = 34,
+        SEMICOLON = 35,
+        EQUAL = 36,
+        DOUBLE_DOT = 37,
+        BRACE_L = 38,
+        BRACE_R = 39,
+        BRACKET_L = 40,
+        BRACKET_R = 41,
+        INT = 42,
+        NUM = 43,
+        ID = 44,
+        STRING = 45,
+        UNK = 46
+    };
     
     char *symbol_names[] = {
         "AND",
@@ -636,7 +639,9 @@ char *yytext;
         "STRING",
         "UNK"
     };
-#line 640 "lex.yy.c"
+    
+    long yylval = 0;
+#line 645 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -818,9 +823,9 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 121 "lex.l"
+#line 126 "lex.l"
 
-#line 824 "lex.yy.c"
+#line 829 "lex.yy.c"
 
 	if ( !(yy_init) )
 		{
@@ -906,257 +911,257 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 122 "lex.l"
+#line 127 "lex.l"
 {/*discard*/}
 	YY_BREAK
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 123 "lex.l"
+#line 128 "lex.l"
 {/*discard*/}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 125 "lex.l"
+#line 130 "lex.l"
 {return IF;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 126 "lex.l"
+#line 131 "lex.l"
 {return AND;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 127 "lex.l"
+#line 132 "lex.l"
 {return BEG;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 128 "lex.l"
+#line 133 "lex.l"
 {return FORWARD;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 129 "lex.l"
+#line 134 "lex.l"
 {return DIV;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 130 "lex.l"
+#line 135 "lex.l"
 {return DO;}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 131 "lex.l"
+#line 136 "lex.l"
 {return ELSE;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 132 "lex.l"
+#line 137 "lex.l"
 {return END;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 133 "lex.l"
+#line 138 "lex.l"
 {return FOR;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 134 "lex.l"
+#line 139 "lex.l"
 {return FUNCTION;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 135 "lex.l"
+#line 140 "lex.l"
 {return ARRAY;}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 136 "lex.l"
+#line 141 "lex.l"
 {return MOD;}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 137 "lex.l"
+#line 142 "lex.l"
 {return NOT;}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 138 "lex.l"
+#line 143 "lex.l"
 {return OF;}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 139 "lex.l"
+#line 144 "lex.l"
 {return OR;}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 140 "lex.l"
+#line 145 "lex.l"
 {return PROCEDURE;}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 141 "lex.l"
+#line 146 "lex.l"
 {return PROGRAM;}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 142 "lex.l"
+#line 147 "lex.l"
 {return RECORD;}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 143 "lex.l"
+#line 148 "lex.l"
 {return THEN;}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 144 "lex.l"
+#line 149 "lex.l"
 {return TO;}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 145 "lex.l"
+#line 150 "lex.l"
 {return TYPE;}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 146 "lex.l"
+#line 151 "lex.l"
 {return VAR;}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 147 "lex.l"
+#line 152 "lex.l"
 {return WHILE;}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 149 "lex.l"
-{return ID;}
+#line 154 "lex.l"
+{yylval = registerSymbol(yytext, "id"); return ID;}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 150 "lex.l"
-{return INT;}
+#line 155 "lex.l"
+{yylval = registerSymbol(yytext, "int"); return INT;}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 151 "lex.l"
-{return NUM;}
+#line 156 "lex.l"
+{yylval = registerSymbol(yytext, "num");return NUM;}
 	YY_BREAK
 case 29:
 /* rule 29 can match eol */
 YY_RULE_SETUP
-#line 152 "lex.l"
-{return STRING;}
+#line 157 "lex.l"
+{yylval = registerSymbol(yytext, "string");return STRING;}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 154 "lex.l"
+#line 159 "lex.l"
 {return OP_ADD;}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 155 "lex.l"
+#line 160 "lex.l"
 {return OP_MUL;}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 156 "lex.l"
+#line 161 "lex.l"
 {return OP_MIN;}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 157 "lex.l"
+#line 162 "lex.l"
 {return OP_RELOP;}
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 158 "lex.l"
+#line 163 "lex.l"
 {return OP_LESS;}
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 159 "lex.l"
+#line 164 "lex.l"
 {return OP_LESS_EQ;}
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 160 "lex.l"
+#line 165 "lex.l"
 {return OP_GREATER;}
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 161 "lex.l"
+#line 166 "lex.l"
 {return OP_GREATER_EQ;}
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 162 "lex.l"
+#line 167 "lex.l"
 {return OP_NOT_EQ;}
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 163 "lex.l"
+#line 168 "lex.l"
 {return DOT;}
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 164 "lex.l"
+#line 169 "lex.l"
 {return COMMA;}
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 165 "lex.l"
+#line 170 "lex.l"
 {return COLON;}
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 166 "lex.l"
+#line 171 "lex.l"
 {return SEMICOLON;}
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 167 "lex.l"
+#line 172 "lex.l"
 {return EQUAL;}
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 168 "lex.l"
+#line 173 "lex.l"
 {return DOUBLE_DOT;}
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 169 "lex.l"
+#line 174 "lex.l"
 {return BRACE_L;}
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 170 "lex.l"
+#line 175 "lex.l"
 {return BRACE_R;}
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 171 "lex.l"
+#line 176 "lex.l"
 {return BRACKET_L;}
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 172 "lex.l"
+#line 177 "lex.l"
 {return BRACKET_R;}
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 174 "lex.l"
+#line 179 "lex.l"
 {return UNK;}
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 175 "lex.l"
+#line 180 "lex.l"
 ECHO;
 	YY_BREAK
-#line 1160 "lex.yy.c"
+#line 1165 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2153,7 +2158,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 175 "lex.l"
+#line 180 "lex.l"
 
 
 
@@ -2163,7 +2168,12 @@ int main(int argc, char *argv[]){
     yyin = fopen(argv[0], "r");
     int token = 0;
     while(token = yylex()) {
-        printf("Token: %s  value: %s\n", symbol_names[token], yytext);
+        printf("Token: %s", symbol_names[token]);
+        if(token == ID || token == INT || token == NUM || token == STRING) {
+            entry *tableEntry = getSymbolEntryByAddr(yylval);
+            printf("  Lexeme: %s  Addr: %ld  Attr: %s", yytext, yylval, tableEntry->attribute);
+        }
+        printf("\n");
     }
     return 0;
 }

@@ -6,55 +6,58 @@
     //
     //  Copyright (c) 2012 Yaxing Chen. All rights reserved.
     //
-    #include<stdio.h>
-    #include <string.h>
-    #define AND  0;
-    #define BEG  1;
-    #define FORWARD 2;
-    #define DIV  3;
-    #define DO  4;
-    #define ELSE  5;
-    #define END  6;
-    #define FOR  7;
-    #define FUNCTION  8;
-    #define IF  9;
-    #define ARRAY  10;
-    #define MOD  11;
-    #define NOT  12;
-    #define OF  13;
-    #define OR  14;
-    #define PROCEDURE  15;
-    #define PROGRAM  16;
-    #define RECORD  17;
-    #define THEN  18;
-    #define TO  19;
-    #define TYPE  20;
-    #define VAR  21;
-    #define WHILE  22;
-    #define OP_ADD  23;
-    #define OP_MUL  24;
-    #define OP_MIN  25;
-    #define OP_RELOP  26;
-    #define OP_LESS  27;
-    #define OP_LESS_EQ  28;
-    #define OP_GREATER  29;
-    #define OP_GREATER_EQ  30;
-    #define OP_NOT_EQ  31;
-    #define DOT  32;
-    #define COMMA  33;
-    #define COLON  34;
-    #define SEMICOLON  35;
-    #define EQUAL  36;
-    #define DOUBLE_DOT  37;
-    #define BRACE_L  38;
-    #define BRACE_R  39;
-    #define BRACKET_L  40;
-    #define BRACKET_R  41;
-    #define INT 42;
-    #define NUM  43;
-    #define ID  44;
-    #define STRING  45;
-    #define UNK  46;
+    #include <stdio.h>
+    #include "symboltable.h"
+    
+    enum KEYS {
+        AND = 0,
+        BEG = 1,
+        FORWARD = 2,
+        DIV = 3,
+        DO = 4,
+        ELSE = 5,
+        END = 6,
+        FOR = 7,
+        FUNCTION = 8,
+        IF = 9,
+        ARRAY = 10,
+        MOD = 11,
+        NOT = 12,
+        OF = 13,
+        OR = 14,
+        PROCEDURE = 15,
+        PROGRAM = 16,
+        RECORD = 17,
+        THEN = 18,
+        TO = 19,
+        TYPE = 20,
+        VAR = 21,
+        WHILE = 22,
+        OP_ADD = 23,
+        OP_MUL = 24,
+        OP_MIN = 25,
+        OP_RELOP = 26,
+        OP_LESS = 27,
+        OP_LESS_EQ = 28,
+        OP_GREATER = 29,
+        OP_GREATER_EQ = 30,
+        OP_NOT_EQ = 31,
+        DOT = 32,
+        COMMA = 33,
+        COLON = 34,
+        SEMICOLON = 35,
+        EQUAL = 36,
+        DOUBLE_DOT = 37,
+        BRACE_L = 38,
+        BRACE_R = 39,
+        BRACKET_L = 40,
+        BRACKET_R = 41,
+        INT = 42,
+        NUM = 43,
+        ID = 44,
+        STRING = 45,
+        UNK = 46
+    };
     
     char *symbol_names[] = {
         "AND",
@@ -105,6 +108,8 @@
         "STRING",
         "UNK"
     };
+    
+    long yylval = 0;
 %}
 
 delim  [ \n\t\r]
@@ -146,10 +151,10 @@ type {return TYPE;}
 var {return VAR;}
 while {return WHILE;}
 
-{id} {return ID;}
-{int} {return INT;}
-{number} {return NUM;}
-{string} {return STRING;}
+{id} {yylval = registerSymbol(yytext, "id"); return ID;}
+{int} {yylval = registerSymbol(yytext, "int"); return INT;}
+{number} {yylval = registerSymbol(yytext, "num");return NUM;}
+{string} {yylval = registerSymbol(yytext, "string");return STRING;}
 
 "+" {return OP_ADD;}
 "*" {return OP_MUL;}
@@ -180,7 +185,12 @@ int main(int argc, char *argv[]){
     yyin = fopen(argv[0], "r");
     int token = 0;
     while(token = yylex()) {
-        printf("Token: %s  value: %s\n", symbol_names[token], yytext);
+        printf("Token: %s", symbol_names[token]);
+        if(token == ID || token == INT || token == NUM || token == STRING) {
+            entry *tableEntry = getSymbolEntryByAddr(yylval);
+            printf("  Lexeme: %s  Addr: %ld  Attr: %s", yytext, yylval, tableEntry->attribute);
+        }
+        printf("\n");
     }
     return 0;
 }
