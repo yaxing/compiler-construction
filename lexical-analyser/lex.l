@@ -1,7 +1,7 @@
 %option noyywrap
 %{
     //
-    //  lexical specification
+    //  symboltable.h
     //  compiler-lexer
     //
     //  Copyright (c) 2012 Yaxing Chen. All rights reserved.
@@ -15,7 +15,6 @@
     };
 	
     enum KEYS {
-        AND = 0,
         BEG = 1,
         FORWARD = 2,
         DIV = 3,
@@ -41,7 +40,7 @@
         OP_ADD = 23,
         OP_MUL = 24,
         OP_MIN = 25,
-        OP_RELOP = 26,
+        OP_EQUAL = 26,
         OP_LESS = 27,
         OP_LESS_EQ = 28,
         OP_GREATER = 29,
@@ -51,7 +50,7 @@
         COMMA = 33,
         COLON = 34,
         SEMICOLON = 35,
-        EQUAL = 36,
+        ASSIGN = 36,
         DOUBLE_DOT = 37,
         BRACE_L = 38,
         BRACE_R = 39,
@@ -60,11 +59,12 @@
         INT = 42,
         NUM = 43,
         ID = 44,
-        STRING = 45
+        STRING = 45,
+	AND = 46
     };
     
     char *symbol_names[] = {
-        "AND",
+	"",
         "BEG",
         "FORWARD",
         "DIV",
@@ -90,7 +90,7 @@
         "OP_ADD",
         "OP_MUL",
         "OP_MIN",
-        "OP_RELOP",
+        "OP_EQUAL",
         "OP_LESS",
         "OP_LESS_EQ",
         "OP_GREATER",
@@ -100,7 +100,7 @@
         "COMMA",
         "COLON",
         "SEMICOLON",
-        "EQUAL",
+        "ASSIGN",
         "DOUBLE_DOT",
         "BRACE_L",
         "BRACE_R",
@@ -109,7 +109,8 @@
         "INT",
         "NUM",
         "ID",
-        "STRING"
+        "STRING",
+	"AND"
     };
     
     long yylval = 0;
@@ -132,8 +133,8 @@ invalidId {digit}+{id}
 {ws} {/*discard*/}
 {comments} {/*discard*/}
 
-if {return IF;}
 and {return AND;}
+if {return IF;}
 begin {return BEG;}
 forward {return FORWARD;}
 div {return DIV;}
@@ -166,7 +167,7 @@ while {return WHILE;}
 "+" {return OP_ADD;}
 "*" {return OP_MUL;}
 "-" {return OP_MIN;}
-"=" {return OP_RELOP;}
+"=" {return OP_EQUAL;}
 "<" {return OP_LESS;}
 "<=" {return OP_LESS_EQ;}
 ">" {return OP_GREATER;}
@@ -176,7 +177,7 @@ while {return WHILE;}
 "," {return COMMA;}
 ":" {return COLON;}
 ";" {return SEMICOLON;}
-":=" {return EQUAL;}
+":=" {return ASSIGN;}
 ".." {return DOUBLE_DOT;}
 "(" {return BRACE_L;}
 ")" {return BRACE_R;}
