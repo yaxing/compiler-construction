@@ -15,4 +15,30 @@
 #include "symboltable.h"
 #include "bisonheader.h"
 
+char *keywords[] = {
+    "and",
+    "if",
+    "begin",
+    "forward",
+    "div",
+    "do",
+    "else",
+    "end",
+    "for",
+    "function",
+    "array",
+    "mod",
+    "not",
+    "of",
+    "or",
+    "procedure",
+    "program",
+    "record",
+    "then",
+    "to",
+    "type",
+    "var",
+    "while"
+};
+
 #endif

@@ -16,32 +16,6 @@
         INVALID_ID = -1,
         UNK_CHAR = -2
     };
-    
-    char *keywords[] = {
-        "and",
-        "if",
-        "begin",
-        "forward",
-        "div",
-        "do",
-        "else",
-        "end",
-        "for",
-        "function",
-        "array",
-        "mod",
-        "not",
-        "of",
-        "or",
-        "procedure",
-        "program",
-        "record",
-        "then",
-        "to",
-        "type",
-        "var",
-        "while"
-    };
  
     int lineNo = 0;
 %}

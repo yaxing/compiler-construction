@@ -61,7 +61,7 @@ void printSymbolTable() {
     entry * cursor = NULL;
     while(i <= maxId) {
         cursor = symboltable[i];
-        printf("entryID: %d ID: %s Type: %s Attr: %s\n",
+        printf("Address: %-3d ID: %-15s Type: %-10s Attr:%s\n",
                cursor->address, cursor->symbolVal, cursor->type, cursor->attribute);
         i ++;
     }
@@ -71,9 +71,6 @@ void printSymbolTable() {
 //@return long the address of registered entry
 //
 int registerSymbol(char *symbolVal, char *type, char *attribute) {
-    type = type == NULL ? "" : type;
-    attribute = attribute == NULL ? "" : attribute;
-    
     int addr = getSymbolEntry(symbolVal);
     if(checkIndex(addr) == 1) {
         return addr;
@@ -85,11 +82,15 @@ int registerSymbol(char *symbolVal, char *type, char *attribute) {
     entry * newEntry = (entry *)(malloc(sizeof(entry)));
     newEntry->address = maxId;
     newEntry->symbolVal = (char *)malloc(strlen(symbolVal) + 1);
-    newEntry->type = (char *)malloc(strlen(type) + 1);
-    newEntry->attribute = (char *)malloc(strlen(attribute) + 1);
+    if(type != NULL) {
+        newEntry->type = (char *)malloc(strlen(type) + 1);
+        strcpy(newEntry->type, type);
+    }
+    if(attribute != NULL) {
+        newEntry->attribute = (char *)malloc(strlen(attribute) + 1);
+        strcpy(newEntry->attribute, attribute);
+    }
     strcpy(newEntry->symbolVal, symbolVal);
-    strcpy(newEntry->type, type);
-    strcpy(newEntry->attribute, attribute);
     symboltable[maxId] = newEntry;
     newEntry = NULL;
     return maxId;
@@ -109,29 +110,32 @@ void setSymbolEntyTypeAttr(int idAddr, int typeAddr, char *attribute) {
         typeEnty = symboltable[typeAddr];
         type = typeEnty->symbolVal;
     }
-    type = type == NULL ? "" : type;
-    attribute = attribute == NULL ? "" : attribute;
-    if(idEnty->type == NULL || strlen(idEnty->type) == 0) {
+    if(type != NULL
+       && (idEnty->type == NULL || strlen(idEnty->type) == 0)) {
         idEnty->type = (char *)malloc(strlen(type) + 1);
         strcpy(idEnty->type, type);
     }
-    idEnty->attribute = (char *)malloc(strlen(attribute) + 1);
-    strcpy(idEnty->attribute, attribute);}
+    if(attribute != NULL) {
+        idEnty->attribute = (char *)malloc(strlen(attribute) + 1);
+        strcpy(idEnty->attribute, attribute);
+    }
+}
 
 void setSymbolTypeAttrDirec(int address, char * type, char *attribute) {
     if(checkIndex(address) != 1) {
         return;
     }
     entry * idEntry = symboltable[address];
-    type = type == NULL ? "" : type;
-    attribute = attribute == NULL ? "" : attribute;
     
+    if(type != NULL) {
+        idEntry->type = (char *)malloc(strlen(type) + 1);
+        strcpy(idEntry->type, type);
+    }
     
-    idEntry->type = (char *)malloc(strlen(type) + 1);
-    idEntry->attribute = (char *)malloc(strlen(attribute) + 1);
-    
-    strcpy(idEntry->type, type);
-    strcpy(idEntry->attribute, attribute);
+    if(attribute != NULL) {
+        idEntry->attribute = (char *)malloc(strlen(attribute) + 1);
+        strcpy(idEntry->attribute, attribute);
+    }
 }
 
 void registerKeywords(char *keywords[], int size) {

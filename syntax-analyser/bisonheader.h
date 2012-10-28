@@ -51,6 +51,7 @@ void destroyCurIdList() {
 void setIdListTypeAttr(int typeEntryAddr, char * attr) {
     idlist * cursor = idlisthead;
     while(cursor != NULL) {
+        printf("setting: %d %d\n", cursor->identryAddr, typeEntryAddr);
         setSymbolEntyTypeAttr(cursor->identryAddr, typeEntryAddr, attr);
         cursor = cursor->next;
     }

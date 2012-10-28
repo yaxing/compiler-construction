@@ -1,0 +1,121 @@
+IdList
+IdListM
+IdList
+TypeID
+Plist_single
+setting: 26 27
+setting: 25 27
+IdList
+TypeID
+Plist_single
+setting: 28 29
+FormalPList
+PList_M
+FormalPList
+Type_sub
+TypeDef: 24 17
+Constant_INT
+Constant_INT
+TypeID
+Type_Array
+TypeDef: 30 10
+TypeID
+TypeDef: 31 29
+TypeDefList
+TypeDefList_Multi
+TypeDefList_Multi
+TypeDef_Mul
+IdList
+TypeID
+VarDecl
+setting: 32 31
+VarDeclList
+VarDecl_Mul
+IdList
+TypeID
+Plist_single
+setting: 25 27
+FormalPList
+ResultType
+Var
+Factor_INT
+Term_Fac_Mul
+AddOpTerm_Single
+SimpleExp_AddTerm
+Exp_simp
+AssiState
+SimpleS_AssignState
+Statement_Simple
+SteS
+CompStBE
+Block_CompState
+PFDecl_Block
+FuncDecl
+setting func: 33 1
+SubDeclF
+IdList
+TypeID
+Plist_single
+setting: 25 27
+IdList
+TypeID
+Plist_single
+setting: 28 29
+FormalPList
+PList_M
+FormalPList
+ResultType
+Var
+Factor_Var
+Term_Fac_Mul
+AddOpTerm_Single
+SimpleExp_AddTerm
+Exp_simp
+ActualParamL
+ProState
+SimpleSS_ProState
+Statement_Simple
+while_do
+Statement_Structured
+SteS
+CompStBE
+Block_CompState
+PFDecl_Block
+FuncDecl
+setting func: 34 2
+SubDeclF
+IdList
+IdListM
+IdList
+TypeID
+Plist_single
+setting: 26 27
+setting: 25 27
+FormalPList
+ResultType
+PFDecl_Forward
+FuncDecl
+setting func: 36 2
+SubDeclF
+SubDecl_Mul
+SubDecl_mul
+SubDecl_mul
+Var
+Factor_INT
+Term_Fac_Mul
+AddOpTerm_Single
+SimpleExp_AddTerm
+Exp_simp
+ActualParamL
+Func_Ref
+Factor_FuncRef
+Term_Fac_Mul
+AddOpTerm_Single
+SimpleExp_AddTerm
+Exp_simp
+AssiState
+SimpleS_AssignState
+Statement_Simple
+SteS
+CompStBE
+Program

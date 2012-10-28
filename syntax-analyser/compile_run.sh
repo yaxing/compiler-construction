@@ -1,4 +1,4 @@
 flex lex.l;
 bison -d translate.y;
 gcc lex.yy.c translate.tab.c -ll -o SA.out;
-./SA.out < parser1.pas; 
+./SA.out < $1; 
