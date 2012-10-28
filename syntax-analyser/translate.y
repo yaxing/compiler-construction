@@ -214,7 +214,7 @@ SimpleExpression : Sign AddOpTerm {printf("SimpleExp_Sign_AddTerm\n");}
                  | AddOpTerm {printf("SimpleExp_AddTerm\n");}
 ;
 
-AddOpTerm : Term AddOp Term AddOpTerm {printf("AddOpTerm_Mul\n");}
+AddOpTerm : Term AddOp AddOpTerm {printf("AddOpTerm_Mul\n");}
           | Term {printf("AddOpTerm_Single\n");}
 ;
 
