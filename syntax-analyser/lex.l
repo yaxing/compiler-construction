@@ -48,13 +48,13 @@ do {return DO;}
 else {return ELSE;}
 end {return END;}
 for {return FOR;}
-function {return FUNCTION;}
+function {yylval.stringType = yytext; return FUNCTION;}
 array {return ARRAY;}
 mod {return MOD;}
 not {return NOT;}
 of {return OF;}
 or {return OR;}
-procedure {return PROCEDURE;}
+procedure {yylval.stringType = yytext; return PROCEDURE;}
 program {return PROGRAM;}
 record {return RECORD;}
 then {return THEN;}

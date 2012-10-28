@@ -30,14 +30,14 @@ char * itoa(int a);
 %token ELSE
 %token END
 %token FOR
-%token FUNCTION
+%token <stringType> FUNCTION
 %token IF
 %token ARRAY
 %token MOD
 %token NOT
 %token OF
 %token OR
-%token PROCEDURE
+%token <stringType> PROCEDURE
 %token PROGRAM
 %token RECORD
 %token THEN
@@ -123,7 +123,7 @@ VariableDeclaration : IdentifierList COLON Type {
 ProcedureDeclaration : PROCEDURE ID BRACE_L FormalParameterList BRACE_R SEMICOLON PFDeclarationFollow 
                     {
                         printf("ProcDecl\n");
-                        setSymbolTypeAttrDirec($2, itoa(parameterCount), NULL);
+                        setSymbolEntyTypeAttr($2, getSymbolEntry("procedure"), itoa(parameterCount));
                         cleanCurParamCounter();
                     }
 ;
@@ -132,7 +132,7 @@ FunctionDeclaration : FUNCTION ID BRACE_L FormalParameterList BRACE_R COLON Resu
                     {
                         printf("FuncDecl\n");
                         printf("setting func: %d %s\n", $2, itoa(parameterCount));
-                        setSymbolTypeAttrDirec($2, itoa(parameterCount), NULL);
+                        setSymbolEntyTypeAttr($2, getSymbolEntry("function"), itoa(parameterCount));
                         cleanCurParamCounter();
                     }
 ;
