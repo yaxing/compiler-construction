@@ -116,7 +116,10 @@ TypeDefinition : ID OP_EQUAL Type {printf("TypeDef: %d %d\n", $1, $3);setSymbolE
 
 VariableDeclaration : IdentifierList COLON Type {
                                                     printf("VarDecl\n");
-                                                    setIdListTypeAttr($3, NULL);
+                                                    char * resp = setIdListTypeAttr($3, NULL);
+                                                    if(resp != NULL) {
+                                                        yyerror(resp);
+                                                    }
                                                 }
 ;
 
@@ -320,4 +323,5 @@ int main(int argc, const char * argv[]) {
     stdout = fstream;
     printf("Done, symbole table: symtable.out\n\n");
     close(fstream);
+    return 0;
 }

@@ -48,14 +48,23 @@ void destroyCurIdList() {
 }
 
 //set type and attr for all current idlist ids
-void setIdListTypeAttr(int typeEntryAddr, char * attr) {
+char * setIdListTypeAttr(int typeEntryAddr, char * attr) {
     idlist * cursor = idlisthead;
+    int setResp = 0;
     while(cursor != NULL) {
         printf("setting: %d %d\n", cursor->identryAddr, typeEntryAddr);
-        setSymbolEntyTypeAttr(cursor->identryAddr, typeEntryAddr, attr);
+        setResp = setSymbolEntyTypeAttr(cursor->identryAddr, typeEntryAddr, attr);
+        if(setResp == -1) {
+            char * idN = getIDName(cursor->identryAddr);
+            char * info = "Redefinition with different type of variable: ";
+            char * buf = (char *)malloc(strlen(info) + strlen(idN) + 4);
+            sprintf(buf, "%s%s\n", info, idN);
+            return buf;
+        }
         cursor = cursor->next;
     }
     destroyCurIdList();
+    return NULL;
 }
 
 #endif

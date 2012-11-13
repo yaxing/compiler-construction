@@ -892,7 +892,7 @@ YY_RULE_SETUP
 case 13:
 YY_RULE_SETUP
 #line 51 "lex.l"
-{return FUNCTION;}
+{yylval.stringType = yytext; return FUNCTION;}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
@@ -922,7 +922,7 @@ YY_RULE_SETUP
 case 19:
 YY_RULE_SETUP
 #line 57 "lex.l"
-{return PROCEDURE;}
+{yylval.stringType = yytext; return PROCEDURE;}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP

@@ -29,11 +29,17 @@ IdList
 TypeID
 VarDecl
 setting: 32 31
+IdList
+TypeID
+VarDecl
+setting: 25 29
 VarDeclList
+VarDeclList_Mul
 VarDecl_Mul
 IdList
 TypeID
 Plist_single
+setting: 25 27
 setting: 25 27
 FormalPList
 ResultType

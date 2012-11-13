@@ -18,10 +18,13 @@ typedef struct SymbolEntry {
 
 int size = 1000;
 int maxId = -1;
-entry * symboltable[1000] = {NULL};
+entry symboltable[1000];
 
 int getSymbolTableMaxId() {
     return maxId;
+}
+
+void initSymbolTable() {
 }
 
 int checkIndex(int i) {
@@ -37,8 +40,7 @@ int checkIndex(int i) {
 int getSymbolEntry(char *symbolVal) {
     int i = 0;
     while(i <= maxId && i < size) {
-        if(symboltable[i] != NULL
-           && strcmp(symboltable[i]->symbolVal, symbolVal) == 0) {
+        if(strcmp(symboltable[i].symbolVal, symbolVal) == 0) {
             return i;
         }
         i ++;
@@ -50,19 +52,18 @@ char * getIDName(int entry) {
     if(entry > maxId) {
         return NULL;
     }
-    return symboltable[entry]->symbolVal;
+    return symboltable[entry].symbolVal;
 }
 
-void extendTable() {
+int extendTable() {
+    return 0;
 }
 
 void printSymbolTable() {
     int i = 0;
-    entry * cursor = NULL;
     while(i <= maxId) {
-        cursor = symboltable[i];
         printf("Address: %-3d ID: %-15s Type: %-10s Attr:%s\n",
-               cursor->address, cursor->symbolVal, cursor->type, cursor->attribute);
+               symboltable[i].address, symboltable[i].symbolVal, symboltable[i].type, symboltable[i].attribute);
         i ++;
     }
 }
@@ -76,65 +77,73 @@ int registerSymbol(char *symbolVal, char *type, char *attribute) {
         return addr;
     }
     if(maxId >= size - 1) {
-        extendTable();
+        if(extendTable() == 0) {
+            return -1;
+        }
     }
     maxId ++;
-    entry * newEntry = (entry *)(malloc(sizeof(entry)));
-    newEntry->address = maxId;
-    newEntry->symbolVal = (char *)malloc(strlen(symbolVal) + 1);
+    symboltable[maxId].address = maxId;
+    symboltable[maxId].symbolVal = (char *)malloc(sizeof(symbolVal));
+    strcpy(symboltable[maxId].symbolVal, symbolVal);
     if(type != NULL) {
-        newEntry->type = (char *)malloc(strlen(type) + 1);
-        strcpy(newEntry->type, type);
+        symboltable[maxId].type = (char *)malloc(sizeof(type));
+        strcpy(symboltable[maxId].type, type);
+    }
+    else {
+        symboltable[maxId].type = NULL;
     }
     if(attribute != NULL) {
-        newEntry->attribute = (char *)malloc(strlen(attribute) + 1);
-        strcpy(newEntry->attribute, attribute);
+        symboltable[maxId].attribute = (char *)malloc(sizeof(attribute));
+        strcpy(symboltable[maxId].attribute, attribute);
     }
-    strcpy(newEntry->symbolVal, symbolVal);
-    symboltable[maxId] = newEntry;
-    newEntry = NULL;
+    else {
+        symboltable[maxId].attribute = NULL;
+    }
     return maxId;
 }
 
-void setSymbolEntyTypeAttr(int idAddr, int typeAddr, char *attribute) {
+int setSymbolEntyTypeAttr(int idAddr, int typeAddr, char *attribute) {
     char * type = NULL;
-    entry * typeEnty = NULL;
-    entry * idEnty = NULL;
-    if(checkIndex(idAddr) == 1) {
-        idEnty = symboltable[idAddr];
-    }
-    else {
-        return;
+    if(checkIndex(idAddr) != 1) {
+        return -2;
     }
     if(checkIndex(typeAddr) == 1) {
-        typeEnty = symboltable[typeAddr];
-        type = typeEnty->symbolVal;
+        type = symboltable[typeAddr].symbolVal;
     }
-    if(type != NULL
-       && (idEnty->type == NULL || strlen(idEnty->type) == 0)) {
-        idEnty->type = (char *)malloc(strlen(type) + 1);
-        strcpy(idEnty->type, type);
+    
+    if(type == NULL) {
+        return -2;
     }
+    else if(symboltable[idAddr].type != NULL) {
+        if(strcmp(type, symboltable[idAddr].type) == 0) {
+            return 0;
+        }
+        return -1;
+    }
+    
+    symboltable[idAddr].type = (char *)malloc(sizeof(type));
+    strcpy(symboltable[idAddr].type, type);
+
     if(attribute != NULL) {
-        idEnty->attribute = (char *)malloc(strlen(attribute) + 1);
-        strcpy(idEnty->attribute, attribute);
+        symboltable[idAddr].attribute = (char *)malloc(sizeof(attribute));
+        strcpy(symboltable[idAddr].attribute, attribute);
     }
+    return 0;
 }
 
 void setSymbolTypeAttrDirec(int address, char * type, char *attribute) {
     if(checkIndex(address) != 1) {
         return;
     }
-    entry * idEntry = symboltable[address];
     
     if(type != NULL) {
-        idEntry->type = (char *)malloc(strlen(type) + 1);
-        strcpy(idEntry->type, type);
+        symboltable[address].type = (char *)malloc(sizeof(type));
+        strcpy(symboltable[address].type, type);
     }
     
     if(attribute != NULL) {
-        idEntry->attribute = (char *)malloc(strlen(attribute) + 1);
-        strcpy(idEntry->attribute, attribute);
+        symboltable[address].attribute = (char *)malloc(sizeof(attribute));
+        strcpy(symboltable[address].attribute, attribute);
     }
 }
 
