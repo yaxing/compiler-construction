@@ -1,0 +1,2156 @@
+Terminals which are not used
+
+   NUM
+   NIL
+   TRUE
+   FALSE
+
+
+State 136 conflicts: 1 shift/reduce
+
+
+Grammar
+
+    0 $accept: Program $end
+
+    1 Program: PROGRAM ID SEMICOLON CompoundStatement DOT
+    2        | PROGRAM ID SEMICOLON TypeDefinitions CompoundStatement DOT
+    3        | PROGRAM ID SEMICOLON VariableDeclarations CompoundStatement DOT
+    4        | PROGRAM ID SEMICOLON SubprogramDeclarations CompoundStatement DOT
+    5        | PROGRAM ID SEMICOLON TypeDefinitions VariableDeclarations CompoundStatement DOT
+    6        | PROGRAM ID SEMICOLON VariableDeclarations SubprogramDeclarations CompoundStatement DOT
+    7        | PROGRAM ID SEMICOLON TypeDefinitions SubprogramDeclarations CompoundStatement DOT
+    8        | PROGRAM ID SEMICOLON TypeDefinitions VariableDeclarations SubprogramDeclarations CompoundStatement DOT
+
+    9 TypeDefinitions: TYPE TypeDefinitionList
+
+   10 TypeDefinitionList: TypeDefinition SEMICOLON
+   11                   | TypeDefinition SEMICOLON TypeDefinitionList
+
+   12 VariableDeclarations: VAR VariableDeclarationList
+
+   13 VariableDeclarationList: VariableDeclaration SEMICOLON
+   14                        | VariableDeclaration SEMICOLON VariableDeclarationList
+
+   15 SubprogramDeclarations: SubprogramDeclaration SEMICOLON SubprogramDeclarations
+   16                       | SubprogramDeclaration SEMICOLON
+
+   17 SubprogramDeclaration: ProcedureDeclaration
+   18                      | FunctionDeclaration
+
+   19 TypeDefinition: ID OP_EQUAL Type
+
+   20 VariableDeclaration: IdentifierList COLON Type
+
+   21 ProcedureDeclaration: PROCEDURE ID BRACE_L FormalParameterList BRACE_R SEMICOLON PFDeclarationFollow
+
+   22 FunctionDeclaration: FUNCTION ID BRACE_L FormalParameterList BRACE_R COLON ResultType SEMICOLON PFDeclarationFollow
+
+   23 PFDeclarationFollow: Block
+   24                    | FORWARD
+
+   25 FormalParameterList: /* empty */
+   26                    | FormalParameterListSingle FormalParameterListMore
+
+   27 FormalParameterListSingle: IdentifierList COLON Type
+
+   28 FormalParameterListMore: SEMICOLON FormalParameterList
+   29                        | /* empty */
+
+   30 Block: CompoundStatement
+   31      | VariableDeclarations CompoundStatement
+
+   32 CompoundStatement: BEGINSYM StatementSequence END
+
+   33 StatementSequence: Statement
+   34                  | StatementSequence SEMICOLON Statement
+
+   35 Statement: SimpleStatement
+   36          | StructuredStatement
+
+   37 SimpleStatement: AssignmentStatement
+   38                | ProcedureStatement
+   39                | /* empty */
+
+   40 AssignmentStatement: Variable ASSIGN Expression
+
+   41 ProcedureStatement: ID BRACE_L ActualParameterList BRACE_R
+
+   42 StructuredStatement: CompoundStatement
+   43                    | IF Expression THEN Statement
+   44                    | IF Expression THEN Statement ELSE Statement
+   45                    | WHILE Expression DO Statement
+   46                    | FOR ID ASSIGN Expression TO Expression DO Statement
+
+   47 Type: ID
+   48     | ARRAY BRACKET_L Constant DOUBLE_DOT Constant BRACKET_R OF Type
+   49     | RECORD FormalParameterList END
+
+   50 ResultType: ID
+
+   51 Constant: Sign INT
+   52         | INT
+
+   53 Expression: SimpleExpression
+   54           | SimpleExpression RelationalOp SimpleExpression
+
+   55 RelationalOp: OP_EQUAL
+   56             | OP_LESS
+   57             | OP_LESS_EQ
+   58             | OP_GREATER
+   59             | OP_GREATER_EQ
+   60             | OP_NOT_EQ
+
+   61 SimpleExpression: Sign AddOpTerm
+   62                 | AddOpTerm
+
+   63 AddOpTerm: Term AddOp AddOpTerm
+   64          | Term
+
+   65 AddOp: OP_ADD
+   66      | OP_MIN
+   67      | OR
+
+   68 Term: Factor MulOpTerm
+
+   69 MulOpTerm: MulOp Term
+   70          | /* empty */
+
+   71 MulOp: OP_MUL
+   72      | DIV
+   73      | MOD
+   74      | AND
+
+   75 Factor: INT
+   76       | STRING
+   77       | Variable
+   78       | FunctionReference
+   79       | NOT Factor
+   80       | BRACE_L Expression BRACE_R
+
+   81 FunctionReference: ID BRACE_L ActualParameterList BRACE_R
+
+   82 Variable: ID ComponentSelection
+
+   83 ComponentSelection: DOT ID ComponentSelection
+   84                   | BRACKET_L Expression BRACKET_R ComponentSelection
+   85                   | /* empty */
+
+   86 ActualParameterList: Expression ExpressionMore
+   87                    | /* empty */
+
+   88 ExpressionMore: COMMA Expression ExpressionMore
+   89               | /* empty */
+
+   90 IdentifierList: ID IdentifierListMore
+
+   91 IdentifierListMore: COMMA IdentifierList
+   92                   | /* empty */
+
+   93 Sign: OP_ADD
+   94     | OP_MIN
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+BEGINSYM (258) 32
+FORWARD (259) 24
+DIV (260) 72
+DO (261) 45 46
+ELSE (262) 44
+END (263) 32 49
+FOR (264) 46
+FUNCTION (265) 22
+IF (266) 43 44
+ARRAY (267) 48
+MOD (268) 73
+NOT (269) 79
+OF (270) 48
+OR (271) 67
+PROCEDURE (272) 21
+PROGRAM (273) 1 2 3 4 5 6 7 8
+RECORD (274) 49
+THEN (275) 43 44
+TO (276) 46
+TYPE (277) 9
+VAR (278) 12
+WHILE (279) 45
+OP_ADD (280) 65 93
+OP_MUL (281) 71
+OP_MIN (282) 66 94
+OP_EQUAL (283) 19 55
+OP_LESS (284) 56
+OP_LESS_EQ (285) 57
+OP_GREATER (286) 58
+OP_GREATER_EQ (287) 59
+OP_NOT_EQ (288) 60
+DOT (289) 1 2 3 4 5 6 7 8 83
+COMMA (290) 88 91
+COLON (291) 20 22 27
+SEMICOLON (292) 1 2 3 4 5 6 7 8 10 11 13 14 15 16 21 22 28 34
+ASSIGN (293) 40 46
+DOUBLE_DOT (294) 48
+BRACE_L (295) 21 22 41 80 81
+BRACE_R (296) 21 22 41 80 81
+BRACKET_L (297) 48 84
+BRACKET_R (298) 48 84
+INT (299) 51 52 75
+NUM (300)
+ID (301) 1 2 3 4 5 6 7 8 19 21 22 41 46 47 50 81 82 83 90
+STRING (302) 76
+AND (303) 74
+NIL (304)
+TRUE (305)
+FALSE (306)
+
+
+Nonterminals, with rules where they appear
+
+$accept (52)
+    on left: 0
+Program (53)
+    on left: 1 2 3 4 5 6 7 8, on right: 0
+TypeDefinitions (54)
+    on left: 9, on right: 2 5 7 8
+TypeDefinitionList (55)
+    on left: 10 11, on right: 9 11
+VariableDeclarations (56)
+    on left: 12, on right: 3 5 6 8 31
+VariableDeclarationList (57)
+    on left: 13 14, on right: 12 14
+SubprogramDeclarations (58)
+    on left: 15 16, on right: 4 6 7 8 15
+SubprogramDeclaration (59)
+    on left: 17 18, on right: 15 16
+TypeDefinition (60)
+    on left: 19, on right: 10 11
+VariableDeclaration (61)
+    on left: 20, on right: 13 14
+ProcedureDeclaration (62)
+    on left: 21, on right: 17
+FunctionDeclaration (63)
+    on left: 22, on right: 18
+PFDeclarationFollow (64)
+    on left: 23 24, on right: 21 22
+FormalParameterList (65)
+    on left: 25 26, on right: 21 22 28 49
+FormalParameterListSingle (66)
+    on left: 27, on right: 26
+FormalParameterListMore (67)
+    on left: 28 29, on right: 26
+Block (68)
+    on left: 30 31, on right: 23
+CompoundStatement (69)
+    on left: 32, on right: 1 2 3 4 5 6 7 8 30 31 42
+StatementSequence (70)
+    on left: 33 34, on right: 32 34
+Statement (71)
+    on left: 35 36, on right: 33 34 43 44 45 46
+SimpleStatement (72)
+    on left: 37 38 39, on right: 35
+AssignmentStatement (73)
+    on left: 40, on right: 37
+ProcedureStatement (74)
+    on left: 41, on right: 38
+StructuredStatement (75)
+    on left: 42 43 44 45 46, on right: 36
+Type (76)
+    on left: 47 48 49, on right: 19 20 27 48
+ResultType (77)
+    on left: 50, on right: 22
+Constant (78)
+    on left: 51 52, on right: 48
+Expression (79)
+    on left: 53 54, on right: 40 43 44 45 46 80 84 86 88
+RelationalOp (80)
+    on left: 55 56 57 58 59 60, on right: 54
+SimpleExpression (81)
+    on left: 61 62, on right: 53 54
+AddOpTerm (82)
+    on left: 63 64, on right: 61 62 63
+AddOp (83)
+    on left: 65 66 67, on right: 63
+Term (84)
+    on left: 68, on right: 63 64 69
+MulOpTerm (85)
+    on left: 69 70, on right: 68
+MulOp (86)
+    on left: 71 72 73 74, on right: 69
+Factor (87)
+    on left: 75 76 77 78 79 80, on right: 68 79
+FunctionReference (88)
+    on left: 81, on right: 78
+Variable (89)
+    on left: 82, on right: 40 77
+ComponentSelection (90)
+    on left: 83 84 85, on right: 82 83 84
+ActualParameterList (91)
+    on left: 86 87, on right: 41 81
+ExpressionMore (92)
+    on left: 88 89, on right: 86 88
+IdentifierList (93)
+    on left: 90, on right: 20 27 91
+IdentifierListMore (94)
+    on left: 91 92, on right: 90
+Sign (95)
+    on left: 93 94, on right: 51 61
+
+
+state 0
+
+    0 $accept: . Program $end
+
+    PROGRAM  shift, and go to state 1
+
+    Program  go to state 2
+
+
+state 1
+
+    1 Program: PROGRAM . ID SEMICOLON CompoundStatement DOT
+    2        | PROGRAM . ID SEMICOLON TypeDefinitions CompoundStatement DOT
+    3        | PROGRAM . ID SEMICOLON VariableDeclarations CompoundStatement DOT
+    4        | PROGRAM . ID SEMICOLON SubprogramDeclarations CompoundStatement DOT
+    5        | PROGRAM . ID SEMICOLON TypeDefinitions VariableDeclarations CompoundStatement DOT
+    6        | PROGRAM . ID SEMICOLON VariableDeclarations SubprogramDeclarations CompoundStatement DOT
+    7        | PROGRAM . ID SEMICOLON TypeDefinitions SubprogramDeclarations CompoundStatement DOT
+    8        | PROGRAM . ID SEMICOLON TypeDefinitions VariableDeclarations SubprogramDeclarations CompoundStatement DOT
+
+    ID  shift, and go to state 3
+
+
+state 2
+
+    0 $accept: Program . $end
+
+    $end  shift, and go to state 4
+
+
+state 3
+
+    1 Program: PROGRAM ID . SEMICOLON CompoundStatement DOT
+    2        | PROGRAM ID . SEMICOLON TypeDefinitions CompoundStatement DOT
+    3        | PROGRAM ID . SEMICOLON VariableDeclarations CompoundStatement DOT
+    4        | PROGRAM ID . SEMICOLON SubprogramDeclarations CompoundStatement DOT
+    5        | PROGRAM ID . SEMICOLON TypeDefinitions VariableDeclarations CompoundStatement DOT
+    6        | PROGRAM ID . SEMICOLON VariableDeclarations SubprogramDeclarations CompoundStatement DOT
+    7        | PROGRAM ID . SEMICOLON TypeDefinitions SubprogramDeclarations CompoundStatement DOT
+    8        | PROGRAM ID . SEMICOLON TypeDefinitions VariableDeclarations SubprogramDeclarations CompoundStatement DOT
+
+    SEMICOLON  shift, and go to state 5
+
+
+state 4
+
+    0 $accept: Program $end .
+
+    $default  accept
+
+
+state 5
+
+    1 Program: PROGRAM ID SEMICOLON . CompoundStatement DOT
+    2        | PROGRAM ID SEMICOLON . TypeDefinitions CompoundStatement DOT
+    3        | PROGRAM ID SEMICOLON . VariableDeclarations CompoundStatement DOT
+    4        | PROGRAM ID SEMICOLON . SubprogramDeclarations CompoundStatement DOT
+    5        | PROGRAM ID SEMICOLON . TypeDefinitions VariableDeclarations CompoundStatement DOT
+    6        | PROGRAM ID SEMICOLON . VariableDeclarations SubprogramDeclarations CompoundStatement DOT
+    7        | PROGRAM ID SEMICOLON . TypeDefinitions SubprogramDeclarations CompoundStatement DOT
+    8        | PROGRAM ID SEMICOLON . TypeDefinitions VariableDeclarations SubprogramDeclarations CompoundStatement DOT
+
+    BEGINSYM   shift, and go to state 6
+    FUNCTION   shift, and go to state 7
+    PROCEDURE  shift, and go to state 8
+    TYPE       shift, and go to state 9
+    VAR        shift, and go to state 10
+
+    TypeDefinitions         go to state 11
+    VariableDeclarations    go to state 12
+    SubprogramDeclarations  go to state 13
+    SubprogramDeclaration   go to state 14
+    ProcedureDeclaration    go to state 15
+    FunctionDeclaration     go to state 16
+    CompoundStatement       go to state 17
+
+
+state 6
+
+   32 CompoundStatement: BEGINSYM . StatementSequence END
+
+    BEGINSYM  shift, and go to state 6
+    FOR       shift, and go to state 18
+    IF        shift, and go to state 19
+    WHILE     shift, and go to state 20
+    ID        shift, and go to state 21
+
+    $default  reduce using rule 39 (SimpleStatement)
+
+    CompoundStatement    go to state 22
+    StatementSequence    go to state 23
+    Statement            go to state 24
+    SimpleStatement      go to state 25
+    AssignmentStatement  go to state 26
+    ProcedureStatement   go to state 27
+    StructuredStatement  go to state 28
+    Variable             go to state 29
+
+
+state 7
+
+   22 FunctionDeclaration: FUNCTION . ID BRACE_L FormalParameterList BRACE_R COLON ResultType SEMICOLON PFDeclarationFollow
+
+    ID  shift, and go to state 30
+
+
+state 8
+
+   21 ProcedureDeclaration: PROCEDURE . ID BRACE_L FormalParameterList BRACE_R SEMICOLON PFDeclarationFollow
+
+    ID  shift, and go to state 31
+
+
+state 9
+
+    9 TypeDefinitions: TYPE . TypeDefinitionList
+
+    ID  shift, and go to state 32
+
+    TypeDefinitionList  go to state 33
+    TypeDefinition      go to state 34
+
+
+state 10
+
+   12 VariableDeclarations: VAR . VariableDeclarationList
+
+    ID  shift, and go to state 35
+
+    VariableDeclarationList  go to state 36
+    VariableDeclaration      go to state 37
+    IdentifierList           go to state 38
+
+
+state 11
+
+    2 Program: PROGRAM ID SEMICOLON TypeDefinitions . CompoundStatement DOT
+    5        | PROGRAM ID SEMICOLON TypeDefinitions . VariableDeclarations CompoundStatement DOT
+    7        | PROGRAM ID SEMICOLON TypeDefinitions . SubprogramDeclarations CompoundStatement DOT
+    8        | PROGRAM ID SEMICOLON TypeDefinitions . VariableDeclarations SubprogramDeclarations CompoundStatement DOT
+
+    BEGINSYM   shift, and go to state 6
+    FUNCTION   shift, and go to state 7
+    PROCEDURE  shift, and go to state 8
+    VAR        shift, and go to state 10
+
+    VariableDeclarations    go to state 39
+    SubprogramDeclarations  go to state 40
+    SubprogramDeclaration   go to state 14
+    ProcedureDeclaration    go to state 15
+    FunctionDeclaration     go to state 16
+    CompoundStatement       go to state 41
+
+
+state 12
+
+    3 Program: PROGRAM ID SEMICOLON VariableDeclarations . CompoundStatement DOT
+    6        | PROGRAM ID SEMICOLON VariableDeclarations . SubprogramDeclarations CompoundStatement DOT
+
+    BEGINSYM   shift, and go to state 6
+    FUNCTION   shift, and go to state 7
+    PROCEDURE  shift, and go to state 8
+
+    SubprogramDeclarations  go to state 42
+    SubprogramDeclaration   go to state 14
+    ProcedureDeclaration    go to state 15
+    FunctionDeclaration     go to state 16
+    CompoundStatement       go to state 43
+
+
+state 13
+
+    4 Program: PROGRAM ID SEMICOLON SubprogramDeclarations . CompoundStatement DOT
+
+    BEGINSYM  shift, and go to state 6
+
+    CompoundStatement  go to state 44
+
+
+state 14
+
+   15 SubprogramDeclarations: SubprogramDeclaration . SEMICOLON SubprogramDeclarations
+   16                       | SubprogramDeclaration . SEMICOLON
+
+    SEMICOLON  shift, and go to state 45
+
+
+state 15
+
+   17 SubprogramDeclaration: ProcedureDeclaration .
+
+    $default  reduce using rule 17 (SubprogramDeclaration)
+
+
+state 16
+
+   18 SubprogramDeclaration: FunctionDeclaration .
+
+    $default  reduce using rule 18 (SubprogramDeclaration)
+
+
+state 17
+
+    1 Program: PROGRAM ID SEMICOLON CompoundStatement . DOT
+
+    DOT  shift, and go to state 46
+
+
+state 18
+
+   46 StructuredStatement: FOR . ID ASSIGN Expression TO Expression DO Statement
+
+    ID  shift, and go to state 47
+
+
+state 19
+
+   43 StructuredStatement: IF . Expression THEN Statement
+   44                    | IF . Expression THEN Statement ELSE Statement
+
+    NOT      shift, and go to state 48
+    OP_ADD   shift, and go to state 49
+    OP_MIN   shift, and go to state 50
+    BRACE_L  shift, and go to state 51
+    INT      shift, and go to state 52
+    ID       shift, and go to state 53
+    STRING   shift, and go to state 54
+
+    Expression         go to state 55
+    SimpleExpression   go to state 56
+    AddOpTerm          go to state 57
+    Term               go to state 58
+    Factor             go to state 59
+    FunctionReference  go to state 60
+    Variable           go to state 61
+    Sign               go to state 62
+
+
+state 20
+
+   45 StructuredStatement: WHILE . Expression DO Statement
+
+    NOT      shift, and go to state 48
+    OP_ADD   shift, and go to state 49
+    OP_MIN   shift, and go to state 50
+    BRACE_L  shift, and go to state 51
+    INT      shift, and go to state 52
+    ID       shift, and go to state 53
+    STRING   shift, and go to state 54
+
+    Expression         go to state 63
+    SimpleExpression   go to state 56
+    AddOpTerm          go to state 57
+    Term               go to state 58
+    Factor             go to state 59
+    FunctionReference  go to state 60
+    Variable           go to state 61
+    Sign               go to state 62
+
+
+state 21
+
+   41 ProcedureStatement: ID . BRACE_L ActualParameterList BRACE_R
+   82 Variable: ID . ComponentSelection
+
+    DOT        shift, and go to state 64
+    BRACE_L    shift, and go to state 65
+    BRACKET_L  shift, and go to state 66
+
+    $default  reduce using rule 85 (ComponentSelection)
+
+    ComponentSelection  go to state 67
+
+
+state 22
+
+   42 StructuredStatement: CompoundStatement .
+
+    $default  reduce using rule 42 (StructuredStatement)
+
+
+state 23
+
+   32 CompoundStatement: BEGINSYM StatementSequence . END
+   34 StatementSequence: StatementSequence . SEMICOLON Statement
+
+    END        shift, and go to state 68
+    SEMICOLON  shift, and go to state 69
+
+
+state 24
+
+   33 StatementSequence: Statement .
+
+    $default  reduce using rule 33 (StatementSequence)
+
+
+state 25
+
+   35 Statement: SimpleStatement .
+
+    $default  reduce using rule 35 (Statement)
+
+
+state 26
+
+   37 SimpleStatement: AssignmentStatement .
+
+    $default  reduce using rule 37 (SimpleStatement)
+
+
+state 27
+
+   38 SimpleStatement: ProcedureStatement .
+
+    $default  reduce using rule 38 (SimpleStatement)
+
+
+state 28
+
+   36 Statement: StructuredStatement .
+
+    $default  reduce using rule 36 (Statement)
+
+
+state 29
+
+   40 AssignmentStatement: Variable . ASSIGN Expression
+
+    ASSIGN  shift, and go to state 70
+
+
+state 30
+
+   22 FunctionDeclaration: FUNCTION ID . BRACE_L FormalParameterList BRACE_R COLON ResultType SEMICOLON PFDeclarationFollow
+
+    BRACE_L  shift, and go to state 71
+
+
+state 31
+
+   21 ProcedureDeclaration: PROCEDURE ID . BRACE_L FormalParameterList BRACE_R SEMICOLON PFDeclarationFollow
+
+    BRACE_L  shift, and go to state 72
+
+
+state 32
+
+   19 TypeDefinition: ID . OP_EQUAL Type
+
+    OP_EQUAL  shift, and go to state 73
+
+
+state 33
+
+    9 TypeDefinitions: TYPE TypeDefinitionList .
+
+    $default  reduce using rule 9 (TypeDefinitions)
+
+
+state 34
+
+   10 TypeDefinitionList: TypeDefinition . SEMICOLON
+   11                   | TypeDefinition . SEMICOLON TypeDefinitionList
+
+    SEMICOLON  shift, and go to state 74
+
+
+state 35
+
+   90 IdentifierList: ID . IdentifierListMore
+
+    COMMA  shift, and go to state 75
+
+    $default  reduce using rule 92 (IdentifierListMore)
+
+    IdentifierListMore  go to state 76
+
+
+state 36
+
+   12 VariableDeclarations: VAR VariableDeclarationList .
+
+    $default  reduce using rule 12 (VariableDeclarations)
+
+
+state 37
+
+   13 VariableDeclarationList: VariableDeclaration . SEMICOLON
+   14                        | VariableDeclaration . SEMICOLON VariableDeclarationList
+
+    SEMICOLON  shift, and go to state 77
+
+
+state 38
+
+   20 VariableDeclaration: IdentifierList . COLON Type
+
+    COLON  shift, and go to state 78
+
+
+state 39
+
+    5 Program: PROGRAM ID SEMICOLON TypeDefinitions VariableDeclarations . CompoundStatement DOT
+    8        | PROGRAM ID SEMICOLON TypeDefinitions VariableDeclarations . SubprogramDeclarations CompoundStatement DOT
+
+    BEGINSYM   shift, and go to state 6
+    FUNCTION   shift, and go to state 7
+    PROCEDURE  shift, and go to state 8
+
+    SubprogramDeclarations  go to state 79
+    SubprogramDeclaration   go to state 14
+    ProcedureDeclaration    go to state 15
+    FunctionDeclaration     go to state 16
+    CompoundStatement       go to state 80
+
+
+state 40
+
+    7 Program: PROGRAM ID SEMICOLON TypeDefinitions SubprogramDeclarations . CompoundStatement DOT
+
+    BEGINSYM  shift, and go to state 6
+
+    CompoundStatement  go to state 81
+
+
+state 41
+
+    2 Program: PROGRAM ID SEMICOLON TypeDefinitions CompoundStatement . DOT
+
+    DOT  shift, and go to state 82
+
+
+state 42
+
+    6 Program: PROGRAM ID SEMICOLON VariableDeclarations SubprogramDeclarations . CompoundStatement DOT
+
+    BEGINSYM  shift, and go to state 6
+
+    CompoundStatement  go to state 83
+
+
+state 43
+
+    3 Program: PROGRAM ID SEMICOLON VariableDeclarations CompoundStatement . DOT
+
+    DOT  shift, and go to state 84
+
+
+state 44
+
+    4 Program: PROGRAM ID SEMICOLON SubprogramDeclarations CompoundStatement . DOT
+
+    DOT  shift, and go to state 85
+
+
+state 45
+
+   15 SubprogramDeclarations: SubprogramDeclaration SEMICOLON . SubprogramDeclarations
+   16                       | SubprogramDeclaration SEMICOLON .
+
+    FUNCTION   shift, and go to state 7
+    PROCEDURE  shift, and go to state 8
+
+    $default  reduce using rule 16 (SubprogramDeclarations)
+
+    SubprogramDeclarations  go to state 86
+    SubprogramDeclaration   go to state 14
+    ProcedureDeclaration    go to state 15
+    FunctionDeclaration     go to state 16
+
+
+state 46
+
+    1 Program: PROGRAM ID SEMICOLON CompoundStatement DOT .
+
+    $default  reduce using rule 1 (Program)
+
+
+state 47
+
+   46 StructuredStatement: FOR ID . ASSIGN Expression TO Expression DO Statement
+
+    ASSIGN  shift, and go to state 87
+
+
+state 48
+
+   79 Factor: NOT . Factor
+
+    NOT      shift, and go to state 48
+    BRACE_L  shift, and go to state 51
+    INT      shift, and go to state 52
+    ID       shift, and go to state 53
+    STRING   shift, and go to state 54
+
+    Factor             go to state 88
+    FunctionReference  go to state 60
+    Variable           go to state 61
+
+
+state 49
+
+   93 Sign: OP_ADD .
+
+    $default  reduce using rule 93 (Sign)
+
+
+state 50
+
+   94 Sign: OP_MIN .
+
+    $default  reduce using rule 94 (Sign)
+
+
+state 51
+
+   80 Factor: BRACE_L . Expression BRACE_R
+
+    NOT      shift, and go to state 48
+    OP_ADD   shift, and go to state 49
+    OP_MIN   shift, and go to state 50
+    BRACE_L  shift, and go to state 51
+    INT      shift, and go to state 52
+    ID       shift, and go to state 53
+    STRING   shift, and go to state 54
+
+    Expression         go to state 89
+    SimpleExpression   go to state 56
+    AddOpTerm          go to state 57
+    Term               go to state 58
+    Factor             go to state 59
+    FunctionReference  go to state 60
+    Variable           go to state 61
+    Sign               go to state 62
+
+
+state 52
+
+   75 Factor: INT .
+
+    $default  reduce using rule 75 (Factor)
+
+
+state 53
+
+   81 FunctionReference: ID . BRACE_L ActualParameterList BRACE_R
+   82 Variable: ID . ComponentSelection
+
+    DOT        shift, and go to state 64
+    BRACE_L    shift, and go to state 90
+    BRACKET_L  shift, and go to state 66
+
+    $default  reduce using rule 85 (ComponentSelection)
+
+    ComponentSelection  go to state 67
+
+
+state 54
+
+   76 Factor: STRING .
+
+    $default  reduce using rule 76 (Factor)
+
+
+state 55
+
+   43 StructuredStatement: IF Expression . THEN Statement
+   44                    | IF Expression . THEN Statement ELSE Statement
+
+    THEN  shift, and go to state 91
+
+
+state 56
+
+   53 Expression: SimpleExpression .
+   54           | SimpleExpression . RelationalOp SimpleExpression
+
+    OP_EQUAL       shift, and go to state 92
+    OP_LESS        shift, and go to state 93
+    OP_LESS_EQ     shift, and go to state 94
+    OP_GREATER     shift, and go to state 95
+    OP_GREATER_EQ  shift, and go to state 96
+    OP_NOT_EQ      shift, and go to state 97
+
+    $default  reduce using rule 53 (Expression)
+
+    RelationalOp  go to state 98
+
+
+state 57
+
+   62 SimpleExpression: AddOpTerm .
+
+    $default  reduce using rule 62 (SimpleExpression)
+
+
+state 58
+
+   63 AddOpTerm: Term . AddOp AddOpTerm
+   64          | Term .
+
+    OR      shift, and go to state 99
+    OP_ADD  shift, and go to state 100
+    OP_MIN  shift, and go to state 101
+
+    $default  reduce using rule 64 (AddOpTerm)
+
+    AddOp  go to state 102
+
+
+state 59
+
+   68 Term: Factor . MulOpTerm
+
+    DIV     shift, and go to state 103
+    MOD     shift, and go to state 104
+    OP_MUL  shift, and go to state 105
+    AND     shift, and go to state 106
+
+    $default  reduce using rule 70 (MulOpTerm)
+
+    MulOpTerm  go to state 107
+    MulOp      go to state 108
+
+
+state 60
+
+   78 Factor: FunctionReference .
+
+    $default  reduce using rule 78 (Factor)
+
+
+state 61
+
+   77 Factor: Variable .
+
+    $default  reduce using rule 77 (Factor)
+
+
+state 62
+
+   61 SimpleExpression: Sign . AddOpTerm
+
+    NOT      shift, and go to state 48
+    BRACE_L  shift, and go to state 51
+    INT      shift, and go to state 52
+    ID       shift, and go to state 53
+    STRING   shift, and go to state 54
+
+    AddOpTerm          go to state 109
+    Term               go to state 58
+    Factor             go to state 59
+    FunctionReference  go to state 60
+    Variable           go to state 61
+
+
+state 63
+
+   45 StructuredStatement: WHILE Expression . DO Statement
+
+    DO  shift, and go to state 110
+
+
+state 64
+
+   83 ComponentSelection: DOT . ID ComponentSelection
+
+    ID  shift, and go to state 111
+
+
+state 65
+
+   41 ProcedureStatement: ID BRACE_L . ActualParameterList BRACE_R
+
+    NOT      shift, and go to state 48
+    OP_ADD   shift, and go to state 49
+    OP_MIN   shift, and go to state 50
+    BRACE_L  shift, and go to state 51
+    INT      shift, and go to state 52
+    ID       shift, and go to state 53
+    STRING   shift, and go to state 54
+
+    $default  reduce using rule 87 (ActualParameterList)
+
+    Expression           go to state 112
+    SimpleExpression     go to state 56
+    AddOpTerm            go to state 57
+    Term                 go to state 58
+    Factor               go to state 59
+    FunctionReference    go to state 60
+    Variable             go to state 61
+    ActualParameterList  go to state 113
+    Sign                 go to state 62
+
+
+state 66
+
+   84 ComponentSelection: BRACKET_L . Expression BRACKET_R ComponentSelection
+
+    NOT      shift, and go to state 48
+    OP_ADD   shift, and go to state 49
+    OP_MIN   shift, and go to state 50
+    BRACE_L  shift, and go to state 51
+    INT      shift, and go to state 52
+    ID       shift, and go to state 53
+    STRING   shift, and go to state 54
+
+    Expression         go to state 114
+    SimpleExpression   go to state 56
+    AddOpTerm          go to state 57
+    Term               go to state 58
+    Factor             go to state 59
+    FunctionReference  go to state 60
+    Variable           go to state 61
+    Sign               go to state 62
+
+
+state 67
+
+   82 Variable: ID ComponentSelection .
+
+    $default  reduce using rule 82 (Variable)
+
+
+state 68
+
+   32 CompoundStatement: BEGINSYM StatementSequence END .
+
+    $default  reduce using rule 32 (CompoundStatement)
+
+
+state 69
+
+   34 StatementSequence: StatementSequence SEMICOLON . Statement
+
+    BEGINSYM  shift, and go to state 6
+    FOR       shift, and go to state 18
+    IF        shift, and go to state 19
+    WHILE     shift, and go to state 20
+    ID        shift, and go to state 21
+
+    $default  reduce using rule 39 (SimpleStatement)
+
+    CompoundStatement    go to state 22
+    Statement            go to state 115
+    SimpleStatement      go to state 25
+    AssignmentStatement  go to state 26
+    ProcedureStatement   go to state 27
+    StructuredStatement  go to state 28
+    Variable             go to state 29
+
+
+state 70
+
+   40 AssignmentStatement: Variable ASSIGN . Expression
+
+    NOT      shift, and go to state 48
+    OP_ADD   shift, and go to state 49
+    OP_MIN   shift, and go to state 50
+    BRACE_L  shift, and go to state 51
+    INT      shift, and go to state 52
+    ID       shift, and go to state 53
+    STRING   shift, and go to state 54
+
+    Expression         go to state 116
+    SimpleExpression   go to state 56
+    AddOpTerm          go to state 57
+    Term               go to state 58
+    Factor             go to state 59
+    FunctionReference  go to state 60
+    Variable           go to state 61
+    Sign               go to state 62
+
+
+state 71
+
+   22 FunctionDeclaration: FUNCTION ID BRACE_L . FormalParameterList BRACE_R COLON ResultType SEMICOLON PFDeclarationFollow
+
+    ID  shift, and go to state 35
+
+    $default  reduce using rule 25 (FormalParameterList)
+
+    FormalParameterList        go to state 117
+    FormalParameterListSingle  go to state 118
+    IdentifierList             go to state 119
+
+
+state 72
+
+   21 ProcedureDeclaration: PROCEDURE ID BRACE_L . FormalParameterList BRACE_R SEMICOLON PFDeclarationFollow
+
+    ID  shift, and go to state 35
+
+    $default  reduce using rule 25 (FormalParameterList)
+
+    FormalParameterList        go to state 120
+    FormalParameterListSingle  go to state 118
+    IdentifierList             go to state 119
+
+
+state 73
+
+   19 TypeDefinition: ID OP_EQUAL . Type
+
+    ARRAY   shift, and go to state 121
+    RECORD  shift, and go to state 122
+    ID      shift, and go to state 123
+
+    Type  go to state 124
+
+
+state 74
+
+   10 TypeDefinitionList: TypeDefinition SEMICOLON .
+   11                   | TypeDefinition SEMICOLON . TypeDefinitionList
+
+    ID  shift, and go to state 32
+
+    $default  reduce using rule 10 (TypeDefinitionList)
+
+    TypeDefinitionList  go to state 125
+    TypeDefinition      go to state 34
+
+
+state 75
+
+   91 IdentifierListMore: COMMA . IdentifierList
+
+    ID  shift, and go to state 35
+
+    IdentifierList  go to state 126
+
+
+state 76
+
+   90 IdentifierList: ID IdentifierListMore .
+
+    $default  reduce using rule 90 (IdentifierList)
+
+
+state 77
+
+   13 VariableDeclarationList: VariableDeclaration SEMICOLON .
+   14                        | VariableDeclaration SEMICOLON . VariableDeclarationList
+
+    ID  shift, and go to state 35
+
+    $default  reduce using rule 13 (VariableDeclarationList)
+
+    VariableDeclarationList  go to state 127
+    VariableDeclaration      go to state 37
+    IdentifierList           go to state 38
+
+
+state 78
+
+   20 VariableDeclaration: IdentifierList COLON . Type
+
+    ARRAY   shift, and go to state 121
+    RECORD  shift, and go to state 122
+    ID      shift, and go to state 123
+
+    Type  go to state 128
+
+
+state 79
+
+    8 Program: PROGRAM ID SEMICOLON TypeDefinitions VariableDeclarations SubprogramDeclarations . CompoundStatement DOT
+
+    BEGINSYM  shift, and go to state 6
+
+    CompoundStatement  go to state 129
+
+
+state 80
+
+    5 Program: PROGRAM ID SEMICOLON TypeDefinitions VariableDeclarations CompoundStatement . DOT
+
+    DOT  shift, and go to state 130
+
+
+state 81
+
+    7 Program: PROGRAM ID SEMICOLON TypeDefinitions SubprogramDeclarations CompoundStatement . DOT
+
+    DOT  shift, and go to state 131
+
+
+state 82
+
+    2 Program: PROGRAM ID SEMICOLON TypeDefinitions CompoundStatement DOT .
+
+    $default  reduce using rule 2 (Program)
+
+
+state 83
+
+    6 Program: PROGRAM ID SEMICOLON VariableDeclarations SubprogramDeclarations CompoundStatement . DOT
+
+    DOT  shift, and go to state 132
+
+
+state 84
+
+    3 Program: PROGRAM ID SEMICOLON VariableDeclarations CompoundStatement DOT .
+
+    $default  reduce using rule 3 (Program)
+
+
+state 85
+
+    4 Program: PROGRAM ID SEMICOLON SubprogramDeclarations CompoundStatement DOT .
+
+    $default  reduce using rule 4 (Program)
+
+
+state 86
+
+   15 SubprogramDeclarations: SubprogramDeclaration SEMICOLON SubprogramDeclarations .
+
+    $default  reduce using rule 15 (SubprogramDeclarations)
+
+
+state 87
+
+   46 StructuredStatement: FOR ID ASSIGN . Expression TO Expression DO Statement
+
+    NOT      shift, and go to state 48
+    OP_ADD   shift, and go to state 49
+    OP_MIN   shift, and go to state 50
+    BRACE_L  shift, and go to state 51
+    INT      shift, and go to state 52
+    ID       shift, and go to state 53
+    STRING   shift, and go to state 54
+
+    Expression         go to state 133
+    SimpleExpression   go to state 56
+    AddOpTerm          go to state 57
+    Term               go to state 58
+    Factor             go to state 59
+    FunctionReference  go to state 60
+    Variable           go to state 61
+    Sign               go to state 62
+
+
+state 88
+
+   79 Factor: NOT Factor .
+
+    $default  reduce using rule 79 (Factor)
+
+
+state 89
+
+   80 Factor: BRACE_L Expression . BRACE_R
+
+    BRACE_R  shift, and go to state 134
+
+
+state 90
+
+   81 FunctionReference: ID BRACE_L . ActualParameterList BRACE_R
+
+    NOT      shift, and go to state 48
+    OP_ADD   shift, and go to state 49
+    OP_MIN   shift, and go to state 50
+    BRACE_L  shift, and go to state 51
+    INT      shift, and go to state 52
+    ID       shift, and go to state 53
+    STRING   shift, and go to state 54
+
+    $default  reduce using rule 87 (ActualParameterList)
+
+    Expression           go to state 112
+    SimpleExpression     go to state 56
+    AddOpTerm            go to state 57
+    Term                 go to state 58
+    Factor               go to state 59
+    FunctionReference    go to state 60
+    Variable             go to state 61
+    ActualParameterList  go to state 135
+    Sign                 go to state 62
+
+
+state 91
+
+   43 StructuredStatement: IF Expression THEN . Statement
+   44                    | IF Expression THEN . Statement ELSE Statement
+
+    BEGINSYM  shift, and go to state 6
+    FOR       shift, and go to state 18
+    IF        shift, and go to state 19
+    WHILE     shift, and go to state 20
+    ID        shift, and go to state 21
+
+    $default  reduce using rule 39 (SimpleStatement)
+
+    CompoundStatement    go to state 22
+    Statement            go to state 136
+    SimpleStatement      go to state 25
+    AssignmentStatement  go to state 26
+    ProcedureStatement   go to state 27
+    StructuredStatement  go to state 28
+    Variable             go to state 29
+
+
+state 92
+
+   55 RelationalOp: OP_EQUAL .
+
+    $default  reduce using rule 55 (RelationalOp)
+
+
+state 93
+
+   56 RelationalOp: OP_LESS .
+
+    $default  reduce using rule 56 (RelationalOp)
+
+
+state 94
+
+   57 RelationalOp: OP_LESS_EQ .
+
+    $default  reduce using rule 57 (RelationalOp)
+
+
+state 95
+
+   58 RelationalOp: OP_GREATER .
+
+    $default  reduce using rule 58 (RelationalOp)
+
+
+state 96
+
+   59 RelationalOp: OP_GREATER_EQ .
+
+    $default  reduce using rule 59 (RelationalOp)
+
+
+state 97
+
+   60 RelationalOp: OP_NOT_EQ .
+
+    $default  reduce using rule 60 (RelationalOp)
+
+
+state 98
+
+   54 Expression: SimpleExpression RelationalOp . SimpleExpression
+
+    NOT      shift, and go to state 48
+    OP_ADD   shift, and go to state 49
+    OP_MIN   shift, and go to state 50
+    BRACE_L  shift, and go to state 51
+    INT      shift, and go to state 52
+    ID       shift, and go to state 53
+    STRING   shift, and go to state 54
+
+    SimpleExpression   go to state 137
+    AddOpTerm          go to state 57
+    Term               go to state 58
+    Factor             go to state 59
+    FunctionReference  go to state 60
+    Variable           go to state 61
+    Sign               go to state 62
+
+
+state 99
+
+   67 AddOp: OR .
+
+    $default  reduce using rule 67 (AddOp)
+
+
+state 100
+
+   65 AddOp: OP_ADD .
+
+    $default  reduce using rule 65 (AddOp)
+
+
+state 101
+
+   66 AddOp: OP_MIN .
+
+    $default  reduce using rule 66 (AddOp)
+
+
+state 102
+
+   63 AddOpTerm: Term AddOp . AddOpTerm
+
+    NOT      shift, and go to state 48
+    BRACE_L  shift, and go to state 51
+    INT      shift, and go to state 52
+    ID       shift, and go to state 53
+    STRING   shift, and go to state 54
+
+    AddOpTerm          go to state 138
+    Term               go to state 58
+    Factor             go to state 59
+    FunctionReference  go to state 60
+    Variable           go to state 61
+
+
+state 103
+
+   72 MulOp: DIV .
+
+    $default  reduce using rule 72 (MulOp)
+
+
+state 104
+
+   73 MulOp: MOD .
+
+    $default  reduce using rule 73 (MulOp)
+
+
+state 105
+
+   71 MulOp: OP_MUL .
+
+    $default  reduce using rule 71 (MulOp)
+
+
+state 106
+
+   74 MulOp: AND .
+
+    $default  reduce using rule 74 (MulOp)
+
+
+state 107
+
+   68 Term: Factor MulOpTerm .
+
+    $default  reduce using rule 68 (Term)
+
+
+state 108
+
+   69 MulOpTerm: MulOp . Term
+
+    NOT      shift, and go to state 48
+    BRACE_L  shift, and go to state 51
+    INT      shift, and go to state 52
+    ID       shift, and go to state 53
+    STRING   shift, and go to state 54
+
+    Term               go to state 139
+    Factor             go to state 59
+    FunctionReference  go to state 60
+    Variable           go to state 61
+
+
+state 109
+
+   61 SimpleExpression: Sign AddOpTerm .
+
+    $default  reduce using rule 61 (SimpleExpression)
+
+
+state 110
+
+   45 StructuredStatement: WHILE Expression DO . Statement
+
+    BEGINSYM  shift, and go to state 6
+    FOR       shift, and go to state 18
+    IF        shift, and go to state 19
+    WHILE     shift, and go to state 20
+    ID        shift, and go to state 21
+
+    $default  reduce using rule 39 (SimpleStatement)
+
+    CompoundStatement    go to state 22
+    Statement            go to state 140
+    SimpleStatement      go to state 25
+    AssignmentStatement  go to state 26
+    ProcedureStatement   go to state 27
+    StructuredStatement  go to state 28
+    Variable             go to state 29
+
+
+state 111
+
+   83 ComponentSelection: DOT ID . ComponentSelection
+
+    DOT        shift, and go to state 64
+    BRACKET_L  shift, and go to state 66
+
+    $default  reduce using rule 85 (ComponentSelection)
+
+    ComponentSelection  go to state 141
+
+
+state 112
+
+   86 ActualParameterList: Expression . ExpressionMore
+
+    COMMA  shift, and go to state 142
+
+    $default  reduce using rule 89 (ExpressionMore)
+
+    ExpressionMore  go to state 143
+
+
+state 113
+
+   41 ProcedureStatement: ID BRACE_L ActualParameterList . BRACE_R
+
+    BRACE_R  shift, and go to state 144
+
+
+state 114
+
+   84 ComponentSelection: BRACKET_L Expression . BRACKET_R ComponentSelection
+
+    BRACKET_R  shift, and go to state 145
+
+
+state 115
+
+   34 StatementSequence: StatementSequence SEMICOLON Statement .
+
+    $default  reduce using rule 34 (StatementSequence)
+
+
+state 116
+
+   40 AssignmentStatement: Variable ASSIGN Expression .
+
+    $default  reduce using rule 40 (AssignmentStatement)
+
+
+state 117
+
+   22 FunctionDeclaration: FUNCTION ID BRACE_L FormalParameterList . BRACE_R COLON ResultType SEMICOLON PFDeclarationFollow
+
+    BRACE_R  shift, and go to state 146
+
+
+state 118
+
+   26 FormalParameterList: FormalParameterListSingle . FormalParameterListMore
+
+    SEMICOLON  shift, and go to state 147
+
+    $default  reduce using rule 29 (FormalParameterListMore)
+
+    FormalParameterListMore  go to state 148
+
+
+state 119
+
+   27 FormalParameterListSingle: IdentifierList . COLON Type
+
+    COLON  shift, and go to state 149
+
+
+state 120
+
+   21 ProcedureDeclaration: PROCEDURE ID BRACE_L FormalParameterList . BRACE_R SEMICOLON PFDeclarationFollow
+
+    BRACE_R  shift, and go to state 150
+
+
+state 121
+
+   48 Type: ARRAY . BRACKET_L Constant DOUBLE_DOT Constant BRACKET_R OF Type
+
+    BRACKET_L  shift, and go to state 151
+
+
+state 122
+
+   49 Type: RECORD . FormalParameterList END
+
+    ID  shift, and go to state 35
+
+    $default  reduce using rule 25 (FormalParameterList)
+
+    FormalParameterList        go to state 152
+    FormalParameterListSingle  go to state 118
+    IdentifierList             go to state 119
+
+
+state 123
+
+   47 Type: ID .
+
+    $default  reduce using rule 47 (Type)
+
+
+state 124
+
+   19 TypeDefinition: ID OP_EQUAL Type .
+
+    $default  reduce using rule 19 (TypeDefinition)
+
+
+state 125
+
+   11 TypeDefinitionList: TypeDefinition SEMICOLON TypeDefinitionList .
+
+    $default  reduce using rule 11 (TypeDefinitionList)
+
+
+state 126
+
+   91 IdentifierListMore: COMMA IdentifierList .
+
+    $default  reduce using rule 91 (IdentifierListMore)
+
+
+state 127
+
+   14 VariableDeclarationList: VariableDeclaration SEMICOLON VariableDeclarationList .
+
+    $default  reduce using rule 14 (VariableDeclarationList)
+
+
+state 128
+
+   20 VariableDeclaration: IdentifierList COLON Type .
+
+    $default  reduce using rule 20 (VariableDeclaration)
+
+
+state 129
+
+    8 Program: PROGRAM ID SEMICOLON TypeDefinitions VariableDeclarations SubprogramDeclarations CompoundStatement . DOT
+
+    DOT  shift, and go to state 153
+
+
+state 130
+
+    5 Program: PROGRAM ID SEMICOLON TypeDefinitions VariableDeclarations CompoundStatement DOT .
+
+    $default  reduce using rule 5 (Program)
+
+
+state 131
+
+    7 Program: PROGRAM ID SEMICOLON TypeDefinitions SubprogramDeclarations CompoundStatement DOT .
+
+    $default  reduce using rule 7 (Program)
+
+
+state 132
+
+    6 Program: PROGRAM ID SEMICOLON VariableDeclarations SubprogramDeclarations CompoundStatement DOT .
+
+    $default  reduce using rule 6 (Program)
+
+
+state 133
+
+   46 StructuredStatement: FOR ID ASSIGN Expression . TO Expression DO Statement
+
+    TO  shift, and go to state 154
+
+
+state 134
+
+   80 Factor: BRACE_L Expression BRACE_R .
+
+    $default  reduce using rule 80 (Factor)
+
+
+state 135
+
+   81 FunctionReference: ID BRACE_L ActualParameterList . BRACE_R
+
+    BRACE_R  shift, and go to state 155
+
+
+state 136
+
+   43 StructuredStatement: IF Expression THEN Statement .
+   44                    | IF Expression THEN Statement . ELSE Statement
+
+    ELSE  shift, and go to state 156
+
+    ELSE      [reduce using rule 43 (StructuredStatement)]
+    $default  reduce using rule 43 (StructuredStatement)
+
+
+state 137
+
+   54 Expression: SimpleExpression RelationalOp SimpleExpression .
+
+    $default  reduce using rule 54 (Expression)
+
+
+state 138
+
+   63 AddOpTerm: Term AddOp AddOpTerm .
+
+    $default  reduce using rule 63 (AddOpTerm)
+
+
+state 139
+
+   69 MulOpTerm: MulOp Term .
+
+    $default  reduce using rule 69 (MulOpTerm)
+
+
+state 140
+
+   45 StructuredStatement: WHILE Expression DO Statement .
+
+    $default  reduce using rule 45 (StructuredStatement)
+
+
+state 141
+
+   83 ComponentSelection: DOT ID ComponentSelection .
+
+    $default  reduce using rule 83 (ComponentSelection)
+
+
+state 142
+
+   88 ExpressionMore: COMMA . Expression ExpressionMore
+
+    NOT      shift, and go to state 48
+    OP_ADD   shift, and go to state 49
+    OP_MIN   shift, and go to state 50
+    BRACE_L  shift, and go to state 51
+    INT      shift, and go to state 52
+    ID       shift, and go to state 53
+    STRING   shift, and go to state 54
+
+    Expression         go to state 157
+    SimpleExpression   go to state 56
+    AddOpTerm          go to state 57
+    Term               go to state 58
+    Factor             go to state 59
+    FunctionReference  go to state 60
+    Variable           go to state 61
+    Sign               go to state 62
+
+
+state 143
+
+   86 ActualParameterList: Expression ExpressionMore .
+
+    $default  reduce using rule 86 (ActualParameterList)
+
+
+state 144
+
+   41 ProcedureStatement: ID BRACE_L ActualParameterList BRACE_R .
+
+    $default  reduce using rule 41 (ProcedureStatement)
+
+
+state 145
+
+   84 ComponentSelection: BRACKET_L Expression BRACKET_R . ComponentSelection
+
+    DOT        shift, and go to state 64
+    BRACKET_L  shift, and go to state 66
+
+    $default  reduce using rule 85 (ComponentSelection)
+
+    ComponentSelection  go to state 158
+
+
+state 146
+
+   22 FunctionDeclaration: FUNCTION ID BRACE_L FormalParameterList BRACE_R . COLON ResultType SEMICOLON PFDeclarationFollow
+
+    COLON  shift, and go to state 159
+
+
+state 147
+
+   28 FormalParameterListMore: SEMICOLON . FormalParameterList
+
+    ID  shift, and go to state 35
+
+    $default  reduce using rule 25 (FormalParameterList)
+
+    FormalParameterList        go to state 160
+    FormalParameterListSingle  go to state 118
+    IdentifierList             go to state 119
+
+
+state 148
+
+   26 FormalParameterList: FormalParameterListSingle FormalParameterListMore .
+
+    $default  reduce using rule 26 (FormalParameterList)
+
+
+state 149
+
+   27 FormalParameterListSingle: IdentifierList COLON . Type
+
+    ARRAY   shift, and go to state 121
+    RECORD  shift, and go to state 122
+    ID      shift, and go to state 123
+
+    Type  go to state 161
+
+
+state 150
+
+   21 ProcedureDeclaration: PROCEDURE ID BRACE_L FormalParameterList BRACE_R . SEMICOLON PFDeclarationFollow
+
+    SEMICOLON  shift, and go to state 162
+
+
+state 151
+
+   48 Type: ARRAY BRACKET_L . Constant DOUBLE_DOT Constant BRACKET_R OF Type
+
+    OP_ADD  shift, and go to state 49
+    OP_MIN  shift, and go to state 50
+    INT     shift, and go to state 163
+
+    Constant  go to state 164
+    Sign      go to state 165
+
+
+state 152
+
+   49 Type: RECORD FormalParameterList . END
+
+    END  shift, and go to state 166
+
+
+state 153
+
+    8 Program: PROGRAM ID SEMICOLON TypeDefinitions VariableDeclarations SubprogramDeclarations CompoundStatement DOT .
+
+    $default  reduce using rule 8 (Program)
+
+
+state 154
+
+   46 StructuredStatement: FOR ID ASSIGN Expression TO . Expression DO Statement
+
+    NOT      shift, and go to state 48
+    OP_ADD   shift, and go to state 49
+    OP_MIN   shift, and go to state 50
+    BRACE_L  shift, and go to state 51
+    INT      shift, and go to state 52
+    ID       shift, and go to state 53
+    STRING   shift, and go to state 54
+
+    Expression         go to state 167
+    SimpleExpression   go to state 56
+    AddOpTerm          go to state 57
+    Term               go to state 58
+    Factor             go to state 59
+    FunctionReference  go to state 60
+    Variable           go to state 61
+    Sign               go to state 62
+
+
+state 155
+
+   81 FunctionReference: ID BRACE_L ActualParameterList BRACE_R .
+
+    $default  reduce using rule 81 (FunctionReference)
+
+
+state 156
+
+   44 StructuredStatement: IF Expression THEN Statement ELSE . Statement
+
+    BEGINSYM  shift, and go to state 6
+    FOR       shift, and go to state 18
+    IF        shift, and go to state 19
+    WHILE     shift, and go to state 20
+    ID        shift, and go to state 21
+
+    $default  reduce using rule 39 (SimpleStatement)
+
+    CompoundStatement    go to state 22
+    Statement            go to state 168
+    SimpleStatement      go to state 25
+    AssignmentStatement  go to state 26
+    ProcedureStatement   go to state 27
+    StructuredStatement  go to state 28
+    Variable             go to state 29
+
+
+state 157
+
+   88 ExpressionMore: COMMA Expression . ExpressionMore
+
+    COMMA  shift, and go to state 142
+
+    $default  reduce using rule 89 (ExpressionMore)
+
+    ExpressionMore  go to state 169
+
+
+state 158
+
+   84 ComponentSelection: BRACKET_L Expression BRACKET_R ComponentSelection .
+
+    $default  reduce using rule 84 (ComponentSelection)
+
+
+state 159
+
+   22 FunctionDeclaration: FUNCTION ID BRACE_L FormalParameterList BRACE_R COLON . ResultType SEMICOLON PFDeclarationFollow
+
+    ID  shift, and go to state 170
+
+    ResultType  go to state 171
+
+
+state 160
+
+   28 FormalParameterListMore: SEMICOLON FormalParameterList .
+
+    $default  reduce using rule 28 (FormalParameterListMore)
+
+
+state 161
+
+   27 FormalParameterListSingle: IdentifierList COLON Type .
+
+    $default  reduce using rule 27 (FormalParameterListSingle)
+
+
+state 162
+
+   21 ProcedureDeclaration: PROCEDURE ID BRACE_L FormalParameterList BRACE_R SEMICOLON . PFDeclarationFollow
+
+    BEGINSYM  shift, and go to state 6
+    FORWARD   shift, and go to state 172
+    VAR       shift, and go to state 10
+
+    VariableDeclarations  go to state 173
+    PFDeclarationFollow   go to state 174
+    Block                 go to state 175
+    CompoundStatement     go to state 176
+
+
+state 163
+
+   52 Constant: INT .
+
+    $default  reduce using rule 52 (Constant)
+
+
+state 164
+
+   48 Type: ARRAY BRACKET_L Constant . DOUBLE_DOT Constant BRACKET_R OF Type
+
+    DOUBLE_DOT  shift, and go to state 177
+
+
+state 165
+
+   51 Constant: Sign . INT
+
+    INT  shift, and go to state 178
+
+
+state 166
+
+   49 Type: RECORD FormalParameterList END .
+
+    $default  reduce using rule 49 (Type)
+
+
+state 167
+
+   46 StructuredStatement: FOR ID ASSIGN Expression TO Expression . DO Statement
+
+    DO  shift, and go to state 179
+
+
+state 168
+
+   44 StructuredStatement: IF Expression THEN Statement ELSE Statement .
+
+    $default  reduce using rule 44 (StructuredStatement)
+
+
+state 169
+
+   88 ExpressionMore: COMMA Expression ExpressionMore .
+
+    $default  reduce using rule 88 (ExpressionMore)
+
+
+state 170
+
+   50 ResultType: ID .
+
+    $default  reduce using rule 50 (ResultType)
+
+
+state 171
+
+   22 FunctionDeclaration: FUNCTION ID BRACE_L FormalParameterList BRACE_R COLON ResultType . SEMICOLON PFDeclarationFollow
+
+    SEMICOLON  shift, and go to state 180
+
+
+state 172
+
+   24 PFDeclarationFollow: FORWARD .
+
+    $default  reduce using rule 24 (PFDeclarationFollow)
+
+
+state 173
+
+   31 Block: VariableDeclarations . CompoundStatement
+
+    BEGINSYM  shift, and go to state 6
+
+    CompoundStatement  go to state 181
+
+
+state 174
+
+   21 ProcedureDeclaration: PROCEDURE ID BRACE_L FormalParameterList BRACE_R SEMICOLON PFDeclarationFollow .
+
+    $default  reduce using rule 21 (ProcedureDeclaration)
+
+
+state 175
+
+   23 PFDeclarationFollow: Block .
+
+    $default  reduce using rule 23 (PFDeclarationFollow)
+
+
+state 176
+
+   30 Block: CompoundStatement .
+
+    $default  reduce using rule 30 (Block)
+
+
+state 177
+
+   48 Type: ARRAY BRACKET_L Constant DOUBLE_DOT . Constant BRACKET_R OF Type
+
+    OP_ADD  shift, and go to state 49
+    OP_MIN  shift, and go to state 50
+    INT     shift, and go to state 163
+
+    Constant  go to state 182
+    Sign      go to state 165
+
+
+state 178
+
+   51 Constant: Sign INT .
+
+    $default  reduce using rule 51 (Constant)
+
+
+state 179
+
+   46 StructuredStatement: FOR ID ASSIGN Expression TO Expression DO . Statement
+
+    BEGINSYM  shift, and go to state 6
+    FOR       shift, and go to state 18
+    IF        shift, and go to state 19
+    WHILE     shift, and go to state 20
+    ID        shift, and go to state 21
+
+    $default  reduce using rule 39 (SimpleStatement)
+
+    CompoundStatement    go to state 22
+    Statement            go to state 183
+    SimpleStatement      go to state 25
+    AssignmentStatement  go to state 26
+    ProcedureStatement   go to state 27
+    StructuredStatement  go to state 28
+    Variable             go to state 29
+
+
+state 180
+
+   22 FunctionDeclaration: FUNCTION ID BRACE_L FormalParameterList BRACE_R COLON ResultType SEMICOLON . PFDeclarationFollow
+
+    BEGINSYM  shift, and go to state 6
+    FORWARD   shift, and go to state 172
+    VAR       shift, and go to state 10
+
+    VariableDeclarations  go to state 173
+    PFDeclarationFollow   go to state 184
+    Block                 go to state 175
+    CompoundStatement     go to state 176
+
+
+state 181
+
+   31 Block: VariableDeclarations CompoundStatement .
+
+    $default  reduce using rule 31 (Block)
+
+
+state 182
+
+   48 Type: ARRAY BRACKET_L Constant DOUBLE_DOT Constant . BRACKET_R OF Type
+
+    BRACKET_R  shift, and go to state 185
+
+
+state 183
+
+   46 StructuredStatement: FOR ID ASSIGN Expression TO Expression DO Statement .
+
+    $default  reduce using rule 46 (StructuredStatement)
+
+
+state 184
+
+   22 FunctionDeclaration: FUNCTION ID BRACE_L FormalParameterList BRACE_R COLON ResultType SEMICOLON PFDeclarationFollow .
+
+    $default  reduce using rule 22 (FunctionDeclaration)
+
+
+state 185
+
+   48 Type: ARRAY BRACKET_L Constant DOUBLE_DOT Constant BRACKET_R . OF Type
+
+    OF  shift, and go to state 186
+
+
+state 186
+
+   48 Type: ARRAY BRACKET_L Constant DOUBLE_DOT Constant BRACKET_R OF . Type
+
+    ARRAY   shift, and go to state 121
+    RECORD  shift, and go to state 122
+    ID      shift, and go to state 123
+
+    Type  go to state 187
+
+
+state 187
+
+   48 Type: ARRAY BRACKET_L Constant DOUBLE_DOT Constant BRACKET_R OF Type .
+
+    $default  reduce using rule 48 (Type)

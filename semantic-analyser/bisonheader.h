@@ -9,6 +9,12 @@
 #ifndef compiler_debugging_bisonheader_h
 #define compiler_debugging_bisonheader_h
 
+typedef struct TypeInfo {
+    int typeEntry;
+    char *additionType;
+    union SymbolEntryAttr attrInfo;
+} typeinfost;
+
 typedef struct IDLIST {
     int identryAddr;
     struct IDLIST * next;
@@ -18,7 +24,7 @@ idlist * idlisthead = NULL;
 idlist * idlisttail = NULL;
 
 int latestSetEntries[100] = {};
-int maxPos = -1;
+int maxSetEntryId = -1;
 
 //append a new id to current id list
 idlist * appendToIdList(int entry) {
@@ -51,31 +57,32 @@ void destroyCurIdList() {
 }
 
 void appendToLatestSetList(int entry) {
-    if(maxPos >= 99) {
+    if(maxSetEntryId >= 99) {
         return;
     }
-    latestSetEntries[maxPos] = entry;
-    maxPos ++;
+    latestSetEntries[maxSetEntryId] = entry;
+    maxSetEntryId ++;
 }
 
 void cleanLatestSetList() {
-    for(int i = 0; i < maxPos; i ++) {
+    int i = 0;
+    for(i = 0; i < maxSetEntryId; i ++) {
         latestSetEntries[i] = -1;
     }
-    maxPos = -1;
+    maxSetEntryId = -1;
 }
 
 //set type and attr for all current idlist ids
 char * setIdListTypeAttr(int typeEntryAddr, entryAttr attr) {
-    scope *curScope;
+    symboltable *table;
     idlist * cursor = idlisthead;
     int setResp = 0;
-    curScope = getCurScope();
+    table = getCurSymboltable();
     while(cursor != NULL) {
         printf("setting: %d %d\n", cursor->identryAddr, typeEntryAddr);
-        setResp = setSymbolEntyTypeAttr(curScope->symboltable, cursor->identryAddr, typeEntryAddr, attr);
+        setResp = setSymbolEntyTypeAttr(table, cursor->identryAddr, typeEntryAddr, attr);
         if(setResp == -1) {
-            char * idN = getIDName(curScope->symboltable, cursor->identryAddr);
+            char * idN = getIDName(table, cursor->identryAddr);
             char * info = "Redefinition of variable: ";
             char * buf = (char *)malloc(strlen(info) + strlen(idN) + 4);
             sprintf(buf, "%s%s\n", info, idN);
@@ -86,6 +93,41 @@ char * setIdListTypeAttr(int typeEntryAddr, entryAttr attr) {
     }
     destroyCurIdList();
     return NULL;
+}
+
+void registerFunc(int idEntry, int retTypeEntry, entryAttr retTypeAttr,
+                      int paramQty) {
+    symboltable *curTable = getCurSymboltable();
+    entryAttr funcAttr;
+    char *type = getIDName(predefinedIdTable, retTypeEntry);
+    funcAttr.funcInfo.paramQty = paramQty;
+    funcAttr.funcInfo.retTypeEntry = retTypeEntry;
+    if(type != NULL && strcmp(type, "array")) {
+            funcAttr.funcInfo.retTypeAttr.retArrayAttr = retTypeAttr.arrayInfo;
+    }
+    else if(type != NULL && strcmp(type, "record")) {
+            funcAttr.funcInfo.retTypeAttr.retRecordAttr = retTypeAttr.recordInfo;
+    }
+    setSymbolTypeAttrDirec(curTable, idEntry, "function", funcAttr);
+    printf("set func: %d in scope %d\n", idEntry, getCurScope()->scopeId);
+}
+
+void registerProc(int idEntry, int paramQty) {
+    symboltable *curTable = getCurSymboltable();
+    entryAttr attr;
+    attr.funcInfo.paramQty = paramQty;
+    setSymbolTypeAttrDirec(curTable, idEntry, "procedure", attr);
+    printf("set proc: %d in scope %d \n", idEntry, getCurScope()->scopeId);
+}
+
+int registerSymbolInCurScope(char *symbolVal, char *type) {
+    int ret = registerSymbol(getCurSymboltable(), symbolVal, type);
+    return ret;
+}
+
+int setSymbolTypeAttrInCurScope(int idAddr, int typeAddr, entryAttr attribute) {
+    int ret = setSymbolEntyTypeAttr(getCurSymboltable(), idAddr, typeAddr, attribute);
+    return ret;
 }
 
 #endif

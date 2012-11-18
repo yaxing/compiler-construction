@@ -66,6 +66,7 @@ scope *newScope(int procedureAddress) {
     scope *newScope = (scope *)malloc(sizeof(scope));
     newScope->scopeId = procedureAddress;
     newScope->symboltable = createSymbolTable();
+    add_scope(newScope);
     return newScope;
 }
 
@@ -73,10 +74,22 @@ scope *pushScopeStack(scope *curScope) {
     curScope->stackParent = scopestack.top;
     scopestack.top = curScope;
     scopestack.size ++;
+    printf("scope changed to: %d\n", curScope->scopeId);
     return scopestack.top;
 }
 
+void newScopeAndPush(int procedureAddress) {
+    pushScopeStack(newScope(procedureAddress));
+}
+
 scope *getCurScope() {
+    return scopestack.top;
+}
+
+scope *getParentScope() {
+    if(scopestack.top->parent != NULL) {
+        return scopestack.top->parent;
+    }
     return scopestack.top;
 }
 
@@ -87,7 +100,9 @@ scope *popScopeStack() {
         scopestack.top = curTop->stackParent;
         curTop->stackParent = NULL;
     }
-    return curTop;
+    scopestack.size --;
+    printf("scope changed to: %d\n", scopestack.top->scopeId);
+    return scopestack.top;
 }
 
 symboltable *getCurSymboltable() {
@@ -114,5 +129,33 @@ int getType(char *name) {
     }
     return -1;
 }
+
+char *getNameInCurScope(int entry) {
+    return getIDName(getCurSymboltable(), entry);
+}
+
+void printSymbolTableRec(int idEntry, int parentId, symboltable *table) {
+    int i = 0;
+    printf("symboltable of scope %d (sub-scope of %d): \n", idEntry, parentId);
+    if(table->maxId == -1) {
+        return;
+    }
+    printSymbolTable(table);
+    scope *scopeP = NULL;
+    for(i = 0; i <= global->symboltable->maxId; i ++) {
+        if(table->entries[i].type != NULL
+           && (strcmp("function", table->entries[i].type) == 0 || strcmp("procedure", table->entries[i].type) == 0)) {
+            scopeP = find_scope(i);
+            printSymbolTableRec(i, idEntry, scopeP->symboltable);
+        }
+    }
+}
+
+void printAllSymbolTable() {
+    printf("All symboltables: \n");
+    printSymbolTableRec(-1, -1, global->symboltable);
+}
+
+
 
 #endif

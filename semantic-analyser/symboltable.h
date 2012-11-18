@@ -29,8 +29,8 @@ entry *getSymbolbyName(symboltable *table, char *name) {
     entry *res = (entry *)malloc(sizeof(entry));
     while(i <= table->maxId && i < table->size) {
         if(strcmp(table->entries[i].symbolVal, name) == 0) {
-*res = table->entries[i];
-return res;
+            *res = table->entries[i];
+            return res;
         }
         i ++;
     }
@@ -40,6 +40,7 @@ return res;
 entry *getSymbolbyEntryId(symboltable *table, int addr) {
     entry *res = NULL;
     if(checkIndex(table, addr) == 1) {
+        res = (entry *)malloc(sizeof(entry));
         *res = table->entries[addr];
         return res;
     }
@@ -53,7 +54,7 @@ int getSymbolEntry(symboltable *table, char *symbolVal) {
     int i = 0;
     while(i <= table->maxId && i < table->size) {
         if(strcmp(table->entries[i].symbolVal, symbolVal) == 0) {
-return i;
+            return i;
         }
         i ++;
     }
@@ -61,7 +62,7 @@ return i;
 }
 
 //get symbol name
-char * getIDName(symboltable *table, int entry) {
+char *getIDName(symboltable *table, int entry) {
     if(entry > table->maxId) {
         return NULL;
     }
@@ -79,16 +80,29 @@ int extendTable() {
     return 0;
 }
 
+void printArrayInfo(union SymbolEntryAttr info) {
+    char *type = getIDName(predefinedIdTable, info.arrayInfo.typeEntry);
+    printf("ArrayType: %-10s BoundLow: %d BoundUp: %d",
+           type, info.arrayInfo.boundLow, info.arrayInfo.boundUp);
+}
+
+void printFuncInfo(union SymbolEntryAttr info) {
+    char *retType = getIDName(predefinedIdTable, info.funcInfo.retTypeEntry);
+    printf("ParamQty: %d ReturnType: %-10s", info.funcInfo.paramQty, retType);
+}
+
+void printProcInfo(union SymbolEntryAttr info) {
+    printf("ParamQty: %d", info.funcInfo.paramQty);
+}
+
 void printSymbolTable(symboltable *table) {
     int i = 0;
     int j = 0;
-    char *type;
     while(i <= table->maxId) {
         printf("Address: %-3d ID: %-15s Type: %-10s ", table->entries[i].address, table->entries[i].symbolVal, table->entries[i].type);
-        if(type != NULL) {
+        if(table->entries[i].type != NULL) {
             if(strcmp(table->entries[i].type, "array") == 0) {
-                type = getIDName(predefinedIdTable, table->entries[i].attribute.arrayInfo.typeEntry);
-                printf("ArrayType: %s Bound: %d", type, table->entries[i].attribute.arrayInfo.bound);
+                printArrayInfo(table->entries[i].attribute);
             }
             else if(strcmp(table->entries[i].type, "record") == 0) {
                 printf("MemberAddrs: ");
@@ -96,11 +110,17 @@ void printSymbolTable(symboltable *table) {
                     printf("%d ", table->entries[i].attribute.recordInfo.recordMembers[j]);
                 }
             }
-
+            else if(strcmp(table->entries[i].type, "function") == 0) {
+                printFuncInfo(table->entries[i].attribute);
+            }
+            else if(strcmp(table->entries[i].type, "procedure") == 0) {
+                printProcInfo(table->entries[i].attribute);
+            }
         }
         printf("\n");
         i ++;
     }
+    printf("\n\n");
 }
 
 //set id attribute based on it's type
@@ -109,8 +129,8 @@ void setAttribute(symboltable *table, int idAddr, char *type, entryAttr attribut
     if(type != NULL) {
         if(strcmp(type, "function") == 0) {
             table->entries[idAddr].attribute.funcInfo.paramQty = attribute.funcInfo.paramQty;
-            table->entries[idAddr].attribute.funcInfo.returnTypeEntry
-                = attribute.funcInfo.returnTypeEntry;
+            table->entries[idAddr].attribute.funcInfo.retTypeEntry
+                = attribute.funcInfo.retTypeEntry;
         }
         else if(strcmp(type, "array") == 0) {
             table->entries[idAddr].attribute.arrayInfo.boundLow = attribute.arrayInfo.boundLow;
@@ -125,6 +145,9 @@ void setAttribute(symboltable *table, int idAddr, char *type, entryAttr attribut
                     = attribute.recordInfo.recordMembers[i];
             }
         }
+        else if(strcmp(type, "procedure") == 0) {
+            table->entries[idAddr].attribute.funcInfo.paramQty = attribute.funcInfo.paramQty;
+        }
     }
     else {
         table->entries[idAddr].attribute.attr = attribute.attr;
@@ -134,7 +157,7 @@ void setAttribute(symboltable *table, int idAddr, char *type, entryAttr attribut
 
 //register a symbol into symbol table
 //@return long the address of registered entry
-int registerSymbol(symboltable *table, char *symbolVal, char *type, entryAttr attribute) {
+int registerSymbol(symboltable *table, char *symbolVal, char *type) {
     int addr = getSymbolEntry(table, symbolVal);
     if(checkIndex(table, addr) == 1) {
         return addr;
@@ -155,16 +178,13 @@ int registerSymbol(symboltable *table, char *symbolVal, char *type, entryAttr at
     else {
         table->entries[table->maxId].type = NULL;
     }
-    setAttribute(table, table->maxId, type, attribute);
     return table->maxId;
 }
 
 void registerPredefinedIds(symboltable *table, char *ids[], char * type, int size) {
     int i = 0;
-    entryAttr atr;
-    atr.attr = NULL;
     for(i = 0; i < size; i ++) {
-        registerSymbol(table, ids[i], type, atr);
+        registerSymbol(table, ids[i], type);
     }
 }
 
@@ -187,10 +207,12 @@ int setSymbolTypeAttrDirec(symboltable *table, int address, char * type, entryAt
     }
     
     if(type == NULL) {
-        return -3;
+        type = "NIL";
     }
-    else if(table->entries[address].type != NULL) {
-        if(strcmp(type, table->entries[address].type) == 0) {
+    else if(table->entries[address].type != NULL
+            && !attrIsEmpty(table->entries[address].attribute, type)) {
+        if(strcmp(type, table->entries[address].type) == 0
+           && attrCmp(attribute, table->entries[address].attribute, type) == 0) {
             return 0;
         }
         return -1; //re-definition
@@ -198,33 +220,25 @@ int setSymbolTypeAttrDirec(symboltable *table, int address, char * type, entryAt
     
     table->entries[address].type = (char *)malloc(sizeof(type));
     strcpy(table->entries[address].type, type);
-    
     setAttribute(table, address, type, attribute);
     return 0;
 }
 
 //set symbol entry type & attr using type addr
 int setSymbolEntyTypeAttr(symboltable *table, int idAddr, int typeAddr, entryAttr attribute) {
-    char * type = NULL;
+    char * type = getIDName(predefinedIdTable, typeAddr);
     if(checkIndex(table, idAddr) != 1) {
         return -2; //invalie id addr
     }
-    if(checkIndex(table, typeAddr) == 1) {
-        type = table->entries[typeAddr].symbolVal;
-    }
     
-    if(type == NULL) {
-        return -2; //invalid type
-    }
-    else if(table->entries[idAddr].type != NULL) {
+    if(table->entries[idAddr].type != NULL) {
         if(strcmp(type, table->entries[idAddr].type) == 0) {
             return 0;
         }
         return -1; //re-definition
     }
     
-    setSymbolTypeAttrDirec(table, idAddr, type, attribute);
-    return 0;
+    return setSymbolTypeAttrDirec(table, idAddr, type, attribute);
 }
 
 /**

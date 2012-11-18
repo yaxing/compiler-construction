@@ -17,25 +17,44 @@ int main() {
     entryAttr attr;
     initScope();
     scope *curScope = getCurScope();
-    registerSymbol(curScope->symboltable, "a", NULL, attr);
+    registerSymbol(getCurSymboltable(), "a", NULL);
     
     printf("scopeid: %d \n", curScope->scopeId);
-    printSymbolTable(curScope->symboltable);
+    printSymbolTable(getCurSymboltable());
     printf("\n");
     
-    int addr = getSymbolEntry(curScope->symboltable, "a");
+    int addr = getSymbolEntry(getCurSymboltable(), "a");
     if(getType("integer") >= 0) {
-        setSymbolTypeAttrDirec(curScope->symboltable, addr, "integer", attr);
+        setSymbolTypeAttrDirec(getCurSymboltable(), addr, "integer", attr);
     }
     printf("scopeid: %d \n", curScope->scopeId);
-    printSymbolTable(curScope->symboltable);
+    printSymbolTable(getCurSymboltable());
     
     printf("%d\n", getType("a"));
     
-    attr.arrayInfo.bound = 10;
+    attr.arrayInfo.boundLow = 1;
+    attr.arrayInfo.boundUp = 10;
     attr.arrayInfo.typeEntry = 23;
-    registerSymbol(curScope->symboltable, "b", "array", attr);
+    registerSymbol(getCurSymboltable(), "b", "array");
+    printSymbolTable(getCurSymboltable());
+    setSymbolTypeAttrDirec(getCurSymboltable(), getSymbolEntry(getCurSymboltable(), "b"), "array", attr);
     
-    printSymbolTable(curScope->symboltable);
+    printSymbolTable(getCurSymboltable());
+    
+    attr.funcInfo.paramQty = 2;
+    attr.funcInfo.retTypeEntry = 23;
+    registerSymbol(getCurSymboltable(), "func1", "function");
+    setSymbolTypeAttrDirec(getCurSymboltable(), getSymbolEntry(getCurSymboltable(), "func1"), "function", attr);
+    
+    newScopeAndPush(getSymbolEntry(getCurSymboltable(), "func1"));
+    
+    registerSymbol(getCurSymboltable(), "a", "integer");
+    
+    popScopeStack();
+    
+    registerSymbol(getCurSymboltable(), "var1", "string");
+    
+    printf("\n");
+    printAllSymbolTable();
     return 0;
 }
