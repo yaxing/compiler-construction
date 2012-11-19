@@ -84,7 +84,10 @@
      NUM = 300,
      ID = 301,
      STRING = 302,
-     AND = 303
+     AND = 303,
+     NIL = 304,
+     TRUE = 305,
+     FALSE = 306
    };
 #endif
 /* Tokens.  */
@@ -134,22 +137,28 @@
 #define ID 301
 #define STRING 302
 #define AND 303
+#define NIL 304
+#define TRUE 305
+#define FALSE 306
 
 
 
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 18 "translate.y"
+#line 35 "translate.y"
 {
     double doubleType;
     int intType;
     int idEntryType;
     char *stringType;
     struct IDLIST *idListType;
+    struct IdResp *idrespType;
+    struct TypeInfo *typeinfo;
+    int paramList[100];
 }
 /* Line 1529 of yacc.c.  */
-#line 153 "translate.tab.h"
+#line 162 "translate.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

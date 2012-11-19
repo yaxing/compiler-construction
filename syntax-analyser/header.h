@@ -12,33 +12,10 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include "uthash.h"
+#include "predefinedids.h"
 #include "symboltable.h"
+#include "scope.h"
 #include "bisonheader.h"
-
-char *keywords[] = {
-    "and",
-    "if",
-    "begin",
-    "forward",
-    "div",
-    "do",
-    "else",
-    "end",
-    "for",
-    "function",
-    "array",
-    "mod",
-    "not",
-    "of",
-    "or",
-    "procedure",
-    "program",
-    "record",
-    "then",
-    "to",
-    "type",
-    "var",
-    "while"
-};
 
 #endif

@@ -5,12 +5,9 @@
     //
     //  Copyright (c) 2012 Yaxing Chen. All rights reserved.
     //
-    #include <stdio.h>
-    #include <stdlib.h>
-    #include <math.h>
-    #include <string.h>
-
+    
     #include "translate.tab.h"
+    #include "flex-bison-header.h"
     
     enum ERRORTYPE {
         INVALID_ID = -1,
@@ -18,6 +15,7 @@
     };
  
     int lineNo = 0;
+
 %}
 
 line   [\n\r]
@@ -62,11 +60,14 @@ to {return TO;}
 type {return TYPE;}
 var {return VAR;}
 while {return WHILE;}
+NIL {return NIL;}
+true {return TRUE;}
 
 {expnumber} {yylval.stringType = yytext; return NUM;}
 {invalidId} {yylval.stringType = yytext; return INVALID_ID;}
 {id} {
-        yylval.idEntryType = registerSymbol(yytext, NULL, NULL);
+        printf("registering %s\n", yytext);
+        idHandler();
         return ID;
      }
 {int} {yylval.stringType = yytext; return INT;}
@@ -95,3 +96,29 @@ while {return WHILE;}
 
 . {yylval.stringType = yytext; return UNK_CHAR;}
 %%
+
+int idHandler() {
+    int entry = -1;
+    yylval.idrespType = (struct IdResp *)malloc(sizeof(struct IdResp));
+    yylval.idrespType->idStr = (char *)malloc(sizeof(yytext));
+    strcpy(yylval.idrespType->idStr, yytext);
+    entry = getPredefType(yytext);
+    if(entry >=0) {
+        printf("id %s is predefined-type at %d\n", yytext, entry);
+        yylval.idrespType->idEntry = entry;
+        yylval.idrespType->idRespStatus = -1;
+        return 0;
+    }
+    entry = getPredefineVar(yytext);
+    if(entry >= 0) {
+        printf("id %s is predefined-keyword at %d\n", yytext, entry);
+        yylval.idrespType->idEntry = entry;
+        yylval.idrespType->idRespStatus = -2;
+        return 0;
+    }
+    entry = registerSymbolInCurScope(yytext);
+    yylval.idrespType->idEntry = entry;
+    yylval.idrespType->idRespStatus = 0;
+    printf("registered %s at %d\n", yytext, entry);
+    return 0;
+}
