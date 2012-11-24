@@ -1,33 +1,8 @@
 All symboltables: 
 symboltable of scope -1 (sub-scope of -1): 
-Address: 0   ID: parser_test     Type: (null)     
-Address: 1   ID: divides         Type: function   ParamQty: 2 ReturnType: boolean   
-Address: 2   ID: mul             Type: function   ParamQty: 2 ReturnType: boolean   
-Address: 3   ID: DrawLine        Type: procedure  ParamQty: 0
-
-
-symboltable of scope 1 (sub-scope of -1): 
-Address: 0   ID: divides         Type: boolean    
-Address: 1   ID: x               Type: integer    
-Address: 2   ID: y               Type: integer    
-
-
-symboltable of scope 2 (sub-scope of -1): 
-Address: 0   ID: mul             Type: boolean    
-Address: 1   ID: x               Type: integer    
-Address: 2   ID: y               Type: integer    
-Address: 3   ID: divides         Type: (null)     
-
-
-symboltable of scope 3 (sub-scope of -1): 
-Address: 0   ID: DrawLine        Type: NIL        
-Address: 1   ID: X               Type: integer    
-Address: 2   ID: Y               Type: integer    
-Address: 3   ID: Counter         Type: (null)     
-Address: 4   ID: GotoXy          Type: (null)     
-Address: 5   ID: textcolor       Type: (null)     
-Address: 6   ID: green           Type: (null)     
-Address: 7   ID: write           Type: (null)     
-Address: 8   ID: chr             Type: (null)     
-
+Address: 0   ID: errormulti      Type: (null)     
+Address: 1   ID: s               Type: string     Attr: type 
+Address: 2   ID: in              Type: integer    Attr: type 
+Address: 3   ID: z               Type: integer    Attr: var 
+Address: 4   ID: m               Type: integer    Attr: var 
 

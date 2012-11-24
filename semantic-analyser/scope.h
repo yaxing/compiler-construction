@@ -9,6 +9,8 @@
 #ifndef compiler_debugging_scope_h
 #define compiler_debugging_scope_h
 
+int const SCOPEID_GLOBAL = -1;
+int const SCOPEID_PREDEF = -2;
 
 typedef struct Scope {
     int scopeId; //hash value, in this part, scopeId equals to corresponding procedure id address
@@ -17,7 +19,6 @@ typedef struct Scope {
     int subScopeQty;
     struct SymbolTable *symboltable;
     struct Scope *parent;
-    struct Scope *stackParent;
     UT_hash_handle hh;
 } scope;
 
@@ -27,8 +28,10 @@ typedef struct ScopeStack {
 } stack;
 
 stack scopestack;
-scope * global;
+scope *global;
+scope *predef;
 scope *scopeHashTable = NULL;
+int hashSeed = 1;
 
 int add_scope(scope *s) {
     scope *tmp;
@@ -44,7 +47,6 @@ int add_scope(scope *s) {
 
 scope *find_scope(int procedureAddress) {
     scope *s;
-    
     HASH_FIND_INT( scopeHashTable, &procedureAddress, s );
     return s;
 }
@@ -57,9 +59,16 @@ void initScope() {
     global = (scope *)malloc(sizeof(scope));
     global->scopeId = -1;
     global->symboltable = createSymbolTable();
+    global->parent = global;
     scopestack.size = 1;
     add_scope(global);
     scopestack.top = global;
+    
+    predef = (scope *)malloc(sizeof(scope));
+    predef->scopeId = -2;
+    predef->symboltable = predefinedIdTable;
+    predef->parent = NULL;
+    add_scope(predef);
 }
 
 scope *newScope(int procedureAddress) {
@@ -71,7 +80,7 @@ scope *newScope(int procedureAddress) {
 }
 
 scope *pushScopeStack(scope *curScope) {
-    curScope->stackParent = scopestack.top;
+    curScope->parent = scopestack.top;
     scopestack.top = curScope;
     scopestack.size ++;
     printf("scope changed to: %d\n", curScope->scopeId);
@@ -86,6 +95,10 @@ scope *getCurScope() {
     return scopestack.top;
 }
 
+int getCurScopeId() {
+    return scopestack.top->scopeId;
+}
+
 scope *getParentScope() {
     if(scopestack.top->parent != NULL) {
         return scopestack.top->parent;
@@ -97,8 +110,7 @@ scope *popScopeStack() {
     scope *curTop;
     curTop = scopestack.top;
     if(scopestack.top != global && scopestack.size > 1) {
-        scopestack.top = curTop->stackParent;
-        curTop->stackParent = NULL;
+        scopestack.top = curTop->parent;
     }
     scopestack.size --;
     printf("scope changed to: %d\n", scopestack.top->scopeId);
@@ -110,52 +122,106 @@ symboltable *getCurSymboltable() {
     return curScope->symboltable;
 }
 
-/**
- *get the entry id of a predefined data type
- *@return int  >=0: entry index, -1: entry doesn't exist
- */
-int getType(char *name) {
+char *getNameInCurScope(int entry) {
+    return getIDName(getCurSymboltable(), entry);
+}
+
+int getTypeDefAddrInScope(scope *scope, char *name) {
     char *type = name;
     struct SymbolEntry *symbol;
-    symboltable *curSymboltable = getCurSymboltable();
-    symbol = getSymbolbyName(curSymboltable, name);
-    if(symbol != NULL && symbol->type != NULL) {
-        type = symbol->type;
+    symboltable *curSymboltable = scope->symboltable;
+    int tag = ATTR_DEFAULT;
+    if(type == NULL) {
+        return -1;
     }
-    symbol = getSymbolbyName(predefinedIdTable, type);
-    type = symbol->type;
-    if(type != NULL && strcmp(type, "TYPE") == 0) {
+    symbol = getSymbolbyName(curSymboltable, name);
+    if(symbol == NULL
+       || symbol->typedesc->tag != ATTR_TYPE
+       || symbol->typedesc->type == NULL) {
+        symbol = getSymbolbyName(predefinedIdTable, type);
+    }
+    if(symbol != NULL) {
+        type = symbol->typedesc->type;
+        tag = symbol->typedesc->tag;
+    }
+    if(type != NULL
+       && (tag == ATTR_TYPE
+           || strcmp(type, "TYPE") == 0)) {
         return symbol->address;
     }
     return -1;
 }
 
-char *getNameInCurScope(int entry) {
-    return getIDName(getCurSymboltable(), entry);
+/**
+ *get the entry id of a predefined data type
+ *@return int  >=0: entry index, -1: entry doesn't exist
+ */
+int getTypeDefAddr(char *name) {
+    printf("checking type %s in cur scope %d\n", name, getCurScope()->scopeId);
+    return getTypeDefAddrInScope(getCurScope(), name);
 }
 
-void printSymbolTableRec(int idEntry, int parentId, symboltable *table) {
-    int i = 0;
-    printf("symboltable of scope %d (sub-scope of %d): \n", idEntry, parentId);
-    if(table->maxId == -1) {
-        return;
+int getTypeDefInParentScope(char *type) {
+    scope *scope = getCurScope()->parent;
+    printf("checking type %s in scope %d\n", type, scope->scopeId);
+    return getTypeDefAddrInScope(scope, type);
+}
+
+int getDefInParentScope(char *name, int tag) {
+    scope *scope = getCurScope()->parent;
+    symboltable *table;
+    entry *tableEntry;
+    if(scope == NULL) {
+        return -1;
     }
-    printSymbolTable(table);
-    scope *scopeP = NULL;
-    for(i = 0; i <= global->symboltable->maxId; i ++) {
-        if(table->entries[i].type != NULL
-           && (strcmp("function", table->entries[i].type) == 0 || strcmp("procedure", table->entries[i].type) == 0)) {
-            scopeP = find_scope(i);
-            printSymbolTableRec(i, idEntry, scopeP->symboltable);
+    printf("checking symbol %s in parent scope %d\n", name, scope->scopeId);
+    table = scope->symboltable;
+    tableEntry = getSymbolbyName(table, name);
+    if(tableEntry != NULL
+       && tableEntry->typedesc->tag == tag
+       && tableEntry->typedesc->type != NULL) {
+        return tableEntry->address;
+    }
+    return -1;
+}
+
+int getFuncProcDefInParentScope(char *name) {
+    scope *scope = getCurScope()->parent;
+    symboltable *table;
+    entry *tableEntry;
+    if(scope == NULL) {
+        return -1;
+    }
+    printf("checking symbol %s in parent scope %d\n", name, scope->scopeId);
+    table = scope->symboltable;
+    tableEntry = getSymbolbyName(table, name);
+    if(tableEntry != NULL
+       && tableEntry->typedesc->tag == ATTR_DEFAULT
+       && tableEntry->typedesc->type != NULL) {
+        if(strcmp(tableEntry->typedesc->type, "function") == 0
+           || strcmp(tableEntry->typedesc->type, "procedure") == 0) {
+            return tableEntry->address;
         }
     }
+    return -1;
 }
 
-void printAllSymbolTable() {
-    printf("All symboltables: \n");
-    printSymbolTableRec(-1, -1, global->symboltable);
+int getPredefType(char *name) {
+    char *type = name;
+    char *predefSymbolType = NULL;
+    struct SymbolEntry *symbol;
+    symbol = getSymbolbyName(predefinedIdTable, type);
+    if(symbol != NULL && symbol->typedesc != NULL) {
+        predefSymbolType = symbol->typedesc->type;
+        if(predefSymbolType != NULL && strcmp(predefSymbolType, "TYPE") == 0) {
+            return symbol->address;
+        }
+    }
+    return -1;
 }
 
-
+int recordIdHashCode() {
+    return abs(getCurScope()->scopeId * 1000) + hashSeed ++;
+}
 
 #endif

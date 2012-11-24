@@ -1,234 +1,160 @@
-registering parser_test
-registering divides
-scope changed to: 1
-registering x
-registering y
-IdList
-IdListM
-IdList
-registering integer
+registering errormulti
+registered errormulti at 0
+registering s
+registered s at 1
+registering string
+id string is predefined-type at 4
 TypeID
-Plist_single
-setting: 2 23
-setting: 1 23
-FormalPList
-registering boolean
-ResultType
-registering divides
-Var
-registering y
-Var
-Factor_Var
-Term_Fac_Mul
-AddOpTerm_Single
-SimpleExp_AddTerm
-RelationalOp_EQ
-registering x
-Var
-Factor_Var
-MulOp_MUL
-registering y
-Var
-Factor_Var
-MulOp_DIV
-registering x
-Var
-Factor_Var
-Term_Fac_Mul
-MulOpTerm
-Term_Fac_Mul
-AddOpTerm_Single
-SimpleExp_AddTerm
-Exp_simp
-Factor_Exp
-Term_Fac_Mul
-MulOpTerm
-Term_Fac_Mul
-AddOpTerm_Single
-SimpleExp_AddTerm
-Exp_Simp_Ro
-AssiState
-SimpleS_AssignState
-Statement_Simple
-SteS
-CompStBE
-Block_CompState
-PFDecl_Block
-FuncDecl
-setting func: 1 2
-scope changed to: -1
-set func: 1 in scope -1
-SubDeclF
-registering mul
-scope changed to: 2
-registering x
-registering y
-IdList
-IdListM
-IdList
+handling type: string
+constructed TypeInfo(pred) as 4 from string(4)
+All symboltables: 
+symboltable of scope -1 (sub-scope of -1): 
+Address: 0   ID: errormulti      Type: (null)     
+Address: 1   ID: s               Type: (null)     
+
+TypeDef: id: 1 type: 4 tag: 0
+registering in
+registered in at 2
 registering integer
+id integer is predefined-type at 0
 TypeID
-Plist_single
-setting: 2 23
-setting: 1 23
-FormalPList
-registering boolean
-ResultType
-registering divides
-Var
-registering y
-Var
-Factor_Var
-Term_Fac_Mul
-AddOpTerm_Single
-SimpleExp_AddTerm
-RelationalOp_EQ
-registering x
-Var
-Factor_Var
-MulOp_MUL
-registering y
-Var
-Factor_Var
-MulOp_DIV
-registering x
-Var
-Factor_Var
-Term_Fac_Mul
-MulOpTerm
-Term_Fac_Mul
-AddOpTerm_Single
-SimpleExp_AddTerm
-Exp_simp
-Factor_Exp
-Term_Fac_Mul
-MulOpTerm
-Term_Fac_Mul
-AddOpTerm_Single
-SimpleExp_AddTerm
-Exp_Simp_Ro
-AssiState
-SimpleS_AssignState
-Statement_Simple
-SteS
-CompStBE
-Block_CompState
-PFDecl_Block
-FuncDecl
-setting func: 2 2
-scope changed to: -1
-set func: 2 in scope -1
-SubDeclF
-registering DrawLine
-scope changed to: 3
-registering X
+handling type: integer
+constructed TypeInfo(pred) as 0 from integer(0)
+All symboltables: 
+symboltable of scope -1 (sub-scope of -1): 
+Address: 0   ID: errormulti      Type: (null)     
+Address: 1   ID: s               Type: string     Attr: type 
+Address: 2   ID: in              Type: (null)     
+
+TypeDef: id: 2 type: 0 tag: 0
+TypeDefList
+TypeDefList_Multi
+TypeDef_Mul
+registering z
+registered z at 3
 IdList
-registering integer
+registering s
+registered s at 1
 TypeID
-Plist_single
-setting: 1 23
-registering Y
-IdList
-registering integer
-TypeID
-Plist_single
-setting: 2 23
-FormalPList
-PList_M
-FormalPList
-registering Counter
-IdList
-registering integer
-TypeID
+handling type: s
+checking type s in cur scope -1
+constructed TypeInfo(normal) as 4 from s(1) string
+All symboltables: 
+symboltable of scope -1 (sub-scope of -1): 
+Address: 0   ID: errormulti      Type: (null)     
+Address: 1   ID: s               Type: string     Attr: type 
+Address: 2   ID: in              Type: integer    Attr: type 
+Address: 3   ID: z               Type: (null)     
+
 VarDecl
+setting idlist
+setting: 3 4
+set idlist
+registering m
+registered m at 4
+IdList
+registering in
+registered in at 2
+TypeID
+handling type: in
+checking type in in cur scope -1
+constructed TypeInfo(normal) as 0 from in(2) integer
+All symboltables: 
+symboltable of scope -1 (sub-scope of -1): 
+Address: 0   ID: errormulti      Type: (null)     
+Address: 1   ID: s               Type: string     Attr: type 
+Address: 2   ID: in              Type: integer    Attr: type 
+Address: 3   ID: z               Type: string     Attr: var 
+Address: 4   ID: m               Type: (null)     
+
+VarDecl
+setting idlist
+setting: 4 0
+set idlist
+registering z
+registered z at 3
+IdList
+registering in
+registered in at 2
+TypeID
+handling type: in
+checking type in in cur scope -1
+constructed TypeInfo(normal) as 0 from in(2) integer
+All symboltables: 
+symboltable of scope -1 (sub-scope of -1): 
+Address: 0   ID: errormulti      Type: (null)     
+Address: 1   ID: s               Type: string     Attr: type 
+Address: 2   ID: in              Type: integer    Attr: type 
+Address: 3   ID: z               Type: string     Attr: var 
+Address: 4   ID: m               Type: integer    Attr: var 
+
+VarDecl
+setting idlist
+setting: 3 0
+set idlist
 VarDeclList
+VarDeclList_Mul
+VarDeclList_Mul
 VarDecl_Mul
-registering GotoXy
-registering X
-Var
-Factor_Var
-Term_Fac_Mul
+registering z
+registered z at 3
+Var_ID
+checking var 3 z
+checking 3 in scope -1 (-1)
+Address: 0   ID: errormulti      Type: (null)     
+Address: 1   ID: s               Type: string     Attr: type 
+Address: 2   ID: in              Type: integer    Attr: type 
+Address: 3   ID: z               Type: integer    Attr: var 
+Address: 4   ID: m               Type: integer    Attr: var 
+
+var id: z
+Var_Comp
+constructed TypeInfo(normal) as 0 from z(3) integer
+var type: 0
+Factor_INT
+type reduced as 0
 AddOpTerm_Single
+type reduced as 0
 SimpleExp_AddTerm
+type reduced as 0
 Exp_simp
-registering Y
-Var
-Factor_Var
-Term_Fac_Mul
-AddOpTerm_Single
-SimpleExp_AddTerm
-Exp_simp
-ExpM
-ActualParamL
-ProState
-SimpleSS_ProState
+type reduced as 0
+AssiState
+assign var type: 0
+type checking: 0 0
+SimpleS_AssignState
 Statement_Simple
 SteS
-registering textcolor
-registering green
-Var
-Factor_Var
-Term_Fac_Mul
-AddOpTerm_Single
-SimpleExp_AddTerm
-Exp_simp
-ActualParamL
-ProState
-SimpleSS_ProState
-Statement_Simple
-SteSSte
-registering Counter
+registering m
+registered m at 4
+Var_ID
+checking var 4 m
+checking 4 in scope -1 (-1)
+Address: 0   ID: errormulti      Type: (null)     
+Address: 1   ID: s               Type: string     Attr: type 
+Address: 2   ID: in              Type: integer    Attr: type 
+Address: 3   ID: z               Type: integer    Attr: var 
+Address: 4   ID: m               Type: integer    Attr: var 
+
+var id: m
+Var_Comp
+constructed TypeInfo(normal) as 0 from m(4) integer
+var type: 0
 Factor_INT
-Term_Fac_Mul
+type reduced as 0
 AddOpTerm_Single
+type reduced as 0
 SimpleExp_AddTerm
+type reduced as 0
 Exp_simp
-Factor_INT
-Term_Fac_Mul
-AddOpTerm_Single
-SimpleExp_AddTerm
-Exp_simp
-registering write
-registering chr
-Factor_INT
-Term_Fac_Mul
-AddOpTerm_Single
-SimpleExp_AddTerm
-Exp_simp
-ActualParamL
-Func_Ref
-Factor_FuncRef
-Term_Fac_Mul
-AddOpTerm_Single
-SimpleExp_AddTerm
-Exp_simp
-ActualParamL
-ProState
-SimpleSS_ProState
+type reduced as 0
+AssiState
+assign var type: 0
+type checking: 0 0
+SimpleS_AssignState
 Statement_Simple
-SteS
-Statement_Simple
-SteSSte
-CompStBE
-Struc_Comp
-Statement_Structured
-for_to
-Statement_Structured
 SteSSte
 Statement_Simple
 SteSSte
-CompStBE
-Block_CompSt_V
-PFDecl_Block
-ProcDecl
-setting proc: 3 0
-scope changed to: -1
-set proc: 3 in scope -1 
-SubDeclP
-SubDecl_Mul
-SubDecl_mul
-SubDecl_mul
-Statement_Simple
-SteS
 CompStBE
 Program

@@ -9,7 +9,7 @@
 #ifndef compiler_debugging_predefinedids_h
 #define compiler_debugging_predefinedids_h
 int keywordsSize = 23;
-int typeSize = 7;
+int typeSize = 10;
 
 char *keywords[] = {
     "and",
@@ -44,7 +44,10 @@ char *types[] = {
     "char",
     "string",
     "array",
-    "record"
+    "record",
+    "function",
+    "procedure",
+    "undefined"
 };
 
 char *booleans[] = {

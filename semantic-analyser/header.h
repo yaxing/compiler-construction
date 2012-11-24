@@ -16,6 +16,10 @@
 #include "predefinedids.h"
 #include "symboltable.h"
 #include "scope.h"
+#include "util.h"
+#include "typecmp.h"
+#include "flex-bison-header.h"
+//#include "context.h"
 #include "bisonheader.h"
 
 #endif

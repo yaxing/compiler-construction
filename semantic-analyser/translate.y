@@ -1,30 +1,46 @@
 %{
 #include "header.h"
-#include "flex-bison-header.h"
+
 extern FILE *yyin;
 extern int count;
 extern char* yytext;
+    
+int const CONTEXT_NORMAL = 0;
+int const CONTEXT_ARRAY = 1;
+int const CONTEXT_RECORD = 2;
 
 int parameterCount = 0;
+int curRecordScopeHash = 0;
 
+int context = 0;
+    
+idresp *curVarIdResp = NULL;
+    
+void printLineNo();
+    
+void yyerror_unequal_type(struct TypeInfo *type1, struct TypeInfo *type2);
+    
 int getConstantInt(char *sign, int num);
 
 void addCurParamCounter(int delta);
 
 void cleanCurParamCounter();
 
-char * itoa(int a);
+int setIdListType(struct TypeInfo *retType);
 
-void setIdListType(struct TypeInfo *retType);
-
-void handleFuncProcDeclaration(int idEntry, typeinfost *retType, int paramQty, char *funcProc);
+void handleFuncProcDeclaration(struct IdResp *id, typeinfost *retType, int paramQty, char *funcProc);
 
 int enterNewScope(struct IdResp *id);
 
-int setSymbolTypeAttr(int idAddr, int typeEntry, typeinfost *typedata);
+int setSymbolTypeAttr(int idAddr, int typeEntry, typeinfost *typedata, int attrTag);
 
-int typeHandler(idresp *idResp);
+int typeHandler(idresp **idResp);
 
+int isIdDefined(struct IdResp *id);
+    
+int certainTypeCheck(struct TypeInfo *type, char *typeToCheck);
+
+int contextSwitch(struct IdResp *idInfo);
 %}
 
 %union {
@@ -89,10 +105,19 @@ int typeHandler(idresp *idResp);
 %token FALSE
 
 %type <idListType> IdentifierList
-%type <typeinfo> Type
-%type <typeinfo> ResultType
 %type <intType> Constant
 %type <stringType> Sign
+%type <typeinfo> Variable
+%type <typeinfo> Type
+%type <typeinfo> ResultType
+%type <typeinfo> Expression
+%type <typeinfo> SimpleExpression
+%type <typeinfo> AddOpTerm
+%type <typeinfo> Term
+%type <typeinfo> Factor
+%type <typeinfo> MulOpTerm
+%type <typeinfo> ProcFuncStatement
+%type <typeinfo> ComponentSelection
 
 %%
 
@@ -113,8 +138,7 @@ TypeDefinitionList : TypeDefinition SEMICOLON {printf("TypeDefList\n");}
                    | TypeDefinition SEMICOLON TypeDefinitionList {printf("TypeDefList_Multi\n");}
 ;
 
-VariableDeclarations : VAR VariableDeclarationList 
-                        {
+VariableDeclarations : VAR VariableDeclarationList {
                             printf("VarDecl_Mul\n");
                             cleanCurParamCounter();
                         }
@@ -133,58 +157,58 @@ SubprogramDeclaration : ProcedureDeclaration {printf("SubDeclP\n");}
 ;
 
 TypeDefinition : ID OP_EQUAL Type {
-                                    printf("TypeDef: %d %d\n", $1->idEntry, $3->typeEntry);
-                                    if($3->additionType != NULL) {
-                                        if(setSymbolTypeAttr($1->idEntry, -1, $3) != 0) {
-                                            YYERROR;
-                                        }
-                                    }
-                                    else {
-                                        if(setSymbolTypeAttr($1->idEntry, $3->typeEntry, $3) != 0) {
-                                            YYERROR;
-                                        }
-                                    }
-                                  }
+    printf("TypeDef: id: %d type: %d tag: %d\n", $1->idEntry, $3->typeEntry, $3->tag);
+    if(setSymbolTypeAttr($1->idEntry, $3->typeEntry, $3, ATTR_TYPE) != 0) {
+        //YYERROR;
+    }
+    free($3);
+}
 ;
 
-VariableDeclaration : IdentifierList COLON Type {
-                                                    printf("VarDecl\n");
-//                                                    char * resp = setIdListType($3);
-//                                                    if(resp != NULL) {
-//                                                        yyerror(resp);
-//                                                        YYERROR;
-//                                                    }
-                                                }
+VariableDeclaration : IdentifierList COLON
+                      Type {
+                          printf("VarDecl\n");
+                          if(setIdListType($3) == 0) {
+                            //YYERROR;
+                          }
+                          free($3);
+                      }
 ;
 
 ProcedureDeclaration : PROCEDURE ID {
                                         char *name = getNameInCurScope($2->idEntry);
                                         if(enterNewScope($2) != 0) {
-                                            YYERROR;
+                                            //YYERROR;
                                         }
-                                        registerSymbolInCurScope(name, NULL);
-                                    } 
-                        BRACE_L FormalParameterList BRACE_R SEMICOLON PFDeclarationFollow
-                    {
-                        printf("ProcDecl\n");
-                        printf("setting proc: %d %s\n", $2->idEntry, itoa(parameterCount));
-                        handleFuncProcDeclaration($2->idEntry, NULL, parameterCount, "procedure");
-                    }
+                                        //registerSymbolInCurScope(name);
+                                    }
+                        BRACE_L FormalParameterList BRACE_R 
+                        SEMICOLON {
+                            printf("setting proc: %d %s\n", $2->idEntry, itoa(funcProcParamCount));
+                            handleFuncProcDeclaration($2, NULL, funcProcParamCount, "procedure");
+                        }
+                        PFDeclarationFollow {
+                            printf("ProcDecl\n");
+                            popScopeStack();
+                        }
 ;
 
 FunctionDeclaration : FUNCTION ID {
                                     char *name = getNameInCurScope($2->idEntry);
                                     if(enterNewScope($2) != 0) {
-                                        YYERROR;
+                                        //YYERROR;
                                     }
-                                    registerSymbolInCurScope(name, NULL);
+                                    registerSymbolInCurScope(name);
                                    } 
-                      BRACE_L FormalParameterList BRACE_R COLON ResultType SEMICOLON PFDeclarationFollow
-                    {
+                      BRACE_L FormalParameterList BRACE_R COLON ResultType 
+                      SEMICOLON {
+                                    printf("setting func: %d %s %d\n", $2->idEntry, itoa(funcProcParamCount), $8->typeEntry);
+                                    handleFuncProcDeclaration($2, $8, funcProcParamCount, "function");
+                                }
+                      PFDeclarationFollow {
                         printf("FuncDecl\n");
-                        printf("setting func: %d %s\n", $2->idEntry, itoa(parameterCount));
-                        handleFuncProcDeclaration($2->idEntry, $8, parameterCount, "function");
-                    }
+                        popScopeStack();
+                      }
 ;
 
 PFDeclarationFollow : Block {printf("PFDecl_Block\n");}
@@ -199,7 +223,10 @@ FormalParameterList : {printf("empty paramlist\n");}
 
 FormalParameterListSingle : IdentifierList COLON Type {
                                                         printf("Plist_single\n");
-                                                        setIdListType($3);
+                                                        if(setIdListType($3) == 0) {
+                                                            //YYERROR;
+                                                        }
+                                                        funcProcParamCount = parameterCount;
                                                       }
 
 FormalParameterListMore : SEMICOLON FormalParameterList {printf("PList_M\n");}
@@ -222,14 +249,59 @@ Statement : SimpleStatement {printf("Statement_Simple\n");}
 ;
 
 SimpleStatement : AssignmentStatement {printf("SimpleS_AssignState\n");}
-                | ProcedureStatement {printf("SimpleSS_ProState\n");}
+                | ProcFuncStatement {printf("SimpleSS_ProState\n");}
                 |
 ;
 
-AssignmentStatement : Variable ASSIGN Expression {printf("AssiState\n");}
+AssignmentStatement : Variable ASSIGN Expression {
+    printf("AssiState\n");
+    printf("assign var type: %d\n", $1->typeEntry);
+    if(!typeCheck($1, $3)) {
+        yyerror_unequal_type($1, $3);
+    }
+}
 ;
 
-ProcedureStatement : ID BRACE_L ActualParameterList BRACE_R {printf("ProState\n");}
+ProcFuncStatement :
+                    ID {
+                        cleanCurFuncProcCallParamCounter();
+                    }
+                    BRACE_L ActualParameterList BRACE_R {
+                        printf("ProFuncStat\n");
+                        int defined;
+                        int preDefEntry;
+                        char *info;
+                        defined = isIdDefined($1);
+                        printf("checking func/proc %d %s\n", $1->idEntry, $1->idStr);
+                        if(defined == 0) {
+                            preDefEntry = getFuncProcDefInParentScope($1->idStr);
+                            if(preDefEntry >= 0) {
+                                printf("func/proc %s defined in enclosing scope at %d\n",
+                                $1->idStr, preDefEntry);
+                                removeTailSymbolFromCurScope();
+                                $1->idEntry = preDefEntry;
+                                $1->idRespStatus = IDRESP_DEF_IN_PARENT;//defined in enclosing scope
+                                defined = 1;
+                            }
+                            else {
+                                printLineNo();
+                                fprintf(stderr, "Undeclared func/proc: %s\n", $1->idStr);
+                                //YYERROR;
+                            }
+                        }
+                        if(defined) {
+                            info = checkFuncProcCallParamType($1);
+                            if(info != NULL) {
+                                fprintf(stderr, "%s\n", info);
+                                free(info);
+                                //YYERROR;
+                            }
+                        }
+                        destroyParamTypeList();
+                        cleanCurFuncProcCallParamCounter();
+                        constructTypeInfoFromIdResp(&$$, $1);
+                        $$->tag = ATTR_VAR;
+                    }
 ;
 
 StructuredStatement : CompoundStatement {printf("Struc_Comp\n");}
@@ -241,34 +313,45 @@ StructuredStatement : CompoundStatement {printf("Struc_Comp\n");}
 
 Type : ID {
             printf("TypeID\n");
-            if(typeHandler($1) != 0) {
-                YYERROR;
-            }
-            $$->typeEntry = $1->idEntry;
+            typeHandler(&$1);
+            constructTypeInfoFromIdResp(&$$, $1);
+            $$->tag = ATTR_TYPE;
+            printAllSymbolTable();
           }
-     | ARRAY BRACKET_L Constant DOUBLE_DOT Constant BRACKET_R OF Type {
-                                                                        printf("Type_Array\n"); 
-                                                                        $$->typeEntry = $8->typeEntry;
-                                                                        $$->additionType = "array";
-                                                                        $$->attrInfo.arrayInfo.boundLow = $3;
-                                                                        $$->attrInfo.arrayInfo.boundUp = $5;
-                                                                      }
-     | RECORD FormalParameterList END {
-                                        int i = 0;
-                                        printf("Type_sub\n"); 
-                                        $$->typeEntry = -1;
-                                        $$->additionType = "record";
-                                        $$->attrInfo.recordInfo.qty = maxSetEntryId;
-                                        for(i = 0; i < maxSetEntryId; i ++) {
-                                            $$->attrInfo.recordInfo.recordMembers[i] = latestSetEntries[i];
-                                        }
-                                      }
+     | ARRAY BRACKET_L Constant DOUBLE_DOT Constant BRACKET_R OF
+       Type {
+           printf("Type_Array\n");
+           $$ = (struct TypeInfo*)malloc(sizeof(struct TypeInfo));
+           // TODO: handle array type
+           $$->typeEntry = getPredefType("array");
+           //$$->typeEntry = $8->typeEntry;
+           //$$->additionType = "array";
+           $$->attrInfo.arrayInfo.boundLow = $3;
+           $$->attrInfo.arrayInfo.boundUp = $5;
+           $$->tag = ATTR_TYPE;
+       }
+     | RECORD {
+         printf("Type_Record_Init\n");
+         curRecordScopeHash = recordIdHashCode();
+         newScopeAndPush(curRecordScopeHash);
+         pushRecordHashInStack(curRecordScopeHash);
+     }
+       FormalParameterList END {
+           printf("Type_Record\n");
+           $$ = (struct TypeInfo*)malloc(sizeof(struct TypeInfo));
+           $$->typeEntry = getPredefType("record");
+           $$->attrInfo.recordInfo.scopeHashCode = curRecordScopeHash;
+           $$->tag = ATTR_TYPE;
+           curRecordScopeHash = handleRecordEnd();
+       }
 ;
 
 ResultType : ID {
                     printf("ResultType\n");
-                    typeHandler($1);
-                    $$->typeEntry = $1->idEntry;
+                    typeHandler(&$1);
+                    constructTypeInfoFromIdResp(&$$, $1);
+                    $$->tag = ATTR_TYPE;
+                    printf("result type: %d\n", $$->typeEntry);
                 }
 ;
 
@@ -276,8 +359,19 @@ Constant : Sign INT {printf("Constant_SIGN_INT\n"); $$ = getConstantInt($1, $2);
          | INT {printf("Constant_INT\n"); $$ = getConstantInt(NULL, $1);}
 ;
 
-Expression : SimpleExpression {printf("Exp_simp\n");}
-           | SimpleExpression RelationalOp SimpleExpression {printf("Exp_Simp_Ro\n");}
+Expression : SimpleExpression {
+                                printf("Exp_simp\n");
+                                $$ = $1;
+                                printf("type reduced as %d\n", $$->typeEntry);
+                              }
+           | SimpleExpression RelationalOp 
+             SimpleExpression {
+                                printf("Exp_Simp_Ro\n");
+                                //check type here $1 & $3
+                                //create boolean type
+                                $$ = $3;
+                                printf("type reduced as %d\n", $$->typeEntry);
+                              }
 ;
 
 RelationalOp : OP_EQUAL {printf("RelationalOp_EQ\n");}
@@ -288,12 +382,37 @@ RelationalOp : OP_EQUAL {printf("RelationalOp_EQ\n");}
              | OP_NOT_EQ {printf("RelationslOp_NE\n");}
 ;
 
-SimpleExpression : Sign AddOpTerm {printf("SimpleExp_Sign_AddTerm\n");}
-                 | AddOpTerm {printf("SimpleExp_AddTerm\n");}
+SimpleExpression : Sign AddOpTerm {
+                                    printf("SimpleExp_Sign_AddTerm\n");
+                                    $$ = $2;
+                                  }
+                 | AddOpTerm {
+                                printf("SimpleExp_AddTerm\n");
+                                $$ = $1;
+                                printf("type reduced as %d\n", $$->typeEntry);
+                             }
 ;
 
-AddOpTerm : Term AddOp AddOpTerm {printf("AddOpTerm_Mul\n");}
-          | Term {printf("AddOpTerm_Single\n");}
+AddOpTerm : Term AddOp AddOpTerm {
+                                    printf("AddOpTerm_Mul\n");
+                                    char *type1;
+                                    char *type2;
+                                    //check type here $1 & $3
+                                    if(typeCheck($1, $3)) {
+                                        $$ = $3;
+                                        setReduceTypeInfo(&$$, $1, $3, 1);
+                                    }
+                                    else {
+                                        yyerror_unequal_type($1, $3);
+                                        setReduceTypeInfo(&$$, $1, $3, 0);
+                                    }
+                                    printf("type reduced as %d\n", $$->typeEntry);
+                                 }
+          | Term {
+                    printf("AddOpTerm_Single\n");
+                    $$ = $1;
+                    printf("type reduced as %d\n", $$->typeEntry);
+                 }
 ;
 
 AddOp : OP_ADD {printf("AddOp_Add\n");}
@@ -301,11 +420,29 @@ AddOp : OP_ADD {printf("AddOp_Add\n");}
       | OR {printf("AddOp_OR\n");}
 ;
 
-Term : Factor MulOpTerm {printf("Term_Fac_Mul\n");}
+Term : Factor MulOpTerm {
+                            printf("Term_Fac_Mul\n");
+                            if(typeCheck($1, $2)) {
+                                $$ = $2;
+                                setReduceTypeInfo(&$$, $1, $2, 1);
+                            }
+                            else {
+                                yyerror_unequal_type($1, $2);
+                                $$ = (struct TypeInfo*)malloc(sizeof(struct TypeInfo));
+                                setReduceTypeInfo(&$$, $1, $2, 0);
+                            }
+                            printf("type reduced as %d\n", $$->typeEntry);
+                        }
+     | Factor {
+                $$ = $1;
+                printf("type reduced as %d\n", $$->typeEntry);
+              }
 ;
 
-MulOpTerm : MulOp Term {printf("MulOpTerm\n");}
-            |
+MulOpTerm : MulOp Term {
+                            printf("MulOpTerm\n");
+                            $$ = $2;
+                       }
 ;
 
 MulOp : OP_MUL {printf("MulOp_MUL\n");}
@@ -314,30 +451,138 @@ MulOp : OP_MUL {printf("MulOp_MUL\n");}
       | AND {printf("MulOp_AND\n");}
 ;
 
-Factor : INT {printf("Factor_INT\n");}
-       | STRING {printf("Factor_String\n");}
-       | FunctionReference {printf("Factor_FuncRef\n");}
-       | Variable {printf("Factor_Var\n");}
-       | NOT Factor {printf("Factor_N_Fac\n");}
-       | BRACE_L Expression BRACE_R {printf("Factor_Exp\n");}
+Factor : INT {
+                printf("Factor_INT\n");
+                $$ = (struct TypeInfo*)malloc(sizeof(struct TypeInfo));
+                $$->typeEntry = getPredefType("integer");
+                $$->tag = ATTR_VAR;
+             }
+       | STRING {
+                    printf("Factor_String\n");
+                    $$ = (struct TypeInfo*)malloc(sizeof(struct TypeInfo));
+                    $$->typeEntry = getPredefType("string");
+                    $$->tag = ATTR_VAR;
+                }
+       | ProcFuncStatement {
+                                printf("Factor_FuncRef\n");
+                                $$ = $1;
+                           }
+       | Variable {
+                    printf("Factor_Var\n");
+                    $$ = $1;
+                  }
+       | NOT Factor {
+                        printf("Factor_N_Fac\n");
+                        $$ = (struct TypeInfo*)malloc(sizeof(struct TypeInfo));
+                        $$->typeEntry = getPredefType("bool");
+                        $$->tag = ATTR_VAR;
+                    }
+       | BRACE_L Expression BRACE_R {
+                                        printf("Factor_Exp\n");
+                                        $$ = $2;
+                                    }
 ;
 
-FunctionReference : ID BRACE_L ActualParameterList BRACE_R {printf("Func_Ref\n");}
+Variable :
+            ID {
+                printf("Var_ID\n");
+                int defined = 0;
+                int preDefEntry;
+                printf("checking var %d %s\n", $1->idEntry, $1->idStr);
+                defined = isIdDefined($1);
+                if($1->idRespStatus == IDRESP_NORMAL
+                && defined == 0) {
+                    preDefEntry = getDefInParentScope($1->idStr, ATTR_VAR);
+                    if(preDefEntry >= 0) {
+                        printf("var %s defined in enclosing scope at %d\n",
+                        $1->idStr, preDefEntry);
+                        removeTailSymbolFromCurScope();
+                        $1->idEntry = preDefEntry;
+                        $1->idRespStatus = IDRESP_DEF_IN_PARENT;//defined in enclosing scope
+                        defined = 1;
+                    }
+                    else {
+                        printLineNo();
+                        fprintf(stderr, "Undeclared var: %s\n", $1->idStr);
+                        //YYERROR;
+                    }
+                }
+                if(defined) {
+                    //enter record scope
+                    printf("var id: %s\n", $1->idStr);
+                    curVarIdResp = $1;
+                }
+                else {
+                    curVarIdResp = NULL;
+                }
+            }
+            ComponentSelection {
+                printf("Var_Comp\n");
+                //exit record scope
+                if($3->typeEntry == -1) {
+                    free($3);
+                    constructTypeInfoFromIdResp(&$$, $1);
+                }
+                else {
+                    $$ = $3;
+                }
+                printf("var type: %d\n", $$->typeEntry);
+                //contextSwitch(NULL);
+                curVarIdResp = NULL;
+            }
 ;
 
-Variable : ID ComponentSelection {printf("Var\n");}
+ComponentSelection :
+                     DOT {
+                         curRecordScopeHash = handleRecordStart(curVarIdResp);
+                         if(curRecordScopeHash != 0) {
+                             printf("enter recordhash: %d\n", curRecordScopeHash);
+                         }
+                     }
+                     Variable {
+                         printf("CompSel_Record\n");
+                         $$ = $3;
+                         curRecordScopeHash = handleRecordEnd();
+                         if(curRecordScopeHash != 0) {
+                             printf("out recordhash: %d\n", curRecordScopeHash);
+                         }
+                     }
+                   | BRACKET_L
+                    {
+                        //if(getContext() != CONTEXT_ARRAY) {
+                         //   fprintf(stderr, "Invalid array operation, variable is not an array.\n");
+                            //YYERROR;
+                        //}
+                    }
+                     Expression {
+                         if(!certainTypeCheck($3, "integer")) {
+                             fprintf(stderr, "(array index should be integer)\n");
+                         }
+                     }
+                     BRACKET_R ComponentSelection {
+                         printf("CompSel_Array\n");
+                         $$ = $6;
+                     }
+                   | {
+                       $$ = (struct TypeInfo*)malloc(sizeof(struct TypeInfo));
+                       $$->typeEntry = -1;
+                     }
 ;
 
-ComponentSelection : DOT ID ComponentSelection {printf("CompSel_Dot\n");}
-                   | BRACKET_L Expression BRACKET_R ComponentSelection {printf("CompSel_Exp\n");}
-                   |
-;
-
-ActualParameterList : Expression ExpressionMore {printf("ActualParamL\n");}
+ActualParameterList : Expression {
+    addCurFuncProcParamCallCounter(1);
+    appendToParamTypeList($1);
+}
+                      ExpressionMore {printf("ActualParamL\n");}
                     | {printf("ActualParamL\n");}
 ;
 
-ExpressionMore : COMMA Expression ExpressionMore {printf("ExpM\n");}
+ExpressionMore : COMMA Expression {
+    printf("ExpM\n");
+    addCurFuncProcParamCallCounter(1);
+    appendToParamTypeList($2);
+}
+                 ExpressionMore
                |
 ;
 
@@ -357,9 +602,51 @@ Sign : OP_ADD {printf("Sign_Add\n"); $$ = "+";}
 ;
 
 %%
+
 yyerror(char *s)
 {
-  fprintf(stderr, "error: %s\n", s);
+    printLineNo();
+    fprintf(stderr, "error: %s\n", s);
+}
+
+void printLineNo() {
+//    fprintf(stderr, "Line: %d  ", getLineNo());
+}
+
+void yyerror_unequal_type(struct TypeInfo *typeInfo1, struct TypeInfo *typeInfo2) {
+    char *type1;
+    char *type2;
+    char *tag1;
+    char *tag2;
+    type1 = getTypeName(typeInfo1);
+    type2 = getTypeName(typeInfo2);
+    
+    switch(typeInfo1->tag) {
+        case -1:
+            tag1 = "Default";
+            break;
+        case 0:
+            tag1 = "Type";
+            break;
+        case 1:
+            tag1 = "Var";
+            break;
+    }
+    
+    switch(typeInfo2->tag) {
+        case -1:
+        tag2 = "Default";
+        break;
+        case 0:
+        tag2 = "Type";
+        break;
+        case 1:
+        tag2 = "Var";
+        break;
+    }
+    printLineNo();
+    fprintf(stderr, "Operation Betwween Incompatiable Types: ");
+    fprintf(stderr, "%s(%s), %s(%s)\n", tag1, type1, tag2, type2);
 }
 
 int getConstantInt(char *sign, int num) {
@@ -377,37 +664,41 @@ void cleanCurParamCounter() {
     parameterCount = 0;
 }
 
-char * itoa(int a) {
-    char * buf = (char *)malloc(sizeof(a) + 1);
-    sprintf(buf, "%d", a);
-    return buf;
+int setIdListType(struct TypeInfo *retType) {
+    printf("setting idlist\n");
+    char *info = NULL;
+    info = setIdListTypeAttr(retType->typeEntry, retType->attrInfo, ATTR_VAR);
+    printf("set idlist\n");
+    destroyCurIdList();
+    cleanLatestSetList();
+    if(info != NULL) {
+        printLineNo();
+        fprintf(stderr, "%s\n", info);
+        free(info);
+        return 0;
+    }
+    return 1;
 }
 
-void setIdListType(struct TypeInfo *retType) {
-    setIdListTypeAttr(retType->typeEntry, retType->attrInfo);
-}
-
-void handleFuncProcDeclaration(int idEntry, struct TypeInfo *retType, int paramQty, char *funcProc) {
+void handleFuncProcDeclaration(struct IdResp *id, struct TypeInfo *retType, int paramQty, char *funcProc) {
         union SymbolEntryAttr attr;
-        attr.attr = NULL;
         if(strcmp(funcProc, "function") == 0) {
             //set function parameter's type as return type
-            setSymbolTypeAttrInCurScope(0, retType->typeEntry, attr);
-            popScopeStack();
-            registerFunc(idEntry, retType->typeEntry, retType->attrInfo, paramQty);
+            setFuncVarInScope(id->idStr, id->idEntry, retType->typeEntry, attr);
+            registerFunc(id->idEntry, retType->typeEntry, retType->attrInfo, paramQty);
         }
         else {
-            setSymbolTypeAttrInCurScope(0, getType("NIL"), attr);
-            popScopeStack();
-            registerProc(idEntry, paramQty);
+            registerProc(id->idEntry, paramQty);
         }
         cleanCurParamCounter();
+        cleanCurFuncProcCallParamCounter();
 }
 
 int enterNewScope(struct IdResp *id) {
     char *name = "";
-    if(id->idRespStatus != 0) {
+    if(id->idRespStatus != IDRESP_NORMAL) {
         name = getNameInCurScope(id->idEntry);
+        printLineNo();
         fprintf(stderr, "invalid function/procedure ID: %s\n", name);
         return -1;
     }
@@ -415,48 +706,79 @@ int enterNewScope(struct IdResp *id) {
     return 0;
 }
 
-int setSymbolTypeAttr(int idAddr, int typeEntry, struct TypeInfo *typedata) {
+int setSymbolTypeAttr(int idAddr, int typeEntry, struct TypeInfo *typedata, int attrTag) {
     int resp;
     char *name;
     entryAttr attr;
     int i = 0;
-
-    if(typedata->additionType != NULL) {
-        typeEntry = getType(typedata->additionType);
-        if(strcmp(typedata->additionType, "array")) {
-            attr.arrayInfo.boundLow = typedata->attrInfo.arrayInfo.boundLow;
-            attr.arrayInfo.boundUp = typedata->attrInfo.arrayInfo.boundUp;
-            attr.arrayInfo.typeEntry = typedata->typeEntry;
-        }
-        else if(strcmp(typedata->additionType, "record")) {
-            attr.recordInfo.qty = typedata->attrInfo.recordInfo.qty;
-            for(i = 0; i < attr.recordInfo.qty; i ++) {
-                attr.recordInfo.recordMembers[i] = typedata->attrInfo.recordInfo.recordMembers[i];
-            }
-        }
+    if(typeEntry == getPredefType("array")) {
+        attr.arrayInfo.boundLow = typedata->attrInfo.arrayInfo.boundLow;
+        attr.arrayInfo.boundUp = typedata->attrInfo.arrayInfo.boundUp;
+        attr.arrayInfo.typeEntry = typedata->attrInfo.arrayInfo.typeEntry;
+    }
+    if(typeEntry == getPredefType("record")) {
+        attr.recordInfo.scopeHashCode = typedata->attrInfo.recordInfo.scopeHashCode;
     }
 
-    resp = setSymbolTypeAttrInCurScope(idAddr, typeEntry, attr);
+    resp = setSymbolTypeAttrInCurScope(idAddr, typeEntry, attr, attrTag);
     if(resp == -1) {
         name = getNameInCurScope(idAddr);
+        printLineNo();
         fprintf(stderr, "Redefinition of symbol %s\n", name);
         return -1;
     }
     return 0;
 }
 
-int typeHandler(struct IdResp *idResp) {
+int typeHandler(struct IdResp **idResp) {
     char *name = "";
-    if(idResp->idRespStatus != -1) {
-        name = getNameInCurScope(idResp->idEntry);
-        fprintf(stderr, "Invalid type: %s\n", name);
-        return -1;
+    printf("handling type: %s\n", (*idResp)->idStr);
+    int entry;
+    if((*idResp)->idRespStatus == IDRESP_PREDEF_TYPE) {
+        return 1;
     }
+    entry = getTypeDefAddr((*idResp)->idStr);
+    if(entry >= 0) {
+        (*idResp)->idEntry = entry;
+        (*idResp)->idRespStatus = IDRESP_NORMAL;
+        return 1;
+    }
+    else {
+        entry = getTypeDefInParentScope((*idResp)->idStr);
+        if(entry >= 0) {
+            (*idResp)->idRespStatus = IDRESP_DEF_IN_PARENT;
+            (*idResp)->idEntry = entry;
+            removeTailSymbolFromCurScope();
+            return 1;
+        }
+    }
+    printLineNo();
+    (*idResp)->idRespStatus = IDRESP_UNDEF;
+    (*idResp)->idEntry = -1;
+    fprintf(stderr, "Undeclared type: %s\n", (*idResp)->idStr);
     return 0;
+}
+
+int isIdDefined(struct IdResp *id) {
+    if(getIDTypeStr(id->idEntry) == NULL) {
+        return 0;
+    }
+    return 1;
+}
+
+//check if a certain type match
+int certainTypeCheck(struct TypeInfo *type, char *typeToCheck) {
+    struct TypeInfo *tmp = (struct TypeInfo *)malloc(sizeof(struct TypeInfo));
+    tmp->typeEntry = getPredefType(typeToCheck);
+    if(!typeCheck(type, tmp)) {
+        return 0;
+    }
+    return 1;
 }
 
 int main(int argc, const char * argv[]) {
     FILE * fstream;
+    initTypeDescList();
     initPredefinedSymboltable();
     initScope();
     ++argv, --argc;    /* skip argv[0] */
@@ -471,7 +793,7 @@ int main(int argc, const char * argv[]) {
     yyparse();
     close(stdout);
     stdout = fstream;
-    printf("Parsing done (debugging info: parser_debug.out).\n\n");
+    printf("\n\nParsing done (debugging info: parser_debug.out).\n\n");
     stdout=fopen("symtable.out","w");
     printAllSymbolTable();
     close(stdout);

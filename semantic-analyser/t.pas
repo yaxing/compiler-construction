@@ -1,42 +1,18 @@
-program parser_test;
+{
+	This program is lexical and parsing error-free.
+	It has multi-declaration error.
+}
 
+program errormulti;
+type
+s = string;
+in = integer;
 var
-  i,j,num  : integer;
-
-function divides(x,y : integer) : boolean;
-begin
-  divides := y = x*(y div x) 
-end;
-
-function mul(x,y : integer) : boolean;
-begin
-  divides := y = x*(y div x) 
-end;
-
-procedure DrawLine(X : integer; Y : integer);
-var Counter, t : integer;
-begin
- GotoXy(X,Y); {here I use the parameters}
- textcolor(green);
- for Counter := 1 to 10 do
-  begin
-   write(chr(196));
-  end;
-end;
+z : s;
+m : in;
+z : in;  {error: multiple declaration}
 
 begin
-  writestring("How many ?");
-  num := readint();
-  writestring("Divisor ?");
-  i := readint();
-  writeint(i);
-  for j := 1 to num do begin
-    writestring("###########");
-    writeint(j);
-    if divides(i,j) then 
-      writestring("yes")
-    else 
-      writestring("no");
-    writeint(j mod i)  
-  end
+z := 5;
+m := 7;
 end.

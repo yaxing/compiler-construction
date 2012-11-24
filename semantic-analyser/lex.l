@@ -6,16 +6,13 @@
     //  Copyright (c) 2012 Yaxing Chen. All rights reserved.
     //
     
-    #include "translate.tab.h"
     #include "flex-bison-header.h"
+    #include "translate.tab.h"
     
     enum ERRORTYPE {
         INVALID_ID = -1,
         UNK_CHAR = -2
     };
- 
-    int lineNo = 0;
-
 %}
 
 line   [\n\r]
@@ -24,16 +21,14 @@ letter [a-zA-Z]
 char   [.]
 digit  [0-9]
 id     {letter}({letter}|{digit}|_)*
-int    [+-]?{digit}+
+int    {digit}+
 string \"[^\"]*\"
 ws     {delim}+
-number [+-]?{digit}+([\.]{digit}+)?
-expnumber {number}[eE]{number}
 comments \{[^{}]*\}
 invalidId {digit}+{id}
 
 %%
-{line} {lineNo ++;}
+{line} {addLineNo();}
 {ws} {/*discard*/}
 {comments} {/*discard*/}
 
@@ -63,7 +58,6 @@ while {return WHILE;}
 NIL {return NIL;}
 true {return TRUE;}
 
-{expnumber} {yylval.stringType = yytext; return NUM;}
 {invalidId} {yylval.stringType = yytext; return INVALID_ID;}
 {id} {
         printf("registering %s\n", yytext);
@@ -71,7 +65,6 @@ true {return TRUE;}
         return ID;
      }
 {int} {yylval.stringType = yytext; return INT;}
-{number} {yylval.stringType = yytext; return NUM;}
 {string} {yylval.stringType = yytext; return STRING;}
 
 "+" {return OP_ADD;}
@@ -100,20 +93,25 @@ true {return TRUE;}
 int idHandler() {
     int entry = -1;
     yylval.idrespType = (struct IdResp *)malloc(sizeof(struct IdResp));
-    entry = getType(yytext);
-    if(entry >= 0) {
+    yylval.idrespType->idStr = (char *)malloc(sizeof(yytext));
+    strcpy(yylval.idrespType->idStr, yytext);
+    entry = getPredefType(yytext);
+    if(entry >=0) {
+        printf("id %s is predefined-type at %d\n", yytext, entry);
         yylval.idrespType->idEntry = entry;
-        yylval.idrespType->idRespStatus = -1;
+        yylval.idrespType->idRespStatus = IDRESP_PREDEF_TYPE;
         return 0;
     }
     entry = getPredefineVar(yytext);
     if(entry >= 0) {
+        printf("id %s is predefined-keyword at %d\n", yytext, entry);
         yylval.idrespType->idEntry = entry;
-        yylval.idrespType->idRespStatus = -2;
+        yylval.idrespType->idRespStatus = IDRESP_PREDEF_KEYW;
         return 0;
     }
-    entry = registerSymbolInCurScope(yytext, NULL);
+    entry = registerSymbolInCurScope(yytext);
     yylval.idrespType->idEntry = entry;
-    yylval.idrespType->idRespStatus = 0;
+    yylval.idrespType->idRespStatus = IDRESP_NORMAL;
+    printf("registered %s at %d\n", yytext, entry);
     return 0;
 }

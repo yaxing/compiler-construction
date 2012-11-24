@@ -1,18 +1,24 @@
 { 
-	This program is lexical and parsing error-free. 
-	It has multi-declaration error.
+	This program is lexical and parsing error-free
+        and contains undeclared variable  
 }
 
-program errormulti;
+program errorundeclared;
 type
 	s = string;
 	in = integer;
 var
-	z : s;
+	z : in;
 	m : in;
-	z : in;  {error: multiple declaration}
+
+function foo(n : in) : in; 
+begin
+   n := n + 1  {error: b has not been declared }
+   foo := n 	
+end;
 
 begin
-	z := 5;
-	m := 7;	
+	m := 5;
+	z := 7;
+	z := m + z;  {error: n has not been declared}
 end.

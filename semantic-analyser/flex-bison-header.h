@@ -9,6 +9,26 @@
 #ifndef compiler_debugging_flex_bison_header_h
 #define compiler_debugging_flex_bison_header_h
 
+#ifndef IDRESP_PREDEF_TYPE
+#define IDRESP_PREDEF_TYPE -1
+#endif
+
+#ifndef IDRESP_PREDEF_KEYW
+#define IDRESP_PREDEF_KEYW -2
+#endif
+
+#ifndef IDRESP_DEF_IN_PARENT
+#define IDRESP_DEF_IN_PARENT -3
+#endif
+
+#ifndef IDRESP_UNDEF
+#define IDRESP_UNDEF -5
+#endif
+
+#ifndef IDRESP_NORMAL
+#define IDRESP_NORMAL 0
+#endif
+
 typedef struct IdResp {
     int idEntry;
     char *idStr;
