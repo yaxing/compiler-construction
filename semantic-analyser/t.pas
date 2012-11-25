@@ -1,18 +1,25 @@
 {
 	This program is lexical and parsing error-free.
-	It has multi-declaration error.
+    It contains unequivalent type errors
 }
 
-program errormulti;
+program errorfree;
 type
 s = string;
 in = integer;
 var
-z : s;
+z : string;
 m : in;
-z : in;  {error: multiple declaration}
+
+
+function foo(a : in) : in;
+begin
+a := a + 1;
+foo := a
+end;
+
 
 begin
-z := 5;
-m := 7;
+z := foo(6);
+m := z * 5
 end.

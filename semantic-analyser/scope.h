@@ -99,6 +99,10 @@ int getCurScopeId() {
     return scopestack.top->scopeId;
 }
 
+int getParentScopeId() {
+    return getCurScope()->parent->scopeId;
+}
+
 scope *getParentScope() {
     if(scopestack.top->parent != NULL) {
         return scopestack.top->parent;

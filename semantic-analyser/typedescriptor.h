@@ -71,12 +71,11 @@ void initTypeDescList() {
 typedescriptor *getDescriptor(union SymbolEntryAttr attr, int tag, char *type) {
     typedescriptor *cursor = typedescripterlisttail;
     while(cursor != NULL) {
-        if(type == NULL) {
-            if(cursor->type == NULL) {
+        if(type == cursor->type) {
                 return cursor;
-            }
         }
         else if(cursor->type != NULL
+           && type != NULL
            && strcmp(cursor->type, type) == 0
            && tag == cursor->tag
            && typeAttrCmp(cursor->attribute, attr, getPredefType(type)) == 0) {

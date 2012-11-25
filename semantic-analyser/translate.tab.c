@@ -190,6 +190,8 @@ int curRecordScopeHash = 0;
 int context = 0;
     
 idresp *curVarIdResp = NULL;
+idresp *curTypeIdResp = NULL;
+int curTypeIdDefScopeId = -2;
     
 void printLineNo();
     
@@ -216,6 +218,8 @@ int isIdDefined(struct IdResp *id);
 int certainTypeCheck(struct TypeInfo *type, char *typeToCheck);
 
 int contextSwitch(struct IdResp *idInfo);
+    
+void resetCurTypeEnvironment();
 
 
 /* Enabling traces.  */
@@ -238,7 +242,7 @@ int contextSwitch(struct IdResp *idInfo);
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 46 "translate.y"
+#line 50 "translate.y"
 {
     double doubleType;
     int intType;
@@ -250,7 +254,7 @@ typedef union YYSTYPE
     int paramList[100];
 }
 /* Line 193 of yacc.c.  */
-#line 254 "translate.tab.c"
+#line 258 "translate.tab.c"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
@@ -263,7 +267,7 @@ typedef union YYSTYPE
 
 
 /* Line 216 of yacc.c.  */
-#line 267 "translate.tab.c"
+#line 271 "translate.tab.c"
 
 #ifdef short
 # undef short
@@ -478,16 +482,16 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  4
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   186
+#define YYLAST   187
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  52
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  55
+#define YYNNTS  56
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  106
+#define YYNRULES  107
 /* YYNRULES -- Number of states.  */
-#define YYNSTATES  196
+#define YYNSTATES  197
 
 /* YYTRANSLATE(YYLEX) -- Bison symbol number corresponding to YYLEX.  */
 #define YYUNDEFTOK  2
@@ -546,8 +550,8 @@ static const yytype_uint16 yyprhs[] =
      231,   233,   237,   239,   241,   243,   245,   247,   249,   252,
      254,   258,   260,   262,   264,   266,   269,   271,   274,   276,
      278,   280,   282,   284,   286,   288,   290,   293,   297,   298,
-     302,   303,   307,   308,   309,   316,   317,   318,   322,   323,
-     324,   329,   330,   333,   336,   337,   339
+     302,   303,   307,   308,   309,   310,   318,   319,   320,   324,
+     325,   326,   331,   332,   335,   338,   339,   341
 };
 
 /* YYRHS -- A `-1'-separated list of the rules' RHS.  */
@@ -562,48 +566,48 @@ static const yytype_int8 yyrhs[] =
       73,    34,    -1,    22,    55,    -1,    60,    37,    -1,    60,
       37,    55,    -1,    23,    57,    -1,    61,    37,    -1,    61,
       37,    57,    -1,    59,    37,    58,    -1,    59,    37,    -1,
-      62,    -1,    65,    -1,    46,    28,    81,    -1,   104,    36,
+      62,    -1,    65,    -1,    46,    28,    81,    -1,   105,    36,
       81,    -1,    -1,    -1,    17,    46,    63,    40,    69,    41,
       37,    64,    68,    -1,    -1,    -1,    10,    46,    66,    40,
       69,    41,    36,    83,    37,    67,    68,    -1,    72,    -1,
-       4,    -1,    -1,    70,    71,    -1,   104,    36,    81,    -1,
+       4,    -1,    -1,    70,    71,    -1,   105,    36,    81,    -1,
       37,    69,    -1,    -1,    73,    -1,    56,    73,    -1,     3,
       74,     8,    -1,    75,    -1,    74,    37,    75,    -1,    76,
       -1,    80,    -1,    77,    -1,    78,    -1,    -1,    94,    38,
-      85,    -1,    -1,    46,    79,    40,   100,    41,    -1,    73,
+      85,    -1,    -1,    46,    79,    40,   101,    41,    -1,    73,
       -1,    11,    85,    20,    75,    -1,    11,    85,    20,    75,
        7,    75,    -1,    24,    85,     6,    75,    -1,     9,    46,
       38,    85,    21,    85,     6,    75,    -1,    46,    -1,    12,
       42,    84,    39,    84,    43,    15,    81,    -1,    -1,    19,
-      82,    69,     8,    -1,    46,    -1,   106,    44,    -1,    44,
+      82,    69,     8,    -1,    46,    -1,   107,    44,    -1,    44,
       -1,    87,    -1,    87,    86,    87,    -1,    28,    -1,    29,
-      -1,    30,    -1,    31,    -1,    32,    -1,    33,    -1,   106,
+      -1,    30,    -1,    31,    -1,    32,    -1,    33,    -1,   107,
       88,    -1,    88,    -1,    90,    89,    88,    -1,    90,    -1,
       25,    -1,    27,    -1,    16,    -1,    93,    91,    -1,    93,
       -1,    92,    90,    -1,    26,    -1,     5,    -1,    13,    -1,
       48,    -1,    44,    -1,    47,    -1,    78,    -1,    94,    -1,
       14,    93,    -1,    40,    85,    41,    -1,    -1,    46,    95,
-      96,    -1,    -1,    34,    97,    94,    -1,    -1,    -1,    42,
-      98,    85,    99,    43,    96,    -1,    -1,    -1,    85,   101,
-     102,    -1,    -1,    -1,    35,    85,   103,   102,    -1,    -1,
-      46,   105,    -1,    35,   104,    -1,    -1,    25,    -1,    27,
-      -1
+      96,    -1,    -1,    34,    97,    94,    -1,    -1,    -1,    -1,
+      42,    98,    85,    99,    43,   100,    96,    -1,    -1,    -1,
+      85,   102,   103,    -1,    -1,    -1,    35,    85,   104,   103,
+      -1,    -1,    46,   106,    -1,    35,   105,    -1,    -1,    25,
+      -1,    27,    -1
 };
 
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   124,   124,   125,   126,   127,   128,   129,   130,   131,
-     134,   137,   138,   141,   147,   148,   151,   152,   155,   156,
-     159,   168,   178,   186,   178,   196,   204,   196,   214,   215,
-     218,   219,   224,   232,   233,   236,   237,   240,   243,   244,
-     247,   248,   251,   252,   253,   256,   266,   266,   307,   308,
-     309,   310,   311,   314,   321,   333,   333,   349,   358,   359,
-     362,   367,   377,   378,   379,   380,   381,   382,   385,   389,
-     396,   411,   418,   419,   420,   423,   436,   442,   448,   449,
-     450,   451,   454,   460,   466,   470,   474,   480,   487,   487,
-     536,   536,   551,   557,   550,   566,   572,   572,   577,   580,
-     580,   586,   589,   596,   597,   600,   601
+       0,   128,   128,   129,   130,   131,   132,   133,   134,   135,
+     138,   141,   142,   145,   151,   152,   155,   156,   159,   160,
+     163,   173,   183,   191,   183,   201,   209,   201,   219,   220,
+     223,   224,   229,   237,   238,   241,   242,   245,   248,   249,
+     252,   253,   256,   257,   258,   261,   271,   271,   312,   313,
+     314,   315,   316,   319,   327,   339,   339,   356,   368,   369,
+     372,   377,   387,   388,   389,   390,   391,   392,   395,   399,
+     406,   421,   428,   429,   430,   433,   446,   452,   458,   459,
+     460,   461,   464,   470,   476,   480,   484,   490,   497,   497,
+     546,   546,   565,   570,   575,   565,   583,   589,   589,   594,
+     597,   597,   603,   606,   613,   614,   617,   618
 };
 #endif
 
@@ -631,8 +635,8 @@ static const char *const yytname[] =
   "Type", "@6", "ResultType", "Constant", "Expression", "RelationalOp",
   "SimpleExpression", "AddOpTerm", "AddOp", "Term", "MulOpTerm", "MulOp",
   "Factor", "Variable", "@7", "ComponentSelection", "@8", "@9", "@10",
-  "ActualParameterList", "@11", "ExpressionMore", "@12", "IdentifierList",
-  "IdentifierListMore", "Sign", 0
+  "@11", "ActualParameterList", "@12", "ExpressionMore", "@13",
+  "IdentifierList", "IdentifierListMore", "Sign", 0
 };
 #endif
 
@@ -662,8 +666,8 @@ static const yytype_uint8 yyr1[] =
       85,    85,    86,    86,    86,    86,    86,    86,    87,    87,
       88,    88,    89,    89,    89,    90,    90,    91,    92,    92,
       92,    92,    93,    93,    93,    93,    93,    93,    95,    94,
-      97,    96,    98,    99,    96,    96,   101,   100,   100,   103,
-     102,   102,   104,   105,   105,   106,   106
+      97,    96,    98,    99,   100,    96,    96,   102,   101,   101,
+     104,   103,   103,   105,   106,   106,   107,   107
 };
 
 /* YYR2[YYN] -- Number of symbols composing right hand side of rule YYN.  */
@@ -678,8 +682,8 @@ static const yytype_uint8 yyr2[] =
        1,     3,     1,     1,     1,     1,     1,     1,     2,     1,
        3,     1,     1,     1,     1,     2,     1,     2,     1,     1,
        1,     1,     1,     1,     1,     1,     2,     3,     0,     3,
-       0,     3,     0,     0,     6,     0,     0,     3,     0,     0,
-       4,     0,     2,     2,     0,     1,     1
+       0,     3,     0,     0,     0,     7,     0,     0,     3,     0,
+       0,     4,     0,     2,     2,     0,     1,     1
 };
 
 /* YYDEFACT[STATE-NAME] -- Default rule to reduce with in state
@@ -690,34 +694,34 @@ static const yytype_uint8 yydefact[] =
        0,     0,     0,     0,     1,     0,    44,     0,     0,     0,
        0,     0,     0,     0,     0,    18,    19,     0,     0,     0,
        0,    88,    48,     0,    38,    40,    42,    43,    41,     0,
-      25,    22,     0,    10,     0,   104,    13,     0,     0,     0,
-       0,     0,     0,     0,     0,    17,     2,     0,     0,   105,
-     106,     0,    82,    83,    84,     0,    60,    69,    71,    76,
-      85,     0,     0,     0,    95,    37,    44,     0,     0,     0,
-       0,    11,     0,   102,    14,     0,     0,     0,     0,     3,
+      25,    22,     0,    10,     0,   105,    13,     0,     0,     0,
+       0,     0,     0,     0,     0,    17,     2,     0,     0,   106,
+     107,     0,    82,    83,    84,     0,    60,    69,    71,    76,
+      85,     0,     0,     0,    96,    37,    44,     0,     0,     0,
+       0,    11,     0,   103,    14,     0,     0,     0,     0,     3,
        0,     4,     5,    16,     0,    86,     0,    44,    62,    63,
       64,    65,    66,    67,     0,    74,    72,    73,     0,    79,
-      80,    78,    81,    75,     0,    68,    44,    98,    90,    92,
+      80,    78,    81,    75,     0,    68,    44,    99,    90,    92,
       89,    39,    45,    30,    30,     0,    55,    53,    20,    12,
-     103,    15,    21,     0,     6,     8,     7,     0,    87,    49,
-      61,    70,    77,    51,    96,     0,     0,     0,     0,    34,
-       0,     0,     0,    30,     9,     0,    44,   101,    47,    88,
+     104,    15,    21,     0,     6,     8,     7,     0,    87,    49,
+      61,    70,    77,    51,    97,     0,     0,     0,     0,    34,
+       0,     0,     0,    30,     9,     0,    44,   102,    47,    88,
       91,    93,     0,    30,    31,     0,     0,    59,     0,     0,
-       0,     0,    50,     0,    97,     0,     0,    33,    32,    23,
-       0,    58,    56,    44,    99,    95,    57,     0,     0,     0,
-      52,   101,    94,    26,    29,     0,    24,    28,    35,     0,
-     100,     0,    36,     0,    27,    54
+       0,     0,    50,     0,    98,     0,     0,    33,    32,    23,
+       0,    58,    56,    44,   100,    94,    57,     0,     0,     0,
+      52,   102,    96,    26,    29,     0,    24,    28,    35,     0,
+     101,    95,     0,    36,     0,    27,    54
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int16 yydefgoto[] =
 {
       -1,     2,    11,    33,   185,    36,    13,    14,    34,    37,
-      15,    69,   178,    16,    68,   191,   186,   138,   139,   154,
+      15,    69,   178,    16,    68,   192,   186,   138,   139,   154,
      187,    22,    23,    24,    25,    26,    54,    63,    28,   118,
      143,   177,   158,    55,    94,    56,    57,    98,    58,   103,
-     104,    59,    60,    64,   110,   136,   137,   165,   135,   147,
-     164,   181,   140,    73,    61
+     104,    59,    60,    64,   110,   136,   137,   165,   182,   135,
+     147,   164,   181,   140,    73,    61
 };
 
 /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
@@ -731,31 +735,31 @@ static const yytype_int16 yypact[] =
     -126,  -126,    73,  -126,    70,    71,  -126,    74,    72,    95,
       40,    79,    40,    80,    81,    42,  -126,    82,    47,  -126,
     -126,    30,  -126,  -126,  -126,    97,   105,  -126,    48,    10,
-    -126,    47,   113,    84,   -14,  -126,     7,    30,    85,    88,
+    -126,    47,   113,    83,   -14,  -126,     7,    30,    85,    88,
        0,    32,    35,  -126,    35,     0,    40,    93,    96,  -126,
      106,  -126,  -126,  -126,    30,  -126,    90,     7,  -126,  -126,
     -126,  -126,  -126,  -126,    30,  -126,  -126,  -126,    47,  -126,
     -126,  -126,  -126,  -126,    47,  -126,     7,    30,  -126,  -126,
     -126,  -126,  -126,    35,    35,    99,  -126,  -126,  -126,  -126,
     -126,  -126,  -126,   111,  -126,  -126,  -126,   100,  -126,   115,
-    -126,  -126,  -126,  -126,  -126,    98,    83,    30,   107,   109,
-     114,   108,    55,    35,  -126,    30,     7,   112,  -126,  -126,
-    -126,  -126,   116,    35,  -126,     0,   117,  -126,   118,   119,
-     143,   147,  -126,    30,  -126,   121,   110,  -126,  -126,  -126,
-      55,  -126,  -126,     7,  -126,   -14,  -126,   122,    18,   123,
-    -126,   112,  -126,  -126,  -126,    40,  -126,  -126,  -126,   140,
-    -126,    18,  -126,     0,  -126,  -126
+    -126,  -126,  -126,  -126,  -126,    98,   101,    30,   107,    92,
+     110,   108,    55,    35,  -126,    30,     7,   116,  -126,  -126,
+    -126,  -126,   114,    35,  -126,     0,   117,  -126,   118,   109,
+     144,   149,  -126,    30,  -126,   119,   112,  -126,  -126,  -126,
+      55,  -126,  -126,     7,  -126,  -126,  -126,   122,    18,   120,
+    -126,   116,   -14,  -126,  -126,    40,  -126,  -126,  -126,   141,
+    -126,  -126,    18,  -126,     0,  -126,  -126
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
     -126,  -126,  -126,    89,    28,    91,    15,  -126,  -126,  -126,
-    -126,  -126,  -126,  -126,  -126,  -126,   -33,  -103,  -126,  -126,
+    -126,  -126,  -126,  -126,  -126,  -126,   -31,  -103,  -126,  -126,
     -126,    -5,  -126,   -57,  -126,  -126,    -3,  -126,  -126,   -70,
-    -126,  -126,    -9,   -19,  -126,    68,   -47,  -126,    63,  -126,
-    -126,   120,    -4,  -126,    -1,  -126,  -126,  -126,  -126,  -126,
-     -10,  -126,    -6,  -126,  -125
+    -126,  -126,    -2,   -19,  -126,    77,   -47,  -126,    60,  -126,
+    -126,   124,    -4,  -126,   -16,  -126,  -126,  -126,  -126,  -126,
+    -126,    -7,  -126,    -6,  -126,  -125
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]].  What to do in state STATE-NUM.  If
@@ -777,13 +781,13 @@ static const yytype_int16 yytable[] =
        6,    52,    10,    21,    53,    47,   -46,     7,     6,   157,
       67,    70,    29,    27,     8,     7,    72,    71,    75,     9,
       10,    74,     8,    79,    81,    82,   180,    87,   151,   106,
-      84,   145,   146,   195,   107,   113,   161,   124,   114,   149,
+      84,   145,   146,   107,   196,   113,   161,   124,   114,   153,
      125,   128,   150,    88,    89,    90,    91,    92,    93,   148,
-     126,   142,    29,    27,   174,   144,   153,   163,   152,   156,
-     155,   172,   166,   173,   169,   193,   176,   170,   194,   183,
-     119,   179,   130,   171,   175,   121,   189,   132,    85,    29,
-      27,   190,     0,   188,   182,     0,     0,     0,     0,     0,
-     192,     0,     0,     0,     0,     0,   188
+     126,   142,    29,    27,   174,   144,   155,   149,   152,   156,
+     166,   163,   172,   171,   169,   173,   194,   170,   176,   183,
+     119,   195,   175,   189,   132,   121,   191,     0,   179,    29,
+      27,   130,    85,   188,   190,     0,     0,     0,     0,     0,
+     193,     0,     0,     0,     0,     0,     0,   188
 };
 
 static const yytype_int16 yycheck[] =
@@ -800,13 +804,13 @@ static const yytype_int16 yycheck[] =
        3,    44,    23,    46,    47,    46,    40,    10,     3,    44,
       38,    28,   106,   106,    17,    10,    35,    37,    36,    22,
       23,    37,    17,    34,    34,    34,   173,    20,   137,     6,
-      38,    21,     7,   193,    40,    40,   145,    34,    40,    46,
+      38,    21,     7,    40,   194,    40,   145,    34,    40,    37,
       34,    41,   136,    28,    29,    30,    31,    32,    33,    41,
-      34,    42,   146,   146,   163,    34,    37,    35,    41,    41,
-      36,     8,    36,     6,    37,    15,    46,    39,   191,    37,
-      71,   170,    94,    44,    43,    74,    43,   104,    48,   173,
-     173,   181,    -1,   178,   175,    -1,    -1,    -1,    -1,    -1,
-     185,    -1,    -1,    -1,    -1,    -1,   191
+      34,    42,   146,   146,   163,    34,    36,    46,    41,    41,
+      36,    35,     8,    44,    37,     6,    15,    39,    46,    37,
+      71,   192,    43,    43,   104,    74,   182,    -1,   170,   173,
+     173,    94,    48,   178,   181,    -1,    -1,    -1,    -1,    -1,
+     185,    -1,    -1,    -1,    -1,    -1,    -1,   192
 };
 
 /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
@@ -816,23 +820,23 @@ static const yytype_uint8 yystos[] =
        0,    18,    53,    46,     0,    37,     3,    10,    17,    22,
       23,    54,    56,    58,    59,    62,    65,    73,     9,    11,
       24,    46,    73,    74,    75,    76,    77,    78,    80,    94,
-      46,    46,    46,    55,    60,    46,    57,    61,   104,    56,
+      46,    46,    46,    55,    60,    46,    57,    61,   105,    56,
       58,    73,    58,    73,    73,    37,    34,    46,    14,    25,
       27,    40,    44,    47,    78,    85,    87,    88,    90,    93,
-      94,   106,    85,    79,    95,     8,    37,    38,    66,    63,
-      28,    37,    35,   105,    37,    36,    58,    73,    73,    34,
+      94,   107,    85,    79,    95,     8,    37,    38,    66,    63,
+      28,    37,    35,   106,    37,    36,    58,    73,    73,    34,
       73,    34,    34,    58,    38,    93,    85,    20,    28,    29,
       30,    31,    32,    33,    86,    16,    25,    27,    89,     5,
       13,    26,    48,    91,    92,    88,     6,    40,    34,    42,
       96,    75,    85,    40,    40,    12,    19,    46,    81,    55,
-     104,    57,    81,    73,    34,    34,    34,    85,    41,    75,
-      87,    88,    90,    75,    85,   100,    97,    98,    69,    70,
-     104,    69,    42,    82,    34,    21,     7,   101,    41,    46,
-      94,    85,    41,    37,    71,    36,    41,    44,    84,   106,
-      69,    85,    75,    35,   102,    99,    36,    69,    81,    37,
+     105,    57,    81,    73,    34,    34,    34,    85,    41,    75,
+      87,    88,    90,    75,    85,   101,    97,    98,    69,    70,
+     105,    69,    42,    82,    34,    21,     7,   102,    41,    46,
+      94,    85,    41,    37,    71,    36,    41,    44,    84,   107,
+      69,    85,    75,    35,   103,    99,    36,    69,    81,    37,
       39,    44,     8,     6,    85,    43,    46,    83,    64,    84,
-      75,   103,    96,    37,     4,    56,    68,    72,    73,    43,
-     102,    67,    73,    15,    68,    81
+      75,   104,   100,    37,     4,    56,    68,    72,    73,    43,
+     103,    96,    67,    73,    15,    68,    81
 };
 
 #define yyerrok		(yyerrstatus = 0)
@@ -1647,62 +1651,62 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 124 "translate.y"
-    {printf("Program\n");;}
-    break;
-
-  case 3:
-#line 125 "translate.y"
-    {printf("Program\n");;}
-    break;
-
-  case 4:
-#line 126 "translate.y"
-    {printf("Program\n");;}
-    break;
-
-  case 5:
-#line 127 "translate.y"
-    {printf("Program\n");;}
-    break;
-
-  case 6:
 #line 128 "translate.y"
     {printf("Program\n");;}
     break;
 
-  case 7:
+  case 3:
 #line 129 "translate.y"
     {printf("Program\n");;}
     break;
 
-  case 8:
+  case 4:
 #line 130 "translate.y"
     {printf("Program\n");;}
     break;
 
-  case 9:
+  case 5:
 #line 131 "translate.y"
     {printf("Program\n");;}
     break;
 
-  case 10:
+  case 6:
+#line 132 "translate.y"
+    {printf("Program\n");;}
+    break;
+
+  case 7:
+#line 133 "translate.y"
+    {printf("Program\n");;}
+    break;
+
+  case 8:
 #line 134 "translate.y"
+    {printf("Program\n");;}
+    break;
+
+  case 9:
+#line 135 "translate.y"
+    {printf("Program\n");;}
+    break;
+
+  case 10:
+#line 138 "translate.y"
     {printf("TypeDef_Mul\n");cleanCurParamCounter();;}
     break;
 
   case 11:
-#line 137 "translate.y"
+#line 141 "translate.y"
     {printf("TypeDefList\n");;}
     break;
 
   case 12:
-#line 138 "translate.y"
+#line 142 "translate.y"
     {printf("TypeDefList_Multi\n");;}
     break;
 
   case 13:
-#line 141 "translate.y"
+#line 145 "translate.y"
     {
                             printf("VarDecl_Mul\n");
                             cleanCurParamCounter();
@@ -1710,48 +1714,49 @@ yyreduce:
     break;
 
   case 14:
-#line 147 "translate.y"
+#line 151 "translate.y"
     {printf("VarDeclList\n");;}
     break;
 
   case 15:
-#line 148 "translate.y"
+#line 152 "translate.y"
     {printf("VarDeclList_Mul\n");;}
     break;
 
   case 16:
-#line 151 "translate.y"
+#line 155 "translate.y"
     {printf("SubDecl_mul\n");;}
     break;
 
   case 17:
-#line 152 "translate.y"
+#line 156 "translate.y"
     {printf("SubDecl_Mul\n");;}
     break;
 
   case 18:
-#line 155 "translate.y"
+#line 159 "translate.y"
     {printf("SubDeclP\n");;}
     break;
 
   case 19:
-#line 156 "translate.y"
+#line 160 "translate.y"
     {printf("SubDeclF\n");;}
     break;
 
   case 20:
-#line 159 "translate.y"
+#line 163 "translate.y"
     {
     printf("TypeDef: id: %d type: %d tag: %d\n", (yyvsp[(1) - (3)].idrespType)->idEntry, (yyvsp[(3) - (3)].typeinfo)->typeEntry, (yyvsp[(3) - (3)].typeinfo)->tag);
     if(setSymbolTypeAttr((yyvsp[(1) - (3)].idrespType)->idEntry, (yyvsp[(3) - (3)].typeinfo)->typeEntry, (yyvsp[(3) - (3)].typeinfo), ATTR_TYPE) != 0) {
         //YYERROR;
     }
     free((yyvsp[(3) - (3)].typeinfo));
+    resetCurTypeEnvironment();
 ;}
     break;
 
   case 21:
-#line 169 "translate.y"
+#line 174 "translate.y"
     {
                           printf("VarDecl\n");
                           if(setIdListType((yyvsp[(3) - (3)].typeinfo)) == 0) {
@@ -1762,7 +1767,7 @@ yyreduce:
     break;
 
   case 22:
-#line 178 "translate.y"
+#line 183 "translate.y"
     {
                                         char *name = getNameInCurScope((yyvsp[(2) - (2)].idrespType)->idEntry);
                                         if(enterNewScope((yyvsp[(2) - (2)].idrespType)) != 0) {
@@ -1773,7 +1778,7 @@ yyreduce:
     break;
 
   case 23:
-#line 186 "translate.y"
+#line 191 "translate.y"
     {
                             printf("setting proc: %d %s\n", (yyvsp[(2) - (7)].idrespType)->idEntry, itoa(funcProcParamCount));
                             handleFuncProcDeclaration((yyvsp[(2) - (7)].idrespType), NULL, funcProcParamCount, "procedure");
@@ -1781,7 +1786,7 @@ yyreduce:
     break;
 
   case 24:
-#line 190 "translate.y"
+#line 195 "translate.y"
     {
                             printf("ProcDecl\n");
                             popScopeStack();
@@ -1789,7 +1794,7 @@ yyreduce:
     break;
 
   case 25:
-#line 196 "translate.y"
+#line 201 "translate.y"
     {
                                     char *name = getNameInCurScope((yyvsp[(2) - (2)].idrespType)->idEntry);
                                     if(enterNewScope((yyvsp[(2) - (2)].idrespType)) != 0) {
@@ -1800,7 +1805,7 @@ yyreduce:
     break;
 
   case 26:
-#line 204 "translate.y"
+#line 209 "translate.y"
     {
                                     printf("setting func: %d %s %d\n", (yyvsp[(2) - (9)].idrespType)->idEntry, itoa(funcProcParamCount), (yyvsp[(8) - (9)].typeinfo)->typeEntry);
                                     handleFuncProcDeclaration((yyvsp[(2) - (9)].idrespType), (yyvsp[(8) - (9)].typeinfo), funcProcParamCount, "function");
@@ -1808,7 +1813,7 @@ yyreduce:
     break;
 
   case 27:
-#line 208 "translate.y"
+#line 213 "translate.y"
     {
                         printf("FuncDecl\n");
                         popScopeStack();
@@ -1816,29 +1821,29 @@ yyreduce:
     break;
 
   case 28:
-#line 214 "translate.y"
+#line 219 "translate.y"
     {printf("PFDecl_Block\n");;}
     break;
 
   case 29:
-#line 215 "translate.y"
+#line 220 "translate.y"
     {printf("PFDecl_Forward\n");;}
     break;
 
   case 30:
-#line 218 "translate.y"
+#line 223 "translate.y"
     {printf("empty paramlist\n");;}
     break;
 
   case 31:
-#line 219 "translate.y"
+#line 224 "translate.y"
     {
                                                                             printf("FormalPList\n");
                                                                         ;}
     break;
 
   case 32:
-#line 224 "translate.y"
+#line 229 "translate.y"
     {
                                                         printf("Plist_single\n");
                                                         if(setIdListType((yyvsp[(3) - (3)].typeinfo)) == 0) {
@@ -1849,57 +1854,57 @@ yyreduce:
     break;
 
   case 33:
-#line 232 "translate.y"
+#line 237 "translate.y"
     {printf("PList_M\n");;}
     break;
 
   case 35:
-#line 236 "translate.y"
+#line 241 "translate.y"
     {printf("Block_CompState\n");;}
     break;
 
   case 36:
-#line 237 "translate.y"
+#line 242 "translate.y"
     {printf("Block_CompSt_V\n");;}
     break;
 
   case 37:
-#line 240 "translate.y"
+#line 245 "translate.y"
     {printf("CompStBE\n");;}
     break;
 
   case 38:
-#line 243 "translate.y"
+#line 248 "translate.y"
     {printf("SteS\n");;}
     break;
 
   case 39:
-#line 244 "translate.y"
+#line 249 "translate.y"
     {printf("SteSSte\n");;}
     break;
 
   case 40:
-#line 247 "translate.y"
+#line 252 "translate.y"
     {printf("Statement_Simple\n");;}
     break;
 
   case 41:
-#line 248 "translate.y"
+#line 253 "translate.y"
     {printf("Statement_Structured\n");;}
     break;
 
   case 42:
-#line 251 "translate.y"
+#line 256 "translate.y"
     {printf("SimpleS_AssignState\n");;}
     break;
 
   case 43:
-#line 252 "translate.y"
+#line 257 "translate.y"
     {printf("SimpleSS_ProState\n");;}
     break;
 
   case 45:
-#line 256 "translate.y"
+#line 261 "translate.y"
     {
     printf("AssiState\n");
     printf("assign var type: %d\n", (yyvsp[(1) - (3)].typeinfo)->typeEntry);
@@ -1910,14 +1915,14 @@ yyreduce:
     break;
 
   case 46:
-#line 266 "translate.y"
+#line 271 "translate.y"
     {
                         cleanCurFuncProcCallParamCounter();
                     ;}
     break;
 
   case 47:
-#line 269 "translate.y"
+#line 274 "translate.y"
     {
                         printf("ProFuncStat\n");
                         int defined;
@@ -1957,58 +1962,59 @@ yyreduce:
     break;
 
   case 48:
-#line 307 "translate.y"
+#line 312 "translate.y"
     {printf("Struc_Comp\n");;}
     break;
 
   case 49:
-#line 308 "translate.y"
+#line 313 "translate.y"
     {printf("if_else\n");;}
     break;
 
   case 50:
-#line 309 "translate.y"
+#line 314 "translate.y"
     {printf("if_else_m\n");;}
     break;
 
   case 51:
-#line 310 "translate.y"
+#line 315 "translate.y"
     {printf("while_do\n");;}
     break;
 
   case 52:
-#line 311 "translate.y"
+#line 316 "translate.y"
     {printf("for_to\n");;}
     break;
 
   case 53:
-#line 314 "translate.y"
+#line 319 "translate.y"
     {
-            printf("TypeID\n");
+            printf("TypeID %d\n", (yyvsp[(1) - (1)].idrespType)->idEntry);
             typeHandler(&(yyvsp[(1) - (1)].idrespType));
             constructTypeInfoFromIdResp(&(yyval.typeinfo), (yyvsp[(1) - (1)].idrespType));
             (yyval.typeinfo)->tag = ATTR_TYPE;
             printAllSymbolTable();
+            curTypeIdResp = (yyvsp[(1) - (1)].idrespType);
           ;}
     break;
 
   case 54:
-#line 322 "translate.y"
+#line 328 "translate.y"
     {
            printf("Type_Array\n");
            (yyval.typeinfo) = (struct TypeInfo*)malloc(sizeof(struct TypeInfo));
-           // TODO: handle array type
            (yyval.typeinfo)->typeEntry = getPredefType("array");
-           //$$->typeEntry = $8->typeEntry;
-           //$$->additionType = "array";
+           (yyval.typeinfo)->defScopeId = getCurScopeId();
            (yyval.typeinfo)->attrInfo.arrayInfo.boundLow = (yyvsp[(3) - (8)].intType);
            (yyval.typeinfo)->attrInfo.arrayInfo.boundUp = (yyvsp[(5) - (8)].intType);
+           (yyval.typeinfo)->attrInfo.arrayInfo.typeEntry = curTypeIdResp->idEntry;
+           (yyval.typeinfo)->attrInfo.arrayInfo.typeDefScopeId = curTypeIdDefScopeId;
            (yyval.typeinfo)->tag = ATTR_TYPE;
        ;}
     break;
 
   case 55:
-#line 333 "translate.y"
+#line 339 "translate.y"
     {
          printf("Type_Record_Init\n");
          curRecordScopeHash = recordIdHashCode();
@@ -2018,40 +2024,44 @@ yyreduce:
     break;
 
   case 56:
-#line 339 "translate.y"
+#line 345 "translate.y"
     {
            printf("Type_Record\n");
            (yyval.typeinfo) = (struct TypeInfo*)malloc(sizeof(struct TypeInfo));
            (yyval.typeinfo)->typeEntry = getPredefType("record");
            (yyval.typeinfo)->attrInfo.recordInfo.scopeHashCode = curRecordScopeHash;
            (yyval.typeinfo)->tag = ATTR_TYPE;
+           (yyval.typeinfo)->defScopeId = getCurScopeId();
            curRecordScopeHash = handleRecordEnd();
        ;}
     break;
 
   case 57:
-#line 349 "translate.y"
+#line 356 "translate.y"
     {
                     printf("ResultType\n");
                     typeHandler(&(yyvsp[(1) - (1)].idrespType));
                     constructTypeInfoFromIdResp(&(yyval.typeinfo), (yyvsp[(1) - (1)].idrespType));
                     (yyval.typeinfo)->tag = ATTR_TYPE;
-                    printf("result type: %d\n", (yyval.typeinfo)->typeEntry);
+                    printf("return type: %d\n", (yyval.typeinfo)->typeEntry);
+                    if((yyval.typeinfo)->typeEntry == 5) {
+                        printf("return array type: %d, scope: %d\n", (yyval.typeinfo)->attrInfo.arrayInfo.typeEntry, (yyval.typeinfo)->attrInfo.arrayInfo.typeDefScopeId);
+                    }
                 ;}
     break;
 
   case 58:
-#line 358 "translate.y"
+#line 368 "translate.y"
     {printf("Constant_SIGN_INT\n"); (yyval.intType) = getConstantInt((yyvsp[(1) - (2)].stringType), (yyvsp[(2) - (2)].intType));;}
     break;
 
   case 59:
-#line 359 "translate.y"
+#line 369 "translate.y"
     {printf("Constant_INT\n"); (yyval.intType) = getConstantInt(NULL, (yyvsp[(1) - (1)].intType));;}
     break;
 
   case 60:
-#line 362 "translate.y"
+#line 372 "translate.y"
     {
                                 printf("Exp_simp\n");
                                 (yyval.typeinfo) = (yyvsp[(1) - (1)].typeinfo);
@@ -2060,7 +2070,7 @@ yyreduce:
     break;
 
   case 61:
-#line 368 "translate.y"
+#line 378 "translate.y"
     {
                                 printf("Exp_Simp_Ro\n");
                                 //check type here $1 & $3
@@ -2071,37 +2081,37 @@ yyreduce:
     break;
 
   case 62:
-#line 377 "translate.y"
+#line 387 "translate.y"
     {printf("RelationalOp_EQ\n");;}
     break;
 
   case 63:
-#line 378 "translate.y"
+#line 388 "translate.y"
     {printf("RelationslOp_Less\n");;}
     break;
 
   case 64:
-#line 379 "translate.y"
+#line 389 "translate.y"
     {printf("RelationslOp_LE\n");;}
     break;
 
   case 65:
-#line 380 "translate.y"
+#line 390 "translate.y"
     {printf("RelationslOp_G\n");;}
     break;
 
   case 66:
-#line 381 "translate.y"
+#line 391 "translate.y"
     {printf("RelationslOp_GE\n");;}
     break;
 
   case 67:
-#line 382 "translate.y"
+#line 392 "translate.y"
     {printf("RelationslOp_NE\n");;}
     break;
 
   case 68:
-#line 385 "translate.y"
+#line 395 "translate.y"
     {
                                     printf("SimpleExp_Sign_AddTerm\n");
                                     (yyval.typeinfo) = (yyvsp[(2) - (2)].typeinfo);
@@ -2109,7 +2119,7 @@ yyreduce:
     break;
 
   case 69:
-#line 389 "translate.y"
+#line 399 "translate.y"
     {
                                 printf("SimpleExp_AddTerm\n");
                                 (yyval.typeinfo) = (yyvsp[(1) - (1)].typeinfo);
@@ -2118,7 +2128,7 @@ yyreduce:
     break;
 
   case 70:
-#line 396 "translate.y"
+#line 406 "translate.y"
     {
                                     printf("AddOpTerm_Mul\n");
                                     char *type1;
@@ -2137,7 +2147,7 @@ yyreduce:
     break;
 
   case 71:
-#line 411 "translate.y"
+#line 421 "translate.y"
     {
                     printf("AddOpTerm_Single\n");
                     (yyval.typeinfo) = (yyvsp[(1) - (1)].typeinfo);
@@ -2146,22 +2156,22 @@ yyreduce:
     break;
 
   case 72:
-#line 418 "translate.y"
+#line 428 "translate.y"
     {printf("AddOp_Add\n");;}
     break;
 
   case 73:
-#line 419 "translate.y"
+#line 429 "translate.y"
     {printf("AddOp_Min\n");;}
     break;
 
   case 74:
-#line 420 "translate.y"
+#line 430 "translate.y"
     {printf("AddOp_OR\n");;}
     break;
 
   case 75:
-#line 423 "translate.y"
+#line 433 "translate.y"
     {
                             printf("Term_Fac_Mul\n");
                             if(typeCheck((yyvsp[(1) - (2)].typeinfo), (yyvsp[(2) - (2)].typeinfo))) {
@@ -2178,7 +2188,7 @@ yyreduce:
     break;
 
   case 76:
-#line 436 "translate.y"
+#line 446 "translate.y"
     {
                 (yyval.typeinfo) = (yyvsp[(1) - (1)].typeinfo);
                 printf("type reduced as %d\n", (yyval.typeinfo)->typeEntry);
@@ -2186,7 +2196,7 @@ yyreduce:
     break;
 
   case 77:
-#line 442 "translate.y"
+#line 452 "translate.y"
     {
                             printf("MulOpTerm\n");
                             (yyval.typeinfo) = (yyvsp[(2) - (2)].typeinfo);
@@ -2194,27 +2204,27 @@ yyreduce:
     break;
 
   case 78:
-#line 448 "translate.y"
+#line 458 "translate.y"
     {printf("MulOp_MUL\n");;}
     break;
 
   case 79:
-#line 449 "translate.y"
+#line 459 "translate.y"
     {printf("MulOp_DIV\n");;}
     break;
 
   case 80:
-#line 450 "translate.y"
+#line 460 "translate.y"
     {printf("MulOp_MOD\n");;}
     break;
 
   case 81:
-#line 451 "translate.y"
+#line 461 "translate.y"
     {printf("MulOp_AND\n");;}
     break;
 
   case 82:
-#line 454 "translate.y"
+#line 464 "translate.y"
     {
                 printf("Factor_INT\n");
                 (yyval.typeinfo) = (struct TypeInfo*)malloc(sizeof(struct TypeInfo));
@@ -2224,7 +2234,7 @@ yyreduce:
     break;
 
   case 83:
-#line 460 "translate.y"
+#line 470 "translate.y"
     {
                     printf("Factor_String\n");
                     (yyval.typeinfo) = (struct TypeInfo*)malloc(sizeof(struct TypeInfo));
@@ -2234,7 +2244,7 @@ yyreduce:
     break;
 
   case 84:
-#line 466 "translate.y"
+#line 476 "translate.y"
     {
                                 printf("Factor_FuncRef\n");
                                 (yyval.typeinfo) = (yyvsp[(1) - (1)].typeinfo);
@@ -2242,7 +2252,7 @@ yyreduce:
     break;
 
   case 85:
-#line 470 "translate.y"
+#line 480 "translate.y"
     {
                     printf("Factor_Var\n");
                     (yyval.typeinfo) = (yyvsp[(1) - (1)].typeinfo);
@@ -2250,7 +2260,7 @@ yyreduce:
     break;
 
   case 86:
-#line 474 "translate.y"
+#line 484 "translate.y"
     {
                         printf("Factor_N_Fac\n");
                         (yyval.typeinfo) = (struct TypeInfo*)malloc(sizeof(struct TypeInfo));
@@ -2260,7 +2270,7 @@ yyreduce:
     break;
 
   case 87:
-#line 480 "translate.y"
+#line 490 "translate.y"
     {
                                         printf("Factor_Exp\n");
                                         (yyval.typeinfo) = (yyvsp[(2) - (3)].typeinfo);
@@ -2268,7 +2278,7 @@ yyreduce:
     break;
 
   case 88:
-#line 487 "translate.y"
+#line 497 "translate.y"
     {
                 printf("Var_ID\n");
                 int defined = 0;
@@ -2304,7 +2314,7 @@ yyreduce:
     break;
 
   case 89:
-#line 519 "translate.y"
+#line 529 "translate.y"
     {
                 printf("Var_Comp\n");
                 //exit record scope
@@ -2322,17 +2332,22 @@ yyreduce:
     break;
 
   case 90:
-#line 536 "translate.y"
+#line 546 "translate.y"
     {
-                         curRecordScopeHash = handleRecordStart(curVarIdResp);
-                         if(curRecordScopeHash != 0) {
-                             printf("enter recordhash: %d\n", curRecordScopeHash);
+                         if(!isTypeConstructor(curVarIdResp, "record")) {
+                             fprintf(stderr, "Invalid var: %s is not a record\n", curVarIdResp->idStr);
+                         }
+                         else {
+                             curRecordScopeHash = handleRecordStart(curVarIdResp);
+                             if(curRecordScopeHash != 0) {
+                                 printf("enter recordhash: %d\n", curRecordScopeHash);
+                             }
                          }
                      ;}
     break;
 
   case 91:
-#line 542 "translate.y"
+#line 557 "translate.y"
     {
                          printf("CompSel_Record\n");
                          (yyval.typeinfo) = (yyvsp[(3) - (3)].typeinfo);
@@ -2344,60 +2359,67 @@ yyreduce:
     break;
 
   case 92:
-#line 551 "translate.y"
+#line 565 "translate.y"
     {
-                        //if(getContext() != CONTEXT_ARRAY) {
-                         //   fprintf(stderr, "Invalid array operation, variable is not an array.\n");
-                            //YYERROR;
-                        //}
-                    ;}
+                       if(!isTypeConstructor(curVarIdResp, "array")) {
+                           fprintf(stderr, "Invalid var: structure is not an array\n", curVarIdResp->idStr);
+                       }
+                   ;}
     break;
 
   case 93:
-#line 557 "translate.y"
+#line 570 "translate.y"
     {
                          if(!certainTypeCheck((yyvsp[(3) - (3)].typeinfo), "integer")) {
-                             fprintf(stderr, "(array index should be integer)\n");
+                             fprintf(stderr, "Invalid array index\n");
                          }
                      ;}
     break;
 
   case 94:
-#line 562 "translate.y"
+#line 575 "translate.y"
     {
-                         printf("CompSel_Array\n");
-                         (yyval.typeinfo) = (yyvsp[(6) - (6)].typeinfo);
+                         handleArrayVar(&curVarIdResp);
                      ;}
     break;
 
   case 95:
-#line 566 "translate.y"
+#line 578 "translate.y"
+    {
+                         printf("CompSel_Array\n");
+                         constructTypeInfoFromIdResp(&(yyval.typeinfo), curVarIdResp);
+                         (yyval.typeinfo)->tag = ATTR_VAR;
+                     ;}
+    break;
+
+  case 96:
+#line 583 "translate.y"
     {
                        (yyval.typeinfo) = (struct TypeInfo*)malloc(sizeof(struct TypeInfo));
                        (yyval.typeinfo)->typeEntry = -1;
                      ;}
     break;
 
-  case 96:
-#line 572 "translate.y"
+  case 97:
+#line 589 "translate.y"
     {
     addCurFuncProcParamCallCounter(1);
     appendToParamTypeList((yyvsp[(1) - (1)].typeinfo));
 ;}
     break;
 
-  case 97:
-#line 576 "translate.y"
-    {printf("ActualParamL\n");;}
-    break;
-
   case 98:
-#line 577 "translate.y"
+#line 593 "translate.y"
     {printf("ActualParamL\n");;}
     break;
 
   case 99:
-#line 580 "translate.y"
+#line 594 "translate.y"
+    {printf("ActualParamL\n");;}
+    break;
+
+  case 100:
+#line 597 "translate.y"
     {
     printf("ExpM\n");
     addCurFuncProcParamCallCounter(1);
@@ -2405,8 +2427,8 @@ yyreduce:
 ;}
     break;
 
-  case 102:
-#line 589 "translate.y"
+  case 103:
+#line 606 "translate.y"
     {
                                         printf("IdList\n");
                                         addCurParamCounter(1);
@@ -2414,24 +2436,24 @@ yyreduce:
                                        ;}
     break;
 
-  case 103:
-#line 596 "translate.y"
+  case 104:
+#line 613 "translate.y"
     {printf("IdListM\n");;}
     break;
 
-  case 105:
-#line 600 "translate.y"
+  case 106:
+#line 617 "translate.y"
     {printf("Sign_Add\n"); (yyval.stringType) = "+";;}
     break;
 
-  case 106:
-#line 601 "translate.y"
+  case 107:
+#line 618 "translate.y"
     {printf("Sign_Min\n"); (yyval.stringType) = "-";;}
     break;
 
 
 /* Line 1267 of yacc.c.  */
-#line 2435 "translate.tab.c"
+#line 2457 "translate.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -2645,7 +2667,7 @@ yyreturn:
 }
 
 
-#line 604 "translate.y"
+#line 621 "translate.y"
 
 
 yyerror(char *s)
@@ -2729,7 +2751,7 @@ void handleFuncProcDeclaration(struct IdResp *id, struct TypeInfo *retType, int 
         union SymbolEntryAttr attr;
         if(strcmp(funcProc, "function") == 0) {
             //set function parameter's type as return type
-            setFuncVarInScope(id->idStr, id->idEntry, retType->typeEntry, attr);
+            setFuncVarInScope(id->idStr, id->idEntry, retType->typeEntry, retType->attrInfo);
             registerFunc(id->idEntry, retType->typeEntry, retType->attrInfo, paramQty);
         }
         else {
@@ -2760,6 +2782,7 @@ int setSymbolTypeAttr(int idAddr, int typeEntry, struct TypeInfo *typedata, int 
         attr.arrayInfo.boundLow = typedata->attrInfo.arrayInfo.boundLow;
         attr.arrayInfo.boundUp = typedata->attrInfo.arrayInfo.boundUp;
         attr.arrayInfo.typeEntry = typedata->attrInfo.arrayInfo.typeEntry;
+        attr.arrayInfo.typeDefScopeId = typedata->attrInfo.arrayInfo.typeDefScopeId;
     }
     if(typeEntry == getPredefType("record")) {
         attr.recordInfo.scopeHashCode = typedata->attrInfo.recordInfo.scopeHashCode;
@@ -2780,12 +2803,14 @@ int typeHandler(struct IdResp **idResp) {
     printf("handling type: %s\n", (*idResp)->idStr);
     int entry;
     if((*idResp)->idRespStatus == IDRESP_PREDEF_TYPE) {
+        curTypeIdDefScopeId = -2;
         return 1;
     }
     entry = getTypeDefAddr((*idResp)->idStr);
     if(entry >= 0) {
         (*idResp)->idEntry = entry;
         (*idResp)->idRespStatus = IDRESP_NORMAL;
+        curTypeIdDefScopeId = getCurScopeId();
         return 1;
     }
     else {
@@ -2794,6 +2819,7 @@ int typeHandler(struct IdResp **idResp) {
             (*idResp)->idRespStatus = IDRESP_DEF_IN_PARENT;
             (*idResp)->idEntry = entry;
             removeTailSymbolFromCurScope();
+            curTypeIdDefScopeId = getParentScopeId();
             return 1;
         }
     }
@@ -2815,10 +2841,16 @@ int isIdDefined(struct IdResp *id) {
 int certainTypeCheck(struct TypeInfo *type, char *typeToCheck) {
     struct TypeInfo *tmp = (struct TypeInfo *)malloc(sizeof(struct TypeInfo));
     tmp->typeEntry = getPredefType(typeToCheck);
+    tmp->tag = type->tag;
     if(!typeCheck(type, tmp)) {
         return 0;
     }
     return 1;
+}
+
+void resetCurTypeEnvironment() {
+    curTypeIdResp = NULL;
+    curTypeIdDefScopeId = -2;
 }
 
 int main(int argc, const char * argv[]) {

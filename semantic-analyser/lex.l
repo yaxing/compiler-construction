@@ -64,7 +64,7 @@ true {return TRUE;}
         idHandler();
         return ID;
      }
-{int} {yylval.stringType = yytext; return INT;}
+{int} {yylval.intType = atoi(yytext); return INT;}
 {string} {yylval.stringType = yytext; return STRING;}
 
 "+" {return OP_ADD;}

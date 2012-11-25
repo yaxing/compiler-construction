@@ -130,7 +130,7 @@ void appendToLatestSetList(int entry) {
 void cleanLatestSetList() {
     int i = 0;
     for(i = 0; i < maxSetEntryId; i ++) {
-        //latestSetEntries[i] = -1;
+      //  latestSetEntries[i] = -1;
     }
     maxSetEntryId = -1;
 }
@@ -290,13 +290,19 @@ void constructTypeInfoFromIdResp(struct TypeInfo **typeinfo, struct IdResp *idRe
     entry *tableEntry;
     char *idType;
     *typeinfo = (struct TypeInfo *)malloc(sizeof(struct TypeInfo));
+    if(idResp == NULL) {
+        (*typeinfo)->typeEntry = getPredefType("undefined");
+        (*typeinfo)->defScopeId = -2;
+        printf("constructed TypeInfo(pred) as %d from undefined\n", (*typeinfo)->typeEntry);
+        return;
+    }
     if(idResp->idRespStatus == IDRESP_PREDEF_KEYW
        || idResp->idRespStatus == IDRESP_PREDEF_TYPE) {
         (*typeinfo)->typeEntry = idResp->idEntry;
+        (*typeinfo)->defScopeId = -2;
         printf("constructed TypeInfo(pred) as %d from %s(%d)\n", (*typeinfo)->typeEntry, idResp->idStr, idResp->idEntry);
         return;
     }
-    
     if(idResp->idRespStatus == IDRESP_DEF_IN_PARENT) {
         curScope = curScope->parent;
     }
@@ -304,6 +310,7 @@ void constructTypeInfoFromIdResp(struct TypeInfo **typeinfo, struct IdResp *idRe
     if(tableEntry == NULL || tableEntry->typedesc->type == NULL) {
         (*typeinfo)->typeEntry = getPredefType("undefined");
         (*typeinfo)->tag = ATTR_DEFAULT;
+        (*typeinfo)->defScopeId = -10;
         printf("constructed TypeInfo(undef) as %d from %s(%d)\n", (*typeinfo)->typeEntry, idResp->idStr, idResp->idEntry);
         return;
     }
@@ -311,6 +318,7 @@ void constructTypeInfoFromIdResp(struct TypeInfo **typeinfo, struct IdResp *idRe
     (*typeinfo)->typeEntry = getPredefType(idType);
     (*typeinfo)->tag = tableEntry->typedesc->tag;
     (*typeinfo)->attrInfo = tableEntry->typedesc->attribute;
+    (*typeinfo)->defScopeId = -2;
     printf("constructed TypeInfo(normal) as %d from %s(%d) %s\n", (*typeinfo)->typeEntry, idResp->idStr, idResp->idEntry, idType);
 }
 
@@ -396,8 +404,18 @@ int handleRecordEnd() {
     return popRecordHashFromStack();
 }
 
-void switchContext(struct IdResp *id) {
-    
+// judge whether a curidresp is a type constructor
+int isTypeConstructor(struct IdResp *curIdResp, char *typeConstructor) {
+    scope *curScope = getCurScope();
+    char *type;
+    if(curIdResp->idRespStatus == IDRESP_DEF_IN_PARENT) {
+        curScope = curScope->parent;
+    }
+    type = getIdType(curScope->symboltable, curIdResp->idEntry);
+    if(strcmp(type, typeConstructor) == 0) {
+        return 1;
+    }
+    return 0;
 }
 
 void setReduceTypeInfo(struct TypeInfo **typeInfoReduce, struct TypeInfo *typeInfoOp1, struct TypeInfo *typeInfoOp2, int eq) {
@@ -431,6 +449,24 @@ char *getTypeName(struct TypeInfo *typeInfo) {
         type = typeInfo->attrInfo.funcInfo.retTypeEntry;
     }
     return getIDName(predefinedIdTable, type);
+}
+
+void handleArrayVar(struct IdResp **idResp) {
+    scope *curScope;
+    entry *tmp;
+    printf("handling array\n");
+    if((*idResp) == NULL || !isTypeConstructor((*idResp), "array")) {
+        printf("handling array: not array\n");
+        return;
+    }
+    curScope = getCurScope();
+    if((*idResp)->idRespStatus == IDRESP_DEF_IN_PARENT) {
+        curScope = curScope->parent;
+    }
+    tmp = getSymbolbyEntryId(curScope->symboltable, (*idResp)->idEntry);
+    (*idResp)->idEntry = tmp->typedesc->attribute.arrayInfo.typeEntry;
+    (*idResp)->idStr = getIDName(find_scope(tmp->typedesc->attribute.arrayInfo.typeDefScopeId)->symboltable, tmp->typedesc->attribute.arrayInfo.typeEntry);
+    printf("handling array: cur idresp changed to %s\n", (*idResp)->idStr);
 }
 
 #endif

@@ -20,11 +20,17 @@ int typeDescCmp(typedescriptor *typedesc, typedescriptor *typedesc2) {
 
 //compare two array type attributes
 int arrayCmp(struct ArrayInfo arrayAttr1, struct ArrayInfo arrayAttr2) {
-    if(arrayAttr1.typeEntry != arrayAttr2.typeEntry
-       || arrayAttr1.typeDefScopeId != arrayAttr2.typeDefScopeId
-       || arrayAttr1.boundLow != arrayAttr2.boundLow
-       || arrayAttr1.boundUp != arrayAttr2.boundUp) {
-        return -1;
+    entry *entry1;
+    entry *entry2;
+    if(arrayAttr1.boundLow != arrayAttr2.boundLow
+       || arrayAttr1.boundUp != arrayAttr2.boundUp
+       || arrayAttr1.typeEntry != arrayAttr2.typeEntry
+       || arrayAttr1.typeDefScopeId != arrayAttr2.typeDefScopeId) {
+        entry1 = getSymbolbyEntryId(find_scope(arrayAttr1.typeDefScopeId)->symboltable, arrayAttr1.typeEntry);
+        entry2 = getSymbolbyEntryId(find_scope(arrayAttr2.typeDefScopeId)->symboltable, arrayAttr2.typeEntry);
+        if(typeDescCmp(entry1->typedesc, entry2->typedesc) != 0) {
+            return -1;
+        }
     }
     return 0;
 }
@@ -58,7 +64,7 @@ int typeConstructorCmp(union SymbolEntryAttr attr1, union SymbolEntryAttr attr2,
     else if(typeAddr == getPredefType("record")) {
         return recordCmp(attr1.recordInfo, attr2.recordInfo);
     }
-    return -1;
+    return 0;
 }
 
 // compare two func's return type attrs
@@ -91,13 +97,17 @@ int procCmp(struct FuncInfo attr1, struct FuncInfo attr2) {
     return 0;
 }
 
-//compare two type attrs
+//compare two type attrs 0 eq
 int typeAttrCmp(union SymbolEntryAttr attr1, union SymbolEntryAttr attr2, int typeAddr) {
     if(typeAddr == getPredefType("function")
        || typeAddr == getPredefType("procedure")) {
         return funcCmp(attr1.funcInfo, attr2.funcInfo);
     }
-    return typeConstructorCmp(attr1, attr2, typeAddr);
+    if(typeAddr == getPredefType("array")
+       || typeAddr == getPredefType("record")) {
+        return typeConstructorCmp(attr1, attr2, typeAddr);
+    }
+    return 0;
 }
 
 //compare a predef type with an array

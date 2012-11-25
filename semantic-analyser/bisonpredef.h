@@ -11,6 +11,7 @@
 
 typedef struct TypeInfo {
     int typeEntry;
+    int defScopeId;//which scope is this type defined in
     int tag;//VAR or TYPE
     union SymbolEntryAttr attrInfo;
 } typeinfost;

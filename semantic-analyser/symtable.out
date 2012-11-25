@@ -1,8 +1,13 @@
 All symboltables: 
 symboltable of scope -1 (sub-scope of -1): 
-Address: 0   ID: errormulti      Type: (null)     
+Address: 0   ID: errorfree       Type: (null)     
 Address: 1   ID: s               Type: string     Attr: type 
 Address: 2   ID: in              Type: integer    Attr: type 
-Address: 3   ID: z               Type: integer    Attr: var 
+Address: 3   ID: z               Type: string     Attr: var 
 Address: 4   ID: m               Type: integer    Attr: var 
+Address: 5   ID: foo             Type: function   ParamQty: 1 ReturnType: integer   
+
+symboltable of scope 5 (sub-scope of -1): 
+Address: 0   ID: foo             Type: integer    Attr: var 
+Address: 1   ID: a               Type: integer    Attr: var 
 

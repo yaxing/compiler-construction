@@ -21,9 +21,10 @@ char *itoa(int a) {
 
 void printArrayInfo(struct ArrayInfo array) {
     char *type;
-    type = getIDName(predefinedIdTable, array.typeEntry);
-    printf("ArrayType: %-10s BoundLow: %d BoundUp: %d",
-           type, array.boundLow, array.boundUp);
+    scope *defScope = find_scope(array.typeDefScopeId);
+    type = getIDName(defScope->symboltable, array.typeEntry);
+    printf("\n    ArrayType: %-10s(scope %d) BoundLow: %d BoundUp: %d",
+           type, defScope->scopeId, array.boundLow, array.boundUp);
 }
 
 void printRecordInfo(struct RecordInfo recordInfo, int spaceCnt, int spaceCntBuf) {

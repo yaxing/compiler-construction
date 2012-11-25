@@ -976,7 +976,7 @@ YY_RULE_SETUP
 case 31:
 YY_RULE_SETUP
 #line 67 "lex.l"
-{yylval.stringType = yytext; return INT;}
+{yylval.intType = atoi(yytext); return INT;}
 	YY_BREAK
 case 32:
 /* rule 32 can match eol */

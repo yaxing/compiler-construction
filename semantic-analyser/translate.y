@@ -15,6 +15,8 @@ int curRecordScopeHash = 0;
 int context = 0;
     
 idresp *curVarIdResp = NULL;
+idresp *curTypeIdResp = NULL;
+int curTypeIdDefScopeId = -2;
     
 void printLineNo();
     
@@ -41,6 +43,8 @@ int isIdDefined(struct IdResp *id);
 int certainTypeCheck(struct TypeInfo *type, char *typeToCheck);
 
 int contextSwitch(struct IdResp *idInfo);
+    
+void resetCurTypeEnvironment();
 %}
 
 %union {
@@ -162,6 +166,7 @@ TypeDefinition : ID OP_EQUAL Type {
         //YYERROR;
     }
     free($3);
+    resetCurTypeEnvironment();
 }
 ;
 
@@ -312,22 +317,23 @@ StructuredStatement : CompoundStatement {printf("Struc_Comp\n");}
 ;
 
 Type : ID {
-            printf("TypeID\n");
+            printf("TypeID %d\n", $1->idEntry);
             typeHandler(&$1);
             constructTypeInfoFromIdResp(&$$, $1);
             $$->tag = ATTR_TYPE;
             printAllSymbolTable();
+            curTypeIdResp = $1;
           }
      | ARRAY BRACKET_L Constant DOUBLE_DOT Constant BRACKET_R OF
        Type {
            printf("Type_Array\n");
            $$ = (struct TypeInfo*)malloc(sizeof(struct TypeInfo));
-           // TODO: handle array type
            $$->typeEntry = getPredefType("array");
-           //$$->typeEntry = $8->typeEntry;
-           //$$->additionType = "array";
+           $$->defScopeId = getCurScopeId();
            $$->attrInfo.arrayInfo.boundLow = $3;
            $$->attrInfo.arrayInfo.boundUp = $5;
+           $$->attrInfo.arrayInfo.typeEntry = curTypeIdResp->idEntry;
+           $$->attrInfo.arrayInfo.typeDefScopeId = curTypeIdDefScopeId;
            $$->tag = ATTR_TYPE;
        }
      | RECORD {
@@ -342,6 +348,7 @@ Type : ID {
            $$->typeEntry = getPredefType("record");
            $$->attrInfo.recordInfo.scopeHashCode = curRecordScopeHash;
            $$->tag = ATTR_TYPE;
+           $$->defScopeId = getCurScopeId();
            curRecordScopeHash = handleRecordEnd();
        }
 ;
@@ -351,7 +358,10 @@ ResultType : ID {
                     typeHandler(&$1);
                     constructTypeInfoFromIdResp(&$$, $1);
                     $$->tag = ATTR_TYPE;
-                    printf("result type: %d\n", $$->typeEntry);
+                    printf("return type: %d\n", $$->typeEntry);
+                    if($$->typeEntry == 5) {
+                        printf("return array type: %d, scope: %d\n", $$->attrInfo.arrayInfo.typeEntry, $$->attrInfo.arrayInfo.typeDefScopeId);
+                    }
                 }
 ;
 
@@ -534,9 +544,14 @@ Variable :
 
 ComponentSelection :
                      DOT {
-                         curRecordScopeHash = handleRecordStart(curVarIdResp);
-                         if(curRecordScopeHash != 0) {
-                             printf("enter recordhash: %d\n", curRecordScopeHash);
+                         if(!isTypeConstructor(curVarIdResp, "record")) {
+                             fprintf(stderr, "Invalid var: %s is not a record\n", curVarIdResp->idStr);
+                         }
+                         else {
+                             curRecordScopeHash = handleRecordStart(curVarIdResp);
+                             if(curRecordScopeHash != 0) {
+                                 printf("enter recordhash: %d\n", curRecordScopeHash);
+                             }
                          }
                      }
                      Variable {
@@ -547,21 +562,23 @@ ComponentSelection :
                              printf("out recordhash: %d\n", curRecordScopeHash);
                          }
                      }
-                   | BRACKET_L
-                    {
-                        //if(getContext() != CONTEXT_ARRAY) {
-                         //   fprintf(stderr, "Invalid array operation, variable is not an array.\n");
-                            //YYERROR;
-                        //}
-                    }
+                   | BRACKET_L {
+                       if(!isTypeConstructor(curVarIdResp, "array")) {
+                           fprintf(stderr, "Invalid var: structure is not an array\n", curVarIdResp->idStr);
+                       }
+                   }
                      Expression {
                          if(!certainTypeCheck($3, "integer")) {
-                             fprintf(stderr, "(array index should be integer)\n");
+                             fprintf(stderr, "Invalid array index\n");
                          }
                      }
-                     BRACKET_R ComponentSelection {
+                     BRACKET_R {
+                         handleArrayVar(&curVarIdResp);
+                     }
+                     ComponentSelection {
                          printf("CompSel_Array\n");
-                         $$ = $6;
+                         constructTypeInfoFromIdResp(&$$, curVarIdResp);
+                         $$->tag = ATTR_VAR;
                      }
                    | {
                        $$ = (struct TypeInfo*)malloc(sizeof(struct TypeInfo));
@@ -684,7 +701,7 @@ void handleFuncProcDeclaration(struct IdResp *id, struct TypeInfo *retType, int 
         union SymbolEntryAttr attr;
         if(strcmp(funcProc, "function") == 0) {
             //set function parameter's type as return type
-            setFuncVarInScope(id->idStr, id->idEntry, retType->typeEntry, attr);
+            setFuncVarInScope(id->idStr, id->idEntry, retType->typeEntry, retType->attrInfo);
             registerFunc(id->idEntry, retType->typeEntry, retType->attrInfo, paramQty);
         }
         else {
@@ -715,6 +732,7 @@ int setSymbolTypeAttr(int idAddr, int typeEntry, struct TypeInfo *typedata, int 
         attr.arrayInfo.boundLow = typedata->attrInfo.arrayInfo.boundLow;
         attr.arrayInfo.boundUp = typedata->attrInfo.arrayInfo.boundUp;
         attr.arrayInfo.typeEntry = typedata->attrInfo.arrayInfo.typeEntry;
+        attr.arrayInfo.typeDefScopeId = typedata->attrInfo.arrayInfo.typeDefScopeId;
     }
     if(typeEntry == getPredefType("record")) {
         attr.recordInfo.scopeHashCode = typedata->attrInfo.recordInfo.scopeHashCode;
@@ -735,12 +753,14 @@ int typeHandler(struct IdResp **idResp) {
     printf("handling type: %s\n", (*idResp)->idStr);
     int entry;
     if((*idResp)->idRespStatus == IDRESP_PREDEF_TYPE) {
+        curTypeIdDefScopeId = -2;
         return 1;
     }
     entry = getTypeDefAddr((*idResp)->idStr);
     if(entry >= 0) {
         (*idResp)->idEntry = entry;
         (*idResp)->idRespStatus = IDRESP_NORMAL;
+        curTypeIdDefScopeId = getCurScopeId();
         return 1;
     }
     else {
@@ -749,6 +769,7 @@ int typeHandler(struct IdResp **idResp) {
             (*idResp)->idRespStatus = IDRESP_DEF_IN_PARENT;
             (*idResp)->idEntry = entry;
             removeTailSymbolFromCurScope();
+            curTypeIdDefScopeId = getParentScopeId();
             return 1;
         }
     }
@@ -770,10 +791,16 @@ int isIdDefined(struct IdResp *id) {
 int certainTypeCheck(struct TypeInfo *type, char *typeToCheck) {
     struct TypeInfo *tmp = (struct TypeInfo *)malloc(sizeof(struct TypeInfo));
     tmp->typeEntry = getPredefType(typeToCheck);
+    tmp->tag = type->tag;
     if(!typeCheck(type, tmp)) {
         return 0;
     }
     return 1;
+}
+
+void resetCurTypeEnvironment() {
+    curTypeIdResp = NULL;
+    curTypeIdDefScopeId = -2;
 }
 
 int main(int argc, const char * argv[]) {
