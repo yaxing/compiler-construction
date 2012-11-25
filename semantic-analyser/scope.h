@@ -12,6 +12,7 @@
 int const SCOPEID_GLOBAL = -1;
 int const SCOPEID_PREDEF = -2;
 
+// scope node
 typedef struct Scope {
     int scopeId; //hash value, in this part, scopeId equals to corresponding procedure id address
     int symboltableSize;
@@ -83,7 +84,9 @@ scope *pushScopeStack(scope *curScope) {
     curScope->parent = scopestack.top;
     scopestack.top = curScope;
     scopestack.size ++;
-    printf("scope changed to: %d\n", curScope->scopeId);
+    if(MODE_DEBUG == 1) {
+        printf("scope changed to: %d\n", curScope->scopeId);
+    }
     return scopestack.top;
 }
 
@@ -117,7 +120,9 @@ scope *popScopeStack() {
         scopestack.top = curTop->parent;
     }
     scopestack.size --;
-    printf("scope changed to: %d\n", scopestack.top->scopeId);
+    if(MODE_DEBUG == 1) {
+        printf("scope changed to: %d\n", scopestack.top->scopeId);
+    }
     return scopestack.top;
 }
 
@@ -161,13 +166,17 @@ int getTypeDefAddrInScope(scope *scope, char *name) {
  *@return int  >=0: entry index, -1: entry doesn't exist
  */
 int getTypeDefAddr(char *name) {
-    printf("checking type %s in cur scope %d\n", name, getCurScope()->scopeId);
+    if(MODE_DEBUG == 1) {
+        printf("checking type %s in cur scope %d\n", name, getCurScope()->scopeId);
+    }
     return getTypeDefAddrInScope(getCurScope(), name);
 }
 
 int getTypeDefInParentScope(char *type) {
     scope *scope = getCurScope()->parent;
-    printf("checking type %s in scope %d\n", type, scope->scopeId);
+    if(MODE_DEBUG == 1) {
+        printf("checking type %s in scope %d\n", type, scope->scopeId);
+    }
     return getTypeDefAddrInScope(scope, type);
 }
 
@@ -178,7 +187,9 @@ int getDefInParentScope(char *name, int tag) {
     if(scope == NULL) {
         return -1;
     }
-    printf("checking symbol %s in parent scope %d\n", name, scope->scopeId);
+    if(MODE_DEBUG == 1) {
+        printf("checking symbol %s in parent scope %d\n", name, scope->scopeId);
+    }
     table = scope->symboltable;
     tableEntry = getSymbolbyName(table, name);
     if(tableEntry != NULL
@@ -196,7 +207,9 @@ int getFuncProcDefInParentScope(char *name) {
     if(scope == NULL) {
         return -1;
     }
-    printf("checking symbol %s in parent scope %d\n", name, scope->scopeId);
+    if(MODE_DEBUG == 1) {
+        printf("checking symbol %s in parent scope %d\n", name, scope->scopeId);
+    }
     table = scope->symboltable;
     tableEntry = getSymbolbyName(table, name);
     if(tableEntry != NULL

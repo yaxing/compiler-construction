@@ -10,6 +10,7 @@ in = integer;
 var
 z : string;
 m : in;
+b : boolean;
 
 
 function foo(a : in) : in;
@@ -20,6 +21,5 @@ end;
 
 
 begin
-z := foo(6);
-m := z * 5
+m := 1 > 2;
 end.

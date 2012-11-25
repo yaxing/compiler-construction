@@ -22,7 +22,9 @@ int pushRecordHashInStack(int hash) {
         node->prev = recordStackTail;
         recordStackTail = node;
     }
-    printf("push record %d in stack\n", hash);
+    if(MODE_DEBUG == 1) {
+        printf("push record %d in stack\n", hash);
+    }
     return hash;
 }
 
@@ -36,14 +38,18 @@ int popRecordHashFromStack() {
     }
     
     if(recordStackTail == tmp) {
-        printf("pop record %d out stack, stack empty\n", tmp->hash);
+        if(MODE_DEBUG == 1) {
+            printf("pop record %d out stack, stack empty\n", tmp->hash);
+        }
         free(recordStackTail);
         recordStackTail = NULL;
         recordStackHead = NULL;
         popScopeStack();
         return 0;
     }
-    printf("pop record %d out stack\n", recordStackTail->hash);
+    if(MODE_DEBUG == 1) {
+        printf("pop record %d out stack\n", recordStackTail->hash);
+    }
     free(recordStackTail);
     recordStackTail = tmp;
     popScopeStack();
@@ -145,7 +151,9 @@ char *setIdListTypeAttr(int typeEntryAddr, entryAttr attr, int tag) {
     char *buf = NULL;
     char *idN = NULL;
     while(cursor != NULL) {
-        printf("setting: %d %d\n", cursor->identryAddr, typeEntryAddr);
+        if(MODE_DEBUG == 1) {
+            printf("setting: %d %d\n", cursor->identryAddr, typeEntryAddr);
+        }
         setResp = setSymbolEntyTypeAttr(table, cursor->identryAddr, typeEntryAddr, attr, tag);
         if(setResp == -1) {
             idN = getIDName(table, cursor->identryAddr);
@@ -176,7 +184,9 @@ void registerFunc(int idEntry, int retTypeEntry,
         funcAttr.funcInfo.retTypeAttr.retRecordAttr = retTypeAttr.recordInfo;
     }
     setSymbolEntyTypeAttr(curTable, idEntry, getPredefType("function"), funcAttr, ATTR_DEFAULT);
-    printf("set func: %d in scope %d\n", idEntry, getCurScope()->scopeId);
+    if(MODE_DEBUG == 1) {
+        printf("set func: %d in scope %d\n", idEntry, getCurScope()->scopeId);
+    }
     pushScopeStack(find_scope(idEntry));
 }
 
@@ -186,8 +196,10 @@ void setFuncVarInScope(char *funcName, int funcId, int retTypeEntry, entryAttr a
     scope *funcScope = find_scope(funcId);
     symboltable *table = funcScope->symboltable;
     setSymbolEntyTypeAttr(table, 0, retTypeEntry, attr, ATTR_VAR);
-    printf("set func var %s\n", table->entries[0].typedesc->type);
-    printSymbolTable(table, 0);
+    if(MODE_DEBUG == 1) {
+        printf("set func var %s\n", table->entries[0].typedesc->type);
+        printSymbolTable(table, 0);
+    }
 }
 
 // register proc
@@ -198,7 +210,9 @@ void registerProc(int idEntry, int paramQty) {
     entryAttr attr;
     attr.funcInfo.paramQty = paramQty;
     setSymbolTypeAttrDirec(curTable, idEntry, "procedure", attr, ATTR_DEFAULT);
-    printf("set proc: %d in scope %d \n", idEntry, getCurScope()->scopeId);
+    if(MODE_DEBUG == 1) {
+        printf("set proc: %d in scope %d \n", idEntry, getCurScope()->scopeId);
+    }
     pushScopeStack(curScope);
 }
 
@@ -218,8 +232,10 @@ int setSymbolTypeAttrInCurScope(int idAddr, int typeAddr, entryAttr attribute, i
 // 
 char *getIDTypeStr(int idEntry) {
     scope *scope = getCurScope();
-    printf("checking %d in scope %d (%d)\n", idEntry, scope->scopeId, scope->parent->scopeId);
-    printSymbolTable(getCurSymboltable(), 0);
+    if(MODE_DEBUG == 1) {
+        printf("checking %d in scope %d (%d)\n", idEntry, scope->scopeId, scope->parent->scopeId);
+        printSymbolTable(getCurSymboltable(), 0);
+    }
     return getIdType(getCurSymboltable(), idEntry);
 }
 
@@ -238,9 +254,13 @@ int typeCheck(struct TypeInfo *typeInfo1, struct TypeInfo *typeInfo2) {
     int procAddr = getPredefType("procedure");
     int arrayAddr = getPredefType("array");
     int recordAddr = getPredefType("record");
-    printf("type checking: %d %d\n", typeInfo1->typeEntry, typeInfo2->typeEntry);
+    if(MODE_DEBUG == 1) {
+        printf("type checking: %d %d\n", typeInfo1->typeEntry, typeInfo2->typeEntry);
+    }
     if(typeInfo1->tag != typeInfo2->tag) {
-        printf("Incompatible tag: %d %d\n", typeInfo1->tag, typeInfo2->tag);
+        if(MODE_DEBUG == 1) {
+            printf("Incompatible tag: %d %d\n", typeInfo1->tag, typeInfo2->tag);
+        }
         return 0;
     }
     else if(type1 != type2) {
@@ -252,21 +272,29 @@ int typeCheck(struct TypeInfo *typeInfo1, struct TypeInfo *typeInfo2) {
                 || type2 == procAddr) {
             type2 = attrInfo2.funcInfo.retTypeEntry;
         }
-        printf("actual types: %d %d\n", type1, type2);
+        if(MODE_DEBUG == 1) {
+            printf("actual types: %d %d\n", type1, type2);
+        }
         return type1 == type2 ? 1 : 0;
     }
     else {
         if(type1 == funcAddr
                 || type1 == procAddr) {
-            printf("actual types: %d %d\n", attrInfo1.funcInfo.retTypeEntry, attrInfo2.funcInfo.retTypeEntry);
+            if(MODE_DEBUG == 1) {
+                printf("actual types: %d %d\n", attrInfo1.funcInfo.retTypeEntry, attrInfo2.funcInfo.retTypeEntry);
+            }
             res = funcCmp(attrInfo1.funcInfo, attrInfo2.funcInfo);
         }
         else if(type1 == arrayAddr) {
-            printf("actual types: %d %d\n", attrInfo1.arrayInfo.typeEntry, attrInfo2.arrayInfo.typeEntry);
+            if(MODE_DEBUG == 1) {
+                printf("actual types: %d %d\n", attrInfo1.arrayInfo.typeEntry, attrInfo2.arrayInfo.typeEntry);
+            }
             res = arrayCmp(typeInfo1->attrInfo.arrayInfo, typeInfo2->attrInfo.arrayInfo);
         }
         else if(type1 == recordAddr) {
-            printf("actual types: %d %d\n", recordAddr, recordAddr);
+            if(MODE_DEBUG == 1) {
+                printf("actual types: %d %d\n", recordAddr, recordAddr);
+            }
             res = recordCmp(typeInfo1->attrInfo.recordInfo, typeInfo2->attrInfo.recordInfo);
         }
         else {
@@ -276,13 +304,24 @@ int typeCheck(struct TypeInfo *typeInfo1, struct TypeInfo *typeInfo2) {
     return res == 0 ? 1 : 0;
 }
 
+void constructTypeInfoForCertainSimpleType(struct TypeInfo **typeinfo, char *type) {
+    *typeinfo = (struct TypeInfo *)malloc(sizeof(struct TypeInfo));
+    (*typeinfo)->typeEntry = getPredefType(type);
+    (*typeinfo)->tag = ATTR_VAR;
+    if(MODE_DEBUG == 1) {
+        printf("constructed TypeInfo as %d(tag: %d)\n", (*typeinfo)->typeEntry, (*typeinfo)->tag);
+    }
+}
+
 void constructTypeInfoFromTableEntry(struct TypeInfo **typeinfo, entry *tableEntry) {
     char *idType = tableEntry->typedesc->type;
     *typeinfo = (struct TypeInfo *)malloc(sizeof(struct TypeInfo));
     (*typeinfo)->typeEntry = getPredefType(idType);
     (*typeinfo)->tag = tableEntry->typedesc->tag;
     (*typeinfo)->attrInfo = tableEntry->typedesc->attribute;
-    printf("constructed TypeInfo as %d(tag: %d) from entry %s(%s)\n", (*typeinfo)->typeEntry, (*typeinfo)->tag, tableEntry->symbolVal, tableEntry->typedesc->type);
+    if(MODE_DEBUG == 1) {
+        printf("constructed TypeInfo as %d(tag: %d) from entry %s(%s)\n", (*typeinfo)->typeEntry, (*typeinfo)->tag, tableEntry->symbolVal, tableEntry->typedesc->type);
+    }
 }
 
 void constructTypeInfoFromIdResp(struct TypeInfo **typeinfo, struct IdResp *idResp) {
@@ -293,14 +332,18 @@ void constructTypeInfoFromIdResp(struct TypeInfo **typeinfo, struct IdResp *idRe
     if(idResp == NULL) {
         (*typeinfo)->typeEntry = getPredefType("undefined");
         (*typeinfo)->defScopeId = -2;
-        printf("constructed TypeInfo(pred) as %d from undefined\n", (*typeinfo)->typeEntry);
+        if(MODE_DEBUG == 1) {
+            printf("constructed TypeInfo(pred) as %d from undefined\n", (*typeinfo)->typeEntry);
+        }
         return;
     }
     if(idResp->idRespStatus == IDRESP_PREDEF_KEYW
        || idResp->idRespStatus == IDRESP_PREDEF_TYPE) {
         (*typeinfo)->typeEntry = idResp->idEntry;
         (*typeinfo)->defScopeId = -2;
-        printf("constructed TypeInfo(pred) as %d from %s(%d)\n", (*typeinfo)->typeEntry, idResp->idStr, idResp->idEntry);
+        if(MODE_DEBUG == 1) {
+            printf("constructed TypeInfo(pred) as %d from %s(%d)\n", (*typeinfo)->typeEntry, idResp->idStr, idResp->idEntry);
+        }
         return;
     }
     if(idResp->idRespStatus == IDRESP_DEF_IN_PARENT) {
@@ -311,7 +354,9 @@ void constructTypeInfoFromIdResp(struct TypeInfo **typeinfo, struct IdResp *idRe
         (*typeinfo)->typeEntry = getPredefType("undefined");
         (*typeinfo)->tag = ATTR_DEFAULT;
         (*typeinfo)->defScopeId = -10;
-        printf("constructed TypeInfo(undef) as %d from %s(%d)\n", (*typeinfo)->typeEntry, idResp->idStr, idResp->idEntry);
+        if(MODE_DEBUG == 1) {
+            printf("constructed TypeInfo(undef) as %d from %s(%d)\n", (*typeinfo)->typeEntry, idResp->idStr, idResp->idEntry);
+        }
         return;
     }
     idType = tableEntry->typedesc->type;
@@ -319,7 +364,9 @@ void constructTypeInfoFromIdResp(struct TypeInfo **typeinfo, struct IdResp *idRe
     (*typeinfo)->tag = tableEntry->typedesc->tag;
     (*typeinfo)->attrInfo = tableEntry->typedesc->attribute;
     (*typeinfo)->defScopeId = -2;
-    printf("constructed TypeInfo(normal) as %d from %s(%d) %s\n", (*typeinfo)->typeEntry, idResp->idStr, idResp->idEntry, idType);
+    if(MODE_DEBUG == 1) {
+        printf("constructed TypeInfo(normal) as %d from %s(%d) %s\n", (*typeinfo)->typeEntry, idResp->idStr, idResp->idEntry, idType);
+    }
 }
 
 // get type name
@@ -393,7 +440,9 @@ int handleRecordStart(struct IdResp *id) {
        || strcmp(type, "record") != 0) {
         return 0;
     }
-    printf("pushing record: %d into stack\n", hash);
+    if(MODE_DEBUG == 1) {
+        printf("pushing record: %d into stack\n", hash);
+    }
     tmpScope = find_scope(hash);
     pushScopeStack(tmpScope);
     pushRecordHashInStack(hash);
@@ -433,7 +482,9 @@ void setReduceTypeInfo(struct TypeInfo **typeInfoReduce, struct TypeInfo *typeIn
             *typeInfoReduce = typeInfoOp1;
         }
     }
-    printf("reduce as type: %d\n", (*typeInfoReduce)->typeEntry);
+    if(MODE_DEBUG == 1) {
+        printf("reduce as type: %d\n", (*typeInfoReduce)->typeEntry);
+    }
 }
 
 int isSimpleType(int typeAddr) {
@@ -454,9 +505,10 @@ char *getTypeName(struct TypeInfo *typeInfo) {
 void handleArrayVar(struct IdResp **idResp) {
     scope *curScope;
     entry *tmp;
-    printf("handling array\n");
     if((*idResp) == NULL || !isTypeConstructor((*idResp), "array")) {
-        printf("handling array: not array\n");
+        if(MODE_DEBUG == 1) {
+            printf("handling array: not array\n");
+        }
         return;
     }
     curScope = getCurScope();
@@ -466,7 +518,9 @@ void handleArrayVar(struct IdResp **idResp) {
     tmp = getSymbolbyEntryId(curScope->symboltable, (*idResp)->idEntry);
     (*idResp)->idEntry = tmp->typedesc->attribute.arrayInfo.typeEntry;
     (*idResp)->idStr = getIDName(find_scope(tmp->typedesc->attribute.arrayInfo.typeDefScopeId)->symboltable, tmp->typedesc->attribute.arrayInfo.typeEntry);
-    printf("handling array: cur idresp changed to %s\n", (*idResp)->idStr);
+    if(MODE_DEBUG == 1) {
+        printf("handling array: cur idresp changed to %s\n", (*idResp)->idStr);
+    }
 }
 
 #endif

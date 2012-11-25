@@ -13,6 +13,7 @@
         INVALID_ID = -1,
         UNK_CHAR = -2
     };
+    int FLEX_DEBUG = 0;
 %}
 
 line   [\n\r]
@@ -60,7 +61,9 @@ true {return TRUE;}
 
 {invalidId} {yylval.stringType = yytext; return INVALID_ID;}
 {id} {
-        printf("registering %s\n", yytext);
+        if(FLEX_DEBUG == 1){
+            printf("registering %s\n", yytext);
+        }
         idHandler();
         return ID;
      }
@@ -97,14 +100,18 @@ int idHandler() {
     strcpy(yylval.idrespType->idStr, yytext);
     entry = getPredefType(yytext);
     if(entry >=0) {
-        printf("id %s is predefined-type at %d\n", yytext, entry);
+        if(FLEX_DEBUG == 1){
+            printf("id %s is predefined-type at %d\n", yytext, entry);
+        }
         yylval.idrespType->idEntry = entry;
         yylval.idrespType->idRespStatus = IDRESP_PREDEF_TYPE;
         return 0;
     }
     entry = getPredefineVar(yytext);
     if(entry >= 0) {
-        printf("id %s is predefined-keyword at %d\n", yytext, entry);
+        if(FLEX_DEBUG == 1){
+            printf("id %s is predefined-keyword at %d\n", yytext, entry);
+        }
         yylval.idrespType->idEntry = entry;
         yylval.idrespType->idRespStatus = IDRESP_PREDEF_KEYW;
         return 0;
@@ -112,6 +119,8 @@ int idHandler() {
     entry = registerSymbolInCurScope(yytext);
     yylval.idrespType->idEntry = entry;
     yylval.idrespType->idRespStatus = IDRESP_NORMAL;
-    printf("registered %s at %d\n", yytext, entry);
+    if(FLEX_DEBUG == 1){
+        printf("registered %s at %d\n", yytext, entry);
+    }
     return 0;
 }

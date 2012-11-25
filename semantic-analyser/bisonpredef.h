@@ -9,6 +9,7 @@
 #ifndef compiler_debugging_bisonpredef_h
 #define compiler_debugging_bisonpredef_h
 
+// type info struct for bison in-parse using
 typedef struct TypeInfo {
     int typeEntry;
     int defScopeId;//which scope is this type defined in
@@ -16,34 +17,34 @@ typedef struct TypeInfo {
     union SymbolEntryAttr attrInfo;
 } typeinfost;
 
+// for temp storage of id list(e.g. var/type def)
 typedef struct IDLIST {
     int identryAddr;
     struct IDLIST * next;
 } idlist;
 
+// func/proc calling params' type list
 typedef struct PARAMTYPELIST {
     struct TypeInfo *typeInfo;
     struct PARAMTYPELIST *next;
 } paramTypeList;
 
+// used to record record calling sequence
+// e.g. a.b.c.s
 typedef struct ActiveRecordHashStack {
     int hash;
     struct ActiveRecordHashStack *prev;
 } recordHashStack;
 
-// idlist
 idlist * idlisthead = NULL;
 idlist * idlisttail = NULL;
 
-// func/proc call parameters type stack
 paramTypeList *paramTypeListHead = NULL;
 paramTypeList *paramTypeListTail = NULL;
 
-// record reference stack
 recordHashStack *recordStackHead = NULL;
 recordHashStack *recordStackTail = NULL;
 
-//int latestSetEntries[100] = {};
 int maxSetEntryId = -1;
 
 int funcProcParamCount = 0;

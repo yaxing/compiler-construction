@@ -1,6 +1,6 @@
 %{
 #include "header.h"
-
+    
 extern FILE *yyin;
 extern int count;
 extern char* yytext;
@@ -125,43 +125,47 @@ void resetCurTypeEnvironment();
 
 %%
 
-Program: PROGRAM ID SEMICOLON CompoundStatement DOT {printf("Program\n");}
-       | PROGRAM ID SEMICOLON TypeDefinitions CompoundStatement DOT {printf("Program\n");}
-       | PROGRAM ID SEMICOLON VariableDeclarations CompoundStatement DOT {printf("Program\n");}
-       | PROGRAM ID SEMICOLON SubprogramDeclarations CompoundStatement DOT {printf("Program\n");}
-       | PROGRAM ID SEMICOLON TypeDefinitions VariableDeclarations CompoundStatement DOT {printf("Program\n");}
-       | PROGRAM ID SEMICOLON VariableDeclarations SubprogramDeclarations CompoundStatement DOT {printf("Program\n");}
-       | PROGRAM ID SEMICOLON TypeDefinitions SubprogramDeclarations CompoundStatement DOT {printf("Program\n");}
-       | PROGRAM ID SEMICOLON TypeDefinitions VariableDeclarations SubprogramDeclarations CompoundStatement DOT {printf("Program\n");}
+Program: PROGRAM ID SEMICOLON CompoundStatement DOT {if(MODE_DEBUG == 1){printf("Program\n");}}
+| PROGRAM ID SEMICOLON TypeDefinitions CompoundStatement DOT {if(MODE_DEBUG == 1){printf("Program\n");}}
+| PROGRAM ID SEMICOLON VariableDeclarations CompoundStatement DOT {if(MODE_DEBUG == 1){printf("Program\n");}}
+| PROGRAM ID SEMICOLON SubprogramDeclarations CompoundStatement DOT {if(MODE_DEBUG == 1){printf("Program\n");}}
+| PROGRAM ID SEMICOLON TypeDefinitions VariableDeclarations CompoundStatement DOT {if(MODE_DEBUG == 1){printf("Program\n");}}
+| PROGRAM ID SEMICOLON VariableDeclarations SubprogramDeclarations CompoundStatement DOT {if(MODE_DEBUG == 1){printf("Program\n");}}
+| PROGRAM ID SEMICOLON TypeDefinitions SubprogramDeclarations CompoundStatement DOT {if(MODE_DEBUG == 1){printf("Program\n");}}
+| PROGRAM ID SEMICOLON TypeDefinitions VariableDeclarations SubprogramDeclarations CompoundStatement DOT {if(MODE_DEBUG == 1){printf("Program\n");}}
 ;
 
-TypeDefinitions : TYPE TypeDefinitionList {printf("TypeDef_Mul\n");cleanCurParamCounter();}
+TypeDefinitions : TYPE TypeDefinitionList {if(MODE_DEBUG == 1){printf("TypeDef_Mul\n");}cleanCurParamCounter();}
 ;
 
-TypeDefinitionList : TypeDefinition SEMICOLON {printf("TypeDefList\n");}
-                   | TypeDefinition SEMICOLON TypeDefinitionList {printf("TypeDefList_Multi\n");}
+TypeDefinitionList : TypeDefinition SEMICOLON {if(MODE_DEBUG == 1){printf("TypeDefList\n");}}
+| TypeDefinition SEMICOLON TypeDefinitionList {if(MODE_DEBUG == 1){printf("TypeDefList_Multi\n");}}
 ;
 
 VariableDeclarations : VAR VariableDeclarationList {
-                            printf("VarDecl_Mul\n");
+                            if(MODE_DEBUG == 1){
+                                printf("VarDecl_Mul\n");
+                            }
                             cleanCurParamCounter();
                         }
 ;
 
-VariableDeclarationList : VariableDeclaration SEMICOLON {printf("VarDeclList\n");}
-                        | VariableDeclaration SEMICOLON VariableDeclarationList {printf("VarDeclList_Mul\n");}
+VariableDeclarationList : VariableDeclaration SEMICOLON {if(MODE_DEBUG == 1){printf("VarDeclList\n");}}
+| VariableDeclaration SEMICOLON VariableDeclarationList {if(MODE_DEBUG == 1){printf("VarDeclList_Mul\n");}}
 ;
 
-SubprogramDeclarations : SubprogramDeclaration SEMICOLON SubprogramDeclarations {printf("SubDecl_mul\n");}
-                       | SubprogramDeclaration SEMICOLON {printf("SubDecl_Mul\n");}
+SubprogramDeclarations : SubprogramDeclaration SEMICOLON SubprogramDeclarations {if(MODE_DEBUG == 1){printf("SubDecl_mul\n");}}
+| SubprogramDeclaration SEMICOLON {if(MODE_DEBUG == 1){printf("SubDecl_Mul\n");}}
 ;
 
-SubprogramDeclaration : ProcedureDeclaration {printf("SubDeclP\n");}
-                      | FunctionDeclaration {printf("SubDeclF\n");}
+SubprogramDeclaration : ProcedureDeclaration {if(MODE_DEBUG == 1){printf("SubDeclP\n");}}
+    | FunctionDeclaration {if(MODE_DEBUG == 1){printf("SubDeclF\n");}}
 ;
 
 TypeDefinition : ID OP_EQUAL Type {
-    printf("TypeDef: id: %d type: %d tag: %d\n", $1->idEntry, $3->typeEntry, $3->tag);
+    if(MODE_DEBUG == 1){
+        printf("TypeDef: id: %d type: %d tag: %d\n", $1->idEntry, $3->typeEntry, $3->tag);
+    }
     if(setSymbolTypeAttr($1->idEntry, $3->typeEntry, $3, ATTR_TYPE) != 0) {
         //YYERROR;
     }
@@ -172,7 +176,9 @@ TypeDefinition : ID OP_EQUAL Type {
 
 VariableDeclaration : IdentifierList COLON
                       Type {
-                          printf("VarDecl\n");
+                          if(MODE_DEBUG == 1){
+                              printf("VarDecl\n");
+                          }
                           if(setIdListType($3) == 0) {
                             //YYERROR;
                           }
@@ -185,15 +191,18 @@ ProcedureDeclaration : PROCEDURE ID {
                                         if(enterNewScope($2) != 0) {
                                             //YYERROR;
                                         }
-                                        //registerSymbolInCurScope(name);
                                     }
                         BRACE_L FormalParameterList BRACE_R 
                         SEMICOLON {
-                            printf("setting proc: %d %s\n", $2->idEntry, itoa(funcProcParamCount));
+                            if(MODE_DEBUG == 1){
+                                printf("setting proc: %d %s\n", $2->idEntry, itoa(funcProcParamCount));
+                            }
                             handleFuncProcDeclaration($2, NULL, funcProcParamCount, "procedure");
                         }
                         PFDeclarationFollow {
-                            printf("ProcDecl\n");
+                            if(MODE_DEBUG == 1){
+                                printf("ProcDecl\n");
+                            }
                             popScopeStack();
                         }
 ;
@@ -207,60 +216,69 @@ FunctionDeclaration : FUNCTION ID {
                                    } 
                       BRACE_L FormalParameterList BRACE_R COLON ResultType 
                       SEMICOLON {
-                                    printf("setting func: %d %s %d\n", $2->idEntry, itoa(funcProcParamCount), $8->typeEntry);
+                                    if(MODE_DEBUG == 1){
+                                        printf("setting func: %d %s %d\n", $2->idEntry, itoa(funcProcParamCount), $8->typeEntry);
+                                    }
                                     handleFuncProcDeclaration($2, $8, funcProcParamCount, "function");
                                 }
                       PFDeclarationFollow {
-                        printf("FuncDecl\n");
-                        popScopeStack();
+                          if(MODE_DEBUG == 1){
+                              printf("FuncDecl\n");
+                          }
+                          popScopeStack();
                       }
 ;
 
-PFDeclarationFollow : Block {printf("PFDecl_Block\n");}
-                  | FORWARD {printf("PFDecl_Forward\n");}
+PFDeclarationFollow : Block {if(MODE_DEBUG == 1){printf("PFDecl_Block\n");}}
+| FORWARD {if(MODE_DEBUG == 1){printf("PFDecl_Forward\n");}}
 ;
 
-FormalParameterList : {printf("empty paramlist\n");}
-                    | FormalParameterListSingle FormalParameterListMore {
-                                                                            printf("FormalPList\n");
-                                                                        }
+FormalParameterList : {if(MODE_DEBUG == 1){printf("empty paramlist\n");}}
+                    | FormalParameterListSingle
+                      FormalParameterListMore {
+                          if(MODE_DEBUG == 1){printf("FormalPList\n");}
+                      }
 ;
 
 FormalParameterListSingle : IdentifierList COLON Type {
-                                                        printf("Plist_single\n");
+                                                        if(MODE_DEBUG == 1){
+                                                            printf("Plist_single\n");
+                                                        }
                                                         if(setIdListType($3) == 0) {
                                                             //YYERROR;
                                                         }
                                                         funcProcParamCount = parameterCount;
                                                       }
 
-FormalParameterListMore : SEMICOLON FormalParameterList {printf("PList_M\n");}
+FormalParameterListMore : SEMICOLON FormalParameterList {if(MODE_DEBUG == 1){printf("PList_M\n");}}
                         |
 ;
 
-Block : CompoundStatement {printf("Block_CompState\n");}
-      | VariableDeclarations CompoundStatement {printf("Block_CompSt_V\n");}
+Block : CompoundStatement {if(MODE_DEBUG == 1){printf("Block_CompState\n");}}
+| VariableDeclarations CompoundStatement {if(MODE_DEBUG == 1){printf("Block_CompSt_V\n");}}
 ;
 
-CompoundStatement : BEGINSYM StatementSequence END {printf("CompStBE\n");}
+CompoundStatement : BEGINSYM StatementSequence END {if(MODE_DEBUG == 1){printf("CompStBE\n");}}
 ;
 
-StatementSequence : Statement {printf("SteS\n");}
-                  | StatementSequence SEMICOLON Statement {printf("SteSSte\n");}
+StatementSequence : Statement {if(MODE_DEBUG == 1){printf("SteS\n");}}
+| StatementSequence SEMICOLON Statement {if(MODE_DEBUG == 1){printf("SteSSte\n");}}
 ;
 
-Statement : SimpleStatement {printf("Statement_Simple\n");}
-          | StructuredStatement {printf("Statement_Structured\n");}
+Statement : SimpleStatement {if(MODE_DEBUG == 1){printf("Statement_Simple\n");}}
+| StructuredStatement {if(MODE_DEBUG == 1){printf("Statement_Structured\n");}}
 ;
 
-SimpleStatement : AssignmentStatement {printf("SimpleS_AssignState\n");}
-                | ProcFuncStatement {printf("SimpleSS_ProState\n");}
+SimpleStatement : AssignmentStatement {if(MODE_DEBUG == 1){printf("SimpleS_AssignState\n");}}
+| ProcFuncStatement {if(MODE_DEBUG == 1){printf("SimpleSS_ProState\n");}}
                 |
 ;
 
 AssignmentStatement : Variable ASSIGN Expression {
-    printf("AssiState\n");
-    printf("assign var type: %d\n", $1->typeEntry);
+    if(MODE_DEBUG == 1){
+        printf("AssiState\n");
+        printf("assign var type: %d\n", $1->typeEntry);
+    }
     if(!typeCheck($1, $3)) {
         yyerror_unequal_type($1, $3);
     }
@@ -272,17 +290,20 @@ ProcFuncStatement :
                         cleanCurFuncProcCallParamCounter();
                     }
                     BRACE_L ActualParameterList BRACE_R {
-                        printf("ProFuncStat\n");
                         int defined;
                         int preDefEntry;
                         char *info;
                         defined = isIdDefined($1);
-                        printf("checking func/proc %d %s\n", $1->idEntry, $1->idStr);
+                        if(MODE_DEBUG == 1){
+                            printf("ProFuncStat\n");
+                            printf("checking func/proc %d %s\n", $1->idEntry, $1->idStr);
+                        }
                         if(defined == 0) {
                             preDefEntry = getFuncProcDefInParentScope($1->idStr);
                             if(preDefEntry >= 0) {
-                                printf("func/proc %s defined in enclosing scope at %d\n",
-                                $1->idStr, preDefEntry);
+                                if(MODE_DEBUG == 1){
+                                    printf("func/proc %s defined in enclosing scope at %d\n", $1->idStr, preDefEntry);
+                                }
                                 removeTailSymbolFromCurScope();
                                 $1->idEntry = preDefEntry;
                                 $1->idRespStatus = IDRESP_DEF_IN_PARENT;//defined in enclosing scope
@@ -309,24 +330,30 @@ ProcFuncStatement :
                     }
 ;
 
-StructuredStatement : CompoundStatement {printf("Struc_Comp\n");}
-                    | IF Expression THEN Statement {printf("if_else\n");}
-                    | IF Expression THEN Statement ELSE Statement {printf("if_else_m\n");}
-                    | WHILE Expression DO Statement {printf("while_do\n");}
-                    | FOR ID ASSIGN Expression TO Expression DO Statement {printf("for_to\n");}
+StructuredStatement : CompoundStatement {if(MODE_DEBUG == 1){printf("Struc_Comp\n");}}
+| IF Expression THEN Statement {if(MODE_DEBUG == 1){printf("if_else\n");}}
+| IF Expression THEN Statement ELSE Statement {if(MODE_DEBUG == 1){printf("if_else_m\n");}}
+| WHILE Expression DO Statement {if(MODE_DEBUG == 1){printf("while_do\n");}}
+| FOR ID ASSIGN Expression TO Expression DO Statement {if(MODE_DEBUG == 1){printf("for_to\n");}}
 ;
 
 Type : ID {
-            printf("TypeID %d\n", $1->idEntry);
+            if(MODE_DEBUG == 1){
+                printf("TypeID %d\n", $1->idEntry);
+            }
             typeHandler(&$1);
             constructTypeInfoFromIdResp(&$$, $1);
             $$->tag = ATTR_TYPE;
-            printAllSymbolTable();
+            if(MODE_DEBUG == 1){
+                printAllSymbolTable();
+            }
             curTypeIdResp = $1;
           }
      | ARRAY BRACKET_L Constant DOUBLE_DOT Constant BRACKET_R OF
        Type {
-           printf("Type_Array\n");
+           if(MODE_DEBUG == 1){
+               printf("Type_Array\n");
+           }
            $$ = (struct TypeInfo*)malloc(sizeof(struct TypeInfo));
            $$->typeEntry = getPredefType("array");
            $$->defScopeId = getCurScopeId();
@@ -337,13 +364,17 @@ Type : ID {
            $$->tag = ATTR_TYPE;
        }
      | RECORD {
-         printf("Type_Record_Init\n");
+         if(MODE_DEBUG == 1){
+             printf("Type_Record_Init\n");
+         }
          curRecordScopeHash = recordIdHashCode();
          newScopeAndPush(curRecordScopeHash);
          pushRecordHashInStack(curRecordScopeHash);
      }
        FormalParameterList END {
-           printf("Type_Record\n");
+           if(MODE_DEBUG == 1){
+               printf("Type_Record\n");
+           }
            $$ = (struct TypeInfo*)malloc(sizeof(struct TypeInfo));
            $$->typeEntry = getPredefType("record");
            $$->attrInfo.recordInfo.scopeHashCode = curRecordScopeHash;
@@ -354,60 +385,76 @@ Type : ID {
 ;
 
 ResultType : ID {
-                    printf("ResultType\n");
+                    if(MODE_DEBUG == 1){
+                        printf("ResultType\n");
+                    }
                     typeHandler(&$1);
                     constructTypeInfoFromIdResp(&$$, $1);
                     $$->tag = ATTR_TYPE;
-                    printf("return type: %d\n", $$->typeEntry);
+                    if(MODE_DEBUG == 1){
+                        printf("return type: %d\n", $$->typeEntry);
+                    }
                     if($$->typeEntry == 5) {
-                        printf("return array type: %d, scope: %d\n", $$->attrInfo.arrayInfo.typeEntry, $$->attrInfo.arrayInfo.typeDefScopeId);
+                        if(MODE_DEBUG == 1){
+                            printf("return array type: %d, scope: %d\n", $$->attrInfo.arrayInfo.typeEntry, $$->attrInfo.arrayInfo.typeDefScopeId);
+                        }
                     }
                 }
 ;
 
-Constant : Sign INT {printf("Constant_SIGN_INT\n"); $$ = getConstantInt($1, $2);}
-         | INT {printf("Constant_INT\n"); $$ = getConstantInt(NULL, $1);}
+Constant : Sign INT {if(MODE_DEBUG == 1){printf("Constant_SIGN_INT\n");} $$ = getConstantInt($1, $2);}
+| INT {if(MODE_DEBUG == 1){printf("Constant_INT\n");} $$ = getConstantInt(NULL, $1);}
 ;
 
 Expression : SimpleExpression {
-                                printf("Exp_simp\n");
                                 $$ = $1;
-                                printf("type reduced as %d\n", $$->typeEntry);
+                                if(MODE_DEBUG == 1){
+                                    printf("Exp_simp\n");
+                                    printf("type reduced as %d\n", $$->typeEntry);
+                                }
                               }
            | SimpleExpression RelationalOp 
              SimpleExpression {
-                                printf("Exp_Simp_Ro\n");
                                 //check type here $1 & $3
                                 //create boolean type
-                                $$ = $3;
-                                printf("type reduced as %d\n", $$->typeEntry);
+                                typeCheck($1, $3);
+                                constructTypeInfoForCertainSimpleType(&$$, "boolean");
+                                if(MODE_DEBUG == 1){
+                                    printf("Exp_Simp_Ro\n");
+                                    printf("type reduced as %d\n", $$->typeEntry);
+                                }
                               }
 ;
 
-RelationalOp : OP_EQUAL {printf("RelationalOp_EQ\n");}
-             | OP_LESS {printf("RelationslOp_Less\n");}
-             | OP_LESS_EQ {printf("RelationslOp_LE\n");}
-             | OP_GREATER {printf("RelationslOp_G\n");}
-             | OP_GREATER_EQ {printf("RelationslOp_GE\n");}
-             | OP_NOT_EQ {printf("RelationslOp_NE\n");}
+RelationalOp : OP_EQUAL {if(MODE_DEBUG == 1){printf("RelationalOp_EQ\n");}}
+| OP_LESS {if(MODE_DEBUG == 1){printf("RelationslOp_Less\n");}}
+| OP_LESS_EQ {if(MODE_DEBUG == 1){printf("RelationslOp_LE\n");}}
+| OP_GREATER {if(MODE_DEBUG == 1){printf("RelationslOp_G\n");}}
+| OP_GREATER_EQ {if(MODE_DEBUG == 1){printf("RelationslOp_GE\n");}}
+| OP_NOT_EQ {if(MODE_DEBUG == 1){printf("RelationslOp_NE\n");}}
 ;
 
 SimpleExpression : Sign AddOpTerm {
-                                    printf("SimpleExp_Sign_AddTerm\n");
+                                    if(MODE_DEBUG == 1){
+                                        printf("SimpleExp_Sign_AddTerm\n");
+                                    }
                                     $$ = $2;
                                   }
                  | AddOpTerm {
-                                printf("SimpleExp_AddTerm\n");
                                 $$ = $1;
-                                printf("type reduced as %d\n", $$->typeEntry);
+                                if(MODE_DEBUG == 1){
+                                    printf("SimpleExp_AddTerm\n");
+                                    printf("type reduced as %d\n", $$->typeEntry);
+                                }
                              }
 ;
 
 AddOpTerm : Term AddOp AddOpTerm {
-                                    printf("AddOpTerm_Mul\n");
+                                    if(MODE_DEBUG == 1){
+                                        printf("AddOpTerm_Mul\n");
+                                    }
                                     char *type1;
                                     char *type2;
-                                    //check type here $1 & $3
                                     if(typeCheck($1, $3)) {
                                         $$ = $3;
                                         setReduceTypeInfo(&$$, $1, $3, 1);
@@ -416,22 +463,28 @@ AddOpTerm : Term AddOp AddOpTerm {
                                         yyerror_unequal_type($1, $3);
                                         setReduceTypeInfo(&$$, $1, $3, 0);
                                     }
-                                    printf("type reduced as %d\n", $$->typeEntry);
+                                    if(MODE_DEBUG == 1){
+                                        printf("type reduced as %d\n", $$->typeEntry);
+                                    }
                                  }
           | Term {
-                    printf("AddOpTerm_Single\n");
                     $$ = $1;
-                    printf("type reduced as %d\n", $$->typeEntry);
+                    if(MODE_DEBUG == 1){
+                        printf("AddOpTerm_Single\n");
+                        printf("type reduced as %d\n", $$->typeEntry);
+                    }
                  }
 ;
 
-AddOp : OP_ADD {printf("AddOp_Add\n");}
-      | OP_MIN {printf("AddOp_Min\n");}
-      | OR {printf("AddOp_OR\n");}
+AddOp : OP_ADD {if(MODE_DEBUG == 1){printf("AddOp_Add\n");}}
+| OP_MIN {if(MODE_DEBUG == 1){printf("AddOp_Min\n");}}
+| OR {if(MODE_DEBUG == 1){printf("AddOp_OR\n");}}
 ;
 
 Term : Factor MulOpTerm {
-                            printf("Term_Fac_Mul\n");
+                            if(MODE_DEBUG == 1){
+                                printf("Term_Fac_Mul\n");
+                            }
                             if(typeCheck($1, $2)) {
                                 $$ = $2;
                                 setReduceTypeInfo(&$$, $1, $2, 1);
@@ -441,71 +494,92 @@ Term : Factor MulOpTerm {
                                 $$ = (struct TypeInfo*)malloc(sizeof(struct TypeInfo));
                                 setReduceTypeInfo(&$$, $1, $2, 0);
                             }
-                            printf("type reduced as %d\n", $$->typeEntry);
+                            if(MODE_DEBUG == 1){
+                                printf("type reduced as %d\n", $$->typeEntry);
+                            }
                         }
      | Factor {
                 $$ = $1;
-                printf("type reduced as %d\n", $$->typeEntry);
+                if(MODE_DEBUG == 1){
+                    printf("type reduced as %d\n", $$->typeEntry);
+                }
               }
 ;
 
 MulOpTerm : MulOp Term {
-                            printf("MulOpTerm\n");
+                            if(MODE_DEBUG == 1){
+                                printf("MulOpTerm\n");
+                            }
                             $$ = $2;
                        }
 ;
 
-MulOp : OP_MUL {printf("MulOp_MUL\n");}
-      | DIV {printf("MulOp_DIV\n");}
-      | MOD {printf("MulOp_MOD\n");}
-      | AND {printf("MulOp_AND\n");}
+MulOp : OP_MUL {if(MODE_DEBUG == 1){printf("MulOp_MUL\n");}}
+| DIV {if(MODE_DEBUG == 1){printf("MulOp_DIV\n");}}
+| MOD {if(MODE_DEBUG == 1){printf("MulOp_MOD\n");}}
+| AND {if(MODE_DEBUG == 1){printf("MulOp_AND\n");}}
 ;
 
 Factor : INT {
-                printf("Factor_INT\n");
+                if(MODE_DEBUG == 1){
+                    printf("Factor_INT\n");
+                }
                 $$ = (struct TypeInfo*)malloc(sizeof(struct TypeInfo));
                 $$->typeEntry = getPredefType("integer");
                 $$->tag = ATTR_VAR;
              }
        | STRING {
-                    printf("Factor_String\n");
+                    if(MODE_DEBUG == 1){
+                        printf("Factor_String\n");
+                    }
                     $$ = (struct TypeInfo*)malloc(sizeof(struct TypeInfo));
                     $$->typeEntry = getPredefType("string");
                     $$->tag = ATTR_VAR;
                 }
        | ProcFuncStatement {
-                                printf("Factor_FuncRef\n");
+                                if(MODE_DEBUG == 1){
+                                    printf("Factor_FuncRef\n");
+                                }
                                 $$ = $1;
                            }
        | Variable {
-                    printf("Factor_Var\n");
+                    if(MODE_DEBUG == 1){
+                        printf("Factor_Var\n");
+                    }
                     $$ = $1;
                   }
        | NOT Factor {
-                        printf("Factor_N_Fac\n");
+                        if(MODE_DEBUG == 1){
+                            printf("Factor_N_Fac\n");
+                        }
                         $$ = (struct TypeInfo*)malloc(sizeof(struct TypeInfo));
                         $$->typeEntry = getPredefType("bool");
                         $$->tag = ATTR_VAR;
                     }
        | BRACE_L Expression BRACE_R {
-                                        printf("Factor_Exp\n");
+                                        if(MODE_DEBUG == 1){
+                                            printf("Factor_Exp\n");
+                                        }
                                         $$ = $2;
                                     }
 ;
 
 Variable :
             ID {
-                printf("Var_ID\n");
+                if(MODE_DEBUG == 1){
+                    printf("Var_ID\n");
+                    printf("checking var %d %s\n", $1->idEntry, $1->idStr);
+                }
                 int defined = 0;
                 int preDefEntry;
-                printf("checking var %d %s\n", $1->idEntry, $1->idStr);
                 defined = isIdDefined($1);
                 if($1->idRespStatus == IDRESP_NORMAL
                 && defined == 0) {
                     preDefEntry = getDefInParentScope($1->idStr, ATTR_VAR);
                     if(preDefEntry >= 0) {
-                        printf("var %s defined in enclosing scope at %d\n",
-                        $1->idStr, preDefEntry);
+                        if(MODE_DEBUG == 1){
+                            printf("var %s defined in enclosing scope at %d\n", $1->idStr, preDefEntry);
+                        }
                         removeTailSymbolFromCurScope();
                         $1->idEntry = preDefEntry;
                         $1->idRespStatus = IDRESP_DEF_IN_PARENT;//defined in enclosing scope
@@ -519,7 +593,9 @@ Variable :
                 }
                 if(defined) {
                     //enter record scope
-                    printf("var id: %s\n", $1->idStr);
+                    if(MODE_DEBUG == 1){
+                        printf("var id: %s\n", $1->idStr);
+                    }
                     curVarIdResp = $1;
                 }
                 else {
@@ -527,7 +603,9 @@ Variable :
                 }
             }
             ComponentSelection {
-                printf("Var_Comp\n");
+                if(MODE_DEBUG == 1){
+                    printf("Var_Comp\n");
+                }
                 //exit record scope
                 if($3->typeEntry == -1) {
                     free($3);
@@ -536,8 +614,9 @@ Variable :
                 else {
                     $$ = $3;
                 }
-                printf("var type: %d\n", $$->typeEntry);
-                //contextSwitch(NULL);
+                if(MODE_DEBUG == 1){
+                    printf("var type: %d\n", $$->typeEntry);
+                }
                 curVarIdResp = NULL;
             }
 ;
@@ -550,16 +629,22 @@ ComponentSelection :
                          else {
                              curRecordScopeHash = handleRecordStart(curVarIdResp);
                              if(curRecordScopeHash != 0) {
-                                 printf("enter recordhash: %d\n", curRecordScopeHash);
+                                 if(MODE_DEBUG == 1){
+                                     printf("enter recordhash: %d\n", curRecordScopeHash);
+                                 }
                              }
                          }
                      }
                      Variable {
-                         printf("CompSel_Record\n");
+                         if(MODE_DEBUG == 1){
+                             printf("CompSel_Record\n");
+                         }
                          $$ = $3;
                          curRecordScopeHash = handleRecordEnd();
                          if(curRecordScopeHash != 0) {
-                             printf("out recordhash: %d\n", curRecordScopeHash);
+                             if(MODE_DEBUG == 1){
+                                 printf("out recordhash: %d\n", curRecordScopeHash);
+                             }
                          }
                      }
                    | BRACKET_L {
@@ -576,7 +661,9 @@ ComponentSelection :
                          handleArrayVar(&curVarIdResp);
                      }
                      ComponentSelection {
-                         printf("CompSel_Array\n");
+                         if(MODE_DEBUG == 1){
+                             printf("CompSel_Array\n");
+                         }
                          constructTypeInfoFromIdResp(&$$, curVarIdResp);
                          $$->tag = ATTR_VAR;
                      }
@@ -590,12 +677,14 @@ ActualParameterList : Expression {
     addCurFuncProcParamCallCounter(1);
     appendToParamTypeList($1);
 }
-                      ExpressionMore {printf("ActualParamL\n");}
-                    | {printf("ActualParamL\n");}
+ExpressionMore {if(MODE_DEBUG == 1){printf("ActualParamL\n");}}
+| {if(MODE_DEBUG == 1){printf("ActualParamL\n");}}
 ;
 
 ExpressionMore : COMMA Expression {
-    printf("ExpM\n");
+    if(MODE_DEBUG == 1){
+        printf("ExpM\n");
+    }
     addCurFuncProcParamCallCounter(1);
     appendToParamTypeList($2);
 }
@@ -604,18 +693,20 @@ ExpressionMore : COMMA Expression {
 ;
 
 IdentifierList : ID IdentifierListMore {
-                                        printf("IdList\n");
+                                        if(MODE_DEBUG == 1){
+                                            printf("IdList\n");
+                                        }
                                         addCurParamCounter(1);
                                         appendToIdList($1->idEntry);
                                        }
 ;
 
-IdentifierListMore : COMMA IdentifierList {printf("IdListM\n");}
+IdentifierListMore : COMMA IdentifierList {if(MODE_DEBUG == 1){printf("IdListM\n");}}
                    |
 ;
 
-Sign : OP_ADD {printf("Sign_Add\n"); $$ = "+";}
-     | OP_MIN {printf("Sign_Min\n"); $$ = "-";}
+Sign : OP_ADD {if(MODE_DEBUG == 1){printf("Sign_Add\n");} $$ = "+";}
+| OP_MIN {if(MODE_DEBUG == 1){printf("Sign_Min\n");} $$ = "-";}
 ;
 
 %%
@@ -682,14 +773,17 @@ void cleanCurParamCounter() {
 }
 
 int setIdListType(struct TypeInfo *retType) {
-    printf("setting idlist\n");
+    if(MODE_DEBUG == 1){
+        printf("setting idlist\n");
+    }
     char *info = NULL;
     info = setIdListTypeAttr(retType->typeEntry, retType->attrInfo, ATTR_VAR);
-    printf("set idlist\n");
+    if(MODE_DEBUG == 1){
+        printf("set idlist\n");
+    }
     destroyCurIdList();
     cleanLatestSetList();
     if(info != NULL) {
-        printLineNo();
         fprintf(stderr, "%s\n", info);
         free(info);
         return 0;
@@ -750,7 +844,9 @@ int setSymbolTypeAttr(int idAddr, int typeEntry, struct TypeInfo *typedata, int 
 
 int typeHandler(struct IdResp **idResp) {
     char *name = "";
-    printf("handling type: %s\n", (*idResp)->idStr);
+    if(MODE_DEBUG == 1){
+        printf("handling type: %s\n", (*idResp)->idStr);
+    }
     int entry;
     if((*idResp)->idRespStatus == IDRESP_PREDEF_TYPE) {
         curTypeIdDefScopeId = -2;
@@ -816,16 +912,25 @@ int main(int argc, const char * argv[]) {
     }
     printf("\n\nParsing...:\n\n");
     fstream = stdout;
-    stdout=fopen("parser_debug.out","w");
+    if(MODE_DEBUG == 1){
+        stdout=fopen("parser_debug.out","w");
+    }
     yyparse();
-    close(stdout);
+    if(MODE_DEBUG == 1){
+        close(stdout);
+    }
     stdout = fstream;
-    printf("\n\nParsing done (debugging info: parser_debug.out).\n\n");
-    stdout=fopen("symtable.out","w");
-    printAllSymbolTable();
-    close(stdout);
-    stdout = fstream;
-    printf("Done, symbole table: symtable.out\n\n");
-    close(fstream);
+    if(MODE_DEBUG == 1){
+        printf("\n\nParsing done (debugging info: parser_debug.out).\n\n");
+        stdout=fopen("symtable.out","w");
+        printAllSymbolTable();
+        close(stdout);
+        stdout = fstream;
+        close(fstream);
+        printf("Done, symbole table: symtable.out\n\n");
+    }
+    else {
+        printf("\n\nParsing done\n\n");
+    }
     return 0;
 }

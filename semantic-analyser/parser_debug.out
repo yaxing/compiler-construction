@@ -224,14 +224,30 @@ constructed TypeInfo(normal) as 4 from z(3) string
 var type: 4
 registering foo
 registered foo at 5
-Factor_INT
-type reduced as 0
+registering z
+registered z at 3
+Var_ID
+checking var 3 z
+checking 3 in scope -1 (-1)
+Address: 0   ID: errorfree       Type: (null)     
+Address: 1   ID: s               Type: string     Attr: type 
+Address: 2   ID: in              Type: integer    Attr: type 
+Address: 3   ID: z               Type: string     Attr: var 
+Address: 4   ID: m               Type: integer    Attr: var 
+Address: 5   ID: foo             Type: function   ParamQty: 1 ReturnType: integer   
+
+var id: z
+Var_Comp
+constructed TypeInfo(normal) as 4 from z(3) string
+var type: 4
+Factor_Var
+type reduced as 4
 AddOpTerm_Single
-type reduced as 0
+type reduced as 4
 SimpleExp_AddTerm
-type reduced as 0
+type reduced as 4
 Exp_simp
-type reduced as 0
+type reduced as 4
 ActualParamL
 ProFuncStat
 checking 5 in scope -1 (-1)
@@ -244,7 +260,8 @@ Address: 5   ID: foo             Type: function   ParamQty: 1 ReturnType: intege
 
 checking func/proc 5 foo
 constructed TypeInfo as 0(tag: 1) from entry a(integer)
-type checking: 0 0
+type checking: 4 0
+actual types: 4 0
 constructed TypeInfo(normal) as 7 from foo(5) function
 Factor_FuncRef
 type reduced as 7

@@ -8,6 +8,9 @@
 
 #ifndef compiler_debugging_header_h
 #define compiler_debugging_header_h
+
+int const MODE_DEBUG = 0;
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -19,7 +22,6 @@
 #include "util.h"
 #include "typecmp.h"
 #include "flex-bison-header.h"
-//#include "context.h"
 #include "bisonheader.h"
 
 #endif

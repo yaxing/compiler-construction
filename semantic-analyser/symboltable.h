@@ -17,6 +17,8 @@ symboltable *createSymbolTable() {
     return table;
 }
 
+// check whether an index is legal for a symboltable
+// @return 1 if legal, else return 0
 int checkIndex(symboltable *table, int i) {
     if (i >= 0 && i <= table->maxId) {
         return 1;
@@ -209,6 +211,8 @@ int getPredefineVar(char *name) {
     return symbol->address;
 }
 
+// compare two symboltable entries
+// @return 0 if eq
 int symbolTableEntryCmp(entry *entry1, entry *entry2) {
     if(entry1->address != entry2->address) {
         return -1;
@@ -226,6 +230,8 @@ int symbolTableEntryCmp(entry *entry1, entry *entry2) {
     return 0;
 }
 
+// compare two symboltables
+// @return 0 if eq
 int symboltableCmp(symboltable *table1, symboltable *table2) {
     int i = 0;
     entry *tableEntry1;

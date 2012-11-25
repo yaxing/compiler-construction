@@ -29,6 +29,7 @@
 #define IDRESP_NORMAL 0
 #endif
 
+// a shared struct for id entities between bison & flex
 typedef struct IdResp {
     int idEntry;
     char *idStr;

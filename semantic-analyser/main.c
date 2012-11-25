@@ -16,7 +16,7 @@ int main() {
     initScope();
     printSymbolTable(predefinedIdTable, 0);
     
-    printf("type %d\n", getType("integer"));
+    printf("type %d\n", getPredefType("integer"));
     
     entryAttr attr;
     scope *curScope = getCurScope();
@@ -29,7 +29,7 @@ int main() {
     printf("\n");
     
     int addr = getSymbolEntry(getCurSymboltable(), "a");
-    if(getType("integer") >= 0) {
+    if(getPredefType("integer") >= 0) {
         setSymbolTypeAttrDirec(getCurSymboltable(), addr, "integer", attr, ATTR_VAR);
     }
     printf("scopeid: %d \n", curScope->scopeId);
@@ -38,7 +38,8 @@ int main() {
     
     attr.arrayInfo.boundLow = 1;
     attr.arrayInfo.boundUp = 10;
-    attr.arrayInfo.typeEntry = getType("integer");
+    attr.arrayInfo.typeEntry = getPredefType("integer");
+    attr.arrayInfo.typeDefScopeId = -2;
     registerSymbol(getCurSymboltable(), "b", NULL);
     printSymbolTable(getCurSymboltable(), 0);
     setSymbolTypeAttrDirec(getCurSymboltable(), getSymbolEntry(getCurSymboltable(), "b"), "array", attr, ATTR_VAR);
@@ -46,7 +47,7 @@ int main() {
     printSymbolTable(getCurSymboltable(), 0);
     
     attr.funcInfo.paramQty = 2;
-    attr.funcInfo.retTypeEntry = getType("integer");
+    attr.funcInfo.retTypeEntry = getPredefType("integer");
     registerSymbol(getCurSymboltable(), "func1", NULL);
     setSymbolTypeAttrDirec(getCurSymboltable(), getSymbolEntry(getCurSymboltable(), "func1"), "function", attr, ATTR_DEFAULT);
     
