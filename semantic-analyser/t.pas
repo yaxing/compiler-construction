@@ -1,25 +1,24 @@
 {
-	This program is lexical and parsing error-free.
-    It contains unequivalent type errors
+	This program is lexical and parsing error-free
+    and contains undeclared variable
 }
 
-program errorfree;
+program errorundeclared;
 type
 s = string;
 in = integer;
 var
-z : string;
+z : in;
 m : in;
-b : boolean;
 
-
-function foo(a : in) : in;
+function foo(n : in) : in;
 begin
-a := a + 1;
-foo := a
+n := b + 1;  {error: b has not been declared }
+foo := n
 end;
 
-
 begin
-m := 1 > 2;
+m := 5;
+z := 7;
+z := m + n;  {error: n has not been declared}
 end.

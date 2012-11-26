@@ -18,6 +18,8 @@ idresp *curVarIdResp = NULL;
 idresp *curTypeIdResp = NULL;
 int curTypeIdDefScopeId = -2;
     
+curArrayType *curArrayTypeInfo = NULL;
+    
 void printLineNo();
     
 void yyerror_unequal_type(struct TypeInfo *type1, struct TypeInfo *type2);
@@ -331,10 +333,35 @@ ProcFuncStatement :
 ;
 
 StructuredStatement : CompoundStatement {if(MODE_DEBUG == 1){printf("Struc_Comp\n");}}
-| IF Expression THEN Statement {if(MODE_DEBUG == 1){printf("if_else\n");}}
-| IF Expression THEN Statement ELSE Statement {if(MODE_DEBUG == 1){printf("if_else_m\n");}}
-| WHILE Expression DO Statement {if(MODE_DEBUG == 1){printf("while_do\n");}}
-| FOR ID ASSIGN Expression TO Expression DO Statement {if(MODE_DEBUG == 1){printf("for_to\n");}}
+| IF Expression THEN Statement {
+    if(MODE_DEBUG == 1){
+        printf("if_else\n");
+    }
+    if(!certainTypeCheck($2, "boolean")) {
+        fprintf(stderr, "If Condition is not boolean\n");
+    }
+}
+| IF Expression THEN Statement ELSE Statement {
+    if(MODE_DEBUG == 1){printf("if_else_m\n");}
+    if(!certainTypeCheck($2, "boolean")) {
+        fprintf(stderr, "If Condition is not boolean\n");
+    }
+}
+| WHILE Expression DO Statement {
+    if(MODE_DEBUG == 1){printf("while_do\n");}
+    if(!certainTypeCheck($2, "boolean")) {
+        fprintf(stderr, "While Condition is not boolean\n");
+    }
+}
+| FOR ID ASSIGN Expression TO Expression DO Statement {
+    if(MODE_DEBUG == 1){printf("for_to\n");}
+    struct TypeInfo *idType;
+    constructTypeInfoFromIdResp(&idType, $2);
+    if(!typeCheck(idType, $4)) {
+        yyerror_unequal_type(idType, $4);
+    }
+    free(idType);
+}
 ;
 
 Type : ID {
@@ -415,9 +442,9 @@ Expression : SimpleExpression {
                               }
            | SimpleExpression RelationalOp 
              SimpleExpression {
-                                //check type here $1 & $3
-                                //create boolean type
-                                typeCheck($1, $3);
+                                if(!typeCheck($1, $3)) {
+                                    yyerror_unequal_type($1, $3);
+                                }
                                 constructTypeInfoForCertainSimpleType(&$$, "boolean");
                                 if(MODE_DEBUG == 1){
                                     printf("Exp_Simp_Ro\n");
@@ -574,7 +601,7 @@ Variable :
                 int preDefEntry;
                 defined = isIdDefined($1);
                 if($1->idRespStatus == IDRESP_NORMAL
-                && defined == 0) {
+                    && !defined) {
                     preDefEntry = getDefInParentScope($1->idStr, ATTR_VAR);
                     if(preDefEntry >= 0) {
                         if(MODE_DEBUG == 1){
@@ -593,13 +620,17 @@ Variable :
                 }
                 if(defined) {
                     //enter record scope
+                    curVarIdResp = $1;
                     if(MODE_DEBUG == 1){
                         printf("var id: %s\n", $1->idStr);
+                        printf("curVarIdResp changed to: %d\n", curVarIdResp->idEntry);
                     }
-                    curVarIdResp = $1;
                 }
                 else {
                     curVarIdResp = NULL;
+                    if(MODE_DEBUG == 1){
+                        printf("curVarIdResp changed to: NULL\n");
+                    }
                 }
             }
             ComponentSelection {
@@ -610,6 +641,7 @@ Variable :
                 if($3->typeEntry == -1) {
                     free($3);
                     constructTypeInfoFromIdResp(&$$, $1);
+                    $$->tag = ATTR_VAR;
                 }
                 else {
                     $$ = $3;
@@ -617,7 +649,6 @@ Variable :
                 if(MODE_DEBUG == 1){
                     printf("var type: %d\n", $$->typeEntry);
                 }
-                curVarIdResp = NULL;
             }
 ;
 
@@ -646,6 +677,9 @@ ComponentSelection :
                                  printf("out recordhash: %d\n", curRecordScopeHash);
                              }
                          }
+                         if(MODE_DEBUG) {
+                             printf("reduced as type: %d\n", $3->typeEntry);
+                         }
                      }
                    | BRACKET_L {
                        if(!isTypeConstructor(curVarIdResp, "array")) {
@@ -658,14 +692,25 @@ ComponentSelection :
                          }
                      }
                      BRACKET_R {
-                         handleArrayVar(&curVarIdResp);
+                         curArrayTypeInfo = NULL;
+                         handleArrayVar(&curVarIdResp, &curArrayTypeInfo);
+                         printf("curVarIdResp changed to: %d\n", curVarIdResp->idEntry);
                      }
                      ComponentSelection {
                          if(MODE_DEBUG == 1){
                              printf("CompSel_Array\n");
                          }
-                         constructTypeInfoFromIdResp(&$$, curVarIdResp);
+                         if($7->typeEntry == -1) {
+                             constructTypeInfoFromArrayTypeInfo(&$$, curArrayTypeInfo);
+                             free(curArrayTypeInfo);
+                         }
+                         else {
+                             $$ = $7;
+                         }
                          $$->tag = ATTR_VAR;
+                         if(MODE_DEBUG) {
+                             printf("reduced as type: %d\n", $3->typeEntry);
+                         }
                      }
                    | {
                        $$ = (struct TypeInfo*)malloc(sizeof(struct TypeInfo));

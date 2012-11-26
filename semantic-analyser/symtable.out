@@ -3,11 +3,36 @@ symboltable of scope -1 (sub-scope of -1):
 Address: 0   ID: errorfree       Type: (null)     
 Address: 1   ID: s               Type: string     Attr: type 
 Address: 2   ID: in              Type: integer    Attr: type 
-Address: 3   ID: z               Type: string     Attr: var 
-Address: 4   ID: m               Type: integer    Attr: var 
-Address: 5   ID: foo             Type: function   ParamQty: 1 ReturnType: integer   
+Address: 3   ID: r               Type: record     Attr: type RecordMembers: 
 
-symboltable of scope 5 (sub-scope of -1): 
+    Address: 0   ID: digit           Type: integer    Attr: var 
+    Address: 1   ID: l               Type: string     Attr: var 
+    Address: 2   ID: x               Type: array      Attr: var 
+    ArrayType: s         (scope -1) BoundLow: 1 BoundUp: 10
+
+
+Address: 4   ID: rr              Type: record     Attr: type RecordMembers: 
+
+    Address: 0   ID: r1              Type: record     Attr: var RecordMembers: 
+
+        Address: 0   ID: digit           Type: integer    Attr: var 
+        Address: 1   ID: l               Type: string     Attr: var 
+        Address: 2   ID: x               Type: array      Attr: var 
+    ArrayType: s         (scope -1) BoundLow: 1 BoundUp: 10
+
+
+
+
+Address: 5   ID: arr             Type: array      Attr: type 
+    ArrayType: rr        (scope -1) BoundLow: 1 BoundUp: 10
+Address: 6   ID: z               Type: string     Attr: var 
+Address: 7   ID: m               Type: integer    Attr: var 
+Address: 8   ID: b               Type: boolean    Attr: var 
+Address: 9   ID: arr1            Type: array      Attr: var 
+    ArrayType: rr        (scope -1) BoundLow: 1 BoundUp: 10
+Address: 10  ID: foo             Type: function   ParamQty: 1 ReturnType: integer   
+
+symboltable of scope 10 (sub-scope of -1): 
 Address: 0   ID: foo             Type: integer    Attr: var 
 Address: 1   ID: a               Type: integer    Attr: var 
 

@@ -36,6 +36,10 @@ typedef struct ActiveRecordHashStack {
     struct ActiveRecordHashStack *prev;
 } recordHashStack;
 
+typedef struct CURArrayType {
+    struct ArrayInfo arrayInfo;
+} curArrayType;
+
 idlist * idlisthead = NULL;
 idlist * idlisttail = NULL;
 

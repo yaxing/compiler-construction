@@ -324,10 +324,21 @@ void constructTypeInfoFromTableEntry(struct TypeInfo **typeinfo, entry *tableEnt
     }
 }
 
+void constructTypeInfoFromArrayTypeInfo(struct TypeInfo **typeinfo, struct CURArrayType *arrayTypeInfo) {
+    scope *curScope = find_scope(arrayTypeInfo->arrayInfo.typeDefScopeId);
+    entry *curEntry = getSymbolbyEntryId(curScope->symboltable, arrayTypeInfo->arrayInfo.typeEntry);
+    *typeinfo = (struct TypeInfo *)malloc(sizeof(struct TypeInfo));
+    (*typeinfo)->typeEntry = getPredefType(curEntry->typedesc->type);
+    (*typeinfo)->tag = curEntry->typedesc->tag;
+    (*typeinfo)->defScopeId = curScope->scopeId;
+    (*typeinfo)->attrInfo = curEntry->typedesc->attribute;
+}
+
 void constructTypeInfoFromIdResp(struct TypeInfo **typeinfo, struct IdResp *idResp) {
     scope *curScope  = getCurScope();
     entry *tableEntry;
     char *idType;
+    char *tmp;
     *typeinfo = (struct TypeInfo *)malloc(sizeof(struct TypeInfo));
     if(idResp == NULL) {
         (*typeinfo)->typeEntry = getPredefType("undefined");
@@ -341,6 +352,10 @@ void constructTypeInfoFromIdResp(struct TypeInfo **typeinfo, struct IdResp *idRe
        || idResp->idRespStatus == IDRESP_PREDEF_TYPE) {
         (*typeinfo)->typeEntry = idResp->idEntry;
         (*typeinfo)->defScopeId = -2;
+        tmp = getIdType(find_scope(-2)->symboltable, idResp->idEntry);
+        if(tmp != NULL && strcmp(tmp, "TYPE") != 0) {
+            (*typeinfo)->typeEntry = getPredefType(tmp);
+        }
         if(MODE_DEBUG == 1) {
             printf("constructed TypeInfo(pred) as %d from %s(%d)\n", (*typeinfo)->typeEntry, idResp->idStr, idResp->idEntry);
         }
@@ -502,7 +517,7 @@ char *getTypeName(struct TypeInfo *typeInfo) {
     return getIDName(predefinedIdTable, type);
 }
 
-void handleArrayVar(struct IdResp **idResp) {
+void handleArrayVar(struct IdResp **idResp, struct CURArrayType **arrayTypeInfo) {
     scope *curScope;
     entry *tmp;
     if((*idResp) == NULL || !isTypeConstructor((*idResp), "array")) {
@@ -518,6 +533,9 @@ void handleArrayVar(struct IdResp **idResp) {
     tmp = getSymbolbyEntryId(curScope->symboltable, (*idResp)->idEntry);
     (*idResp)->idEntry = tmp->typedesc->attribute.arrayInfo.typeEntry;
     (*idResp)->idStr = getIDName(find_scope(tmp->typedesc->attribute.arrayInfo.typeDefScopeId)->symboltable, tmp->typedesc->attribute.arrayInfo.typeEntry);
+    
+    *arrayTypeInfo = (struct CURArrayType *)malloc(sizeof(struct CURArrayType));
+    (*arrayTypeInfo)->arrayInfo = tmp->typedesc->attribute.arrayInfo;
     if(MODE_DEBUG == 1) {
         printf("handling array: cur idresp changed to %s\n", (*idResp)->idStr);
     }

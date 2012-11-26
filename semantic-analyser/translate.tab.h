@@ -146,7 +146,7 @@
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 50 "translate.y"
+#line 52 "translate.y"
 {
     double doubleType;
     int intType;

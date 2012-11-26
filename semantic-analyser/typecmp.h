@@ -88,7 +88,6 @@ int funcCmp(struct FuncInfo attr1, struct FuncInfo attr2) {
     res = funcRetTypeAttrCmp(attr1, attr2, attr1.retTypeEntry);
     return res;
 }
-
 //compare two proc
 int procCmp(struct FuncInfo attr1, struct FuncInfo attr2) {
     if(attr1.paramQty != attr2.paramQty) {

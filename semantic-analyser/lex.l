@@ -56,8 +56,6 @@ to {return TO;}
 type {return TYPE;}
 var {return VAR;}
 while {return WHILE;}
-NIL {return NIL;}
-true {return TRUE;}
 
 {invalidId} {yylval.stringType = yytext; return INVALID_ID;}
 {id} {
