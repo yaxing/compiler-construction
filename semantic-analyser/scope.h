@@ -8,31 +8,7 @@
 
 #ifndef compiler_debugging_scope_h
 #define compiler_debugging_scope_h
-
-int const SCOPEID_GLOBAL = -1;
-int const SCOPEID_PREDEF = -2;
-
-// scope node
-typedef struct Scope {
-    int scopeId; //hash value, in this part, scopeId equals to corresponding procedure id address
-    int symboltableSize;
-    int maxSymbolId;
-    int subScopeQty;
-    struct SymbolTable *symboltable;
-    struct Scope *parent;
-    UT_hash_handle hh;
-} scope;
-
-typedef struct ScopeStack {
-    int size;
-    struct Scope *top;
-} stack;
-
-stack scopestack;
-scope *global;
-scope *predef;
-scope *scopeHashTable = NULL;
-int hashSeed = 1;
+#include "scopepredef.h"
 
 int add_scope(scope *s) {
     scope *tmp;

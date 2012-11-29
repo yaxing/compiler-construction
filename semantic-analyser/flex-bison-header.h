@@ -9,6 +9,7 @@
 #ifndef compiler_debugging_flex_bison_header_h
 #define compiler_debugging_flex_bison_header_h
 
+//===Id Resp type declarations===//
 #ifndef IDRESP_PREDEF_TYPE
 #define IDRESP_PREDEF_TYPE -1
 #endif
