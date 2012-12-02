@@ -19,6 +19,7 @@ typedef struct Scope {
     int maxSymbolId;
     int subScopeQty;
     struct SymbolTable *symboltable;
+    struct QUADRUPLES *quadrupletable;
     struct Scope *parent;
     UT_hash_handle hh;
 } scope;

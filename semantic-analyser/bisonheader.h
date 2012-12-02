@@ -10,6 +10,50 @@
 #define compiler_debugging_bisonheader_h
 #include "bisonpredef.h"
 
+void pushArrayIdRespInStack(idresp *array) {
+    arrayStack *nodeN = (arrayStack *)malloc(sizeof(arrayStack));
+    idresp *node = (idresp *)malloc(sizeof(idresp));
+    node->idEntry = array->idEntry;
+    node->idRespStatus = array->idRespStatus;
+    if(array->idStr == NULL) {
+        node->idStr = array->idStr;
+    }
+    else {
+        node->idStr = (char *)malloc(sizeof(array->idStr));
+        strcpy(node->idStr, array->idStr);
+    }
+    nodeN->idInfo = node;
+    nodeN->prev = arrayStackTail;
+    arrayStackTail = nodeN;
+    if(MODE_DEBUG) {
+        printf("pushed array %s into active stack\n", array->idStr);
+    }
+}
+
+idresp *popArrayIdResp() {
+    if(arrayStackTail == NULL) {
+        return NULL;
+    }
+    arrayStack *tmpA;
+    idresp *tmp = (idresp *)malloc(sizeof(idresp));
+    tmp->idEntry = arrayStackTail->idInfo->idEntry;
+    tmp->idRespStatus = arrayStackTail->idInfo->idRespStatus;
+    if(arrayStackTail->idInfo->idStr == NULL) {
+        tmp->idStr = NULL;
+    }
+    else {
+        tmp->idStr = (char *)malloc(sizeof(arrayStackTail->idInfo->idStr));
+        strcpy(tmp->idStr, arrayStackTail->idInfo->idStr);
+    }
+    tmpA = arrayStackTail;
+    arrayStackTail = arrayStackTail->prev;
+    free(tmpA);
+    if(MODE_DEBUG) {
+        printf("poped array %s out active stack\n", tmp->idStr);
+    }
+    return tmp;
+}
+
 int pushRecordHashInStack(int hash) {
     recordHashStack *node = (recordHashStack *)malloc(sizeof(recordHashStack));
     node->hash = hash;
@@ -328,10 +372,18 @@ void constructTypeInfoFromArrayTypeInfo(struct TypeInfo **typeinfo, struct CURAr
     scope *curScope = find_scope(arrayTypeInfo->arrayInfo.typeDefScopeId);
     entry *curEntry = getSymbolbyEntryId(curScope->symboltable, arrayTypeInfo->arrayInfo.typeEntry);
     *typeinfo = (struct TypeInfo *)malloc(sizeof(struct TypeInfo));
-    (*typeinfo)->typeEntry = getPredefType(curEntry->typedesc->type);
+    if(curScope->scopeId == -2) {
+        (*typeinfo)->typeEntry = curEntry->address;
+    }
+    else {
+        (*typeinfo)->typeEntry = getPredefType(curEntry->typedesc->type);
+    }
     (*typeinfo)->tag = curEntry->typedesc->tag;
     (*typeinfo)->defScopeId = curScope->scopeId;
     (*typeinfo)->attrInfo = curEntry->typedesc->attribute;
+    if(MODE_DEBUG) {
+        printf("constructed arraytype: %d %d %d\n", (*typeinfo)->typeEntry, arrayTypeInfo->arrayInfo.typeEntry, arrayTypeInfo->arrayInfo.typeDefScopeId);
+    }
 }
 
 void constructTypeInfoFromIdResp(struct TypeInfo **typeinfo, struct IdResp *idResp) {
@@ -343,11 +395,13 @@ void constructTypeInfoFromIdResp(struct TypeInfo **typeinfo, struct IdResp *idRe
     if(idResp == NULL) {
         (*typeinfo)->typeEntry = getPredefType("undefined");
         (*typeinfo)->defScopeId = -2;
+        (*typeinfo)->code = NULL;
         if(MODE_DEBUG == 1) {
             printf("constructed TypeInfo(pred) as %d from undefined\n", (*typeinfo)->typeEntry);
         }
         return;
     }
+    (*typeinfo)->code = idResp->idStr;
     if(idResp->idRespStatus == IDRESP_PREDEF_KEYW
        || idResp->idRespStatus == IDRESP_PREDEF_TYPE) {
         (*typeinfo)->typeEntry = idResp->idEntry;
@@ -522,7 +576,7 @@ void handleArrayVar(struct IdResp **idResp, struct CURArrayType **arrayTypeInfo)
     entry *tmp;
     if((*idResp) == NULL || !isTypeConstructor((*idResp), "array")) {
         if(MODE_DEBUG == 1) {
-            printf("handling array: not array\n");
+            printf("handling array: %s not array\n", (*idResp)->idStr);
         }
         return;
     }

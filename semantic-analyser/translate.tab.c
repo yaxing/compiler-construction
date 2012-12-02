@@ -601,15 +601,15 @@ static const yytype_uint16 yyrline[] =
 {
        0,   130,   130,   131,   132,   133,   134,   135,   136,   137,
      140,   143,   144,   147,   155,   156,   159,   160,   163,   164,
-     167,   179,   191,   198,   191,   212,   220,   212,   234,   235,
-     238,   239,   245,   255,   256,   259,   260,   263,   266,   267,
-     270,   271,   274,   275,   276,   279,   291,   291,   335,   336,
-     344,   350,   356,   367,   379,   393,   393,   414,   432,   433,
-     436,   443,   456,   457,   458,   459,   460,   461,   464,   470,
-     479,   497,   506,   507,   508,   511,   528,   536,   544,   545,
-     546,   547,   550,   558,   566,   572,   578,   586,   595,   595,
-     656,   656,   684,   689,   694,   684,   715,   721,   721,   726,
-     729,   729,   737,   740,   749,   750,   753,   754
+     167,   179,   191,   199,   191,   213,   222,   213,   236,   237,
+     240,   241,   247,   257,   258,   261,   262,   265,   268,   269,
+     272,   273,   276,   277,   278,   281,   293,   293,   338,   339,
+     347,   353,   359,   370,   382,   396,   396,   417,   435,   436,
+     439,   446,   459,   460,   461,   462,   463,   464,   467,   473,
+     482,   500,   509,   510,   511,   514,   531,   539,   547,   548,
+     549,   550,   553,   562,   571,   577,   583,   591,   600,   600,
+     662,   662,   691,   699,   704,   691,   731,   737,   737,   742,
+     745,   745,   753,   756,   765,   766,   769,   770
 };
 #endif
 
@@ -1781,11 +1781,12 @@ yyreduce:
                                         if(enterNewScope((yyvsp[(2) - (2)].idrespType)) != 0) {
                                             //YYERROR;
                                         }
+                                        cleanCurFuncProcCallParamCounter();
                                     ;}
     break;
 
   case 23:
-#line 198 "translate.y"
+#line 199 "translate.y"
     {
                             if(MODE_DEBUG == 1){
                                 printf("setting proc: %d %s\n", (yyvsp[(2) - (7)].idrespType)->idEntry, itoa(funcProcParamCount));
@@ -1795,7 +1796,7 @@ yyreduce:
     break;
 
   case 24:
-#line 204 "translate.y"
+#line 205 "translate.y"
     {
                             if(MODE_DEBUG == 1){
                                 printf("ProcDecl\n");
@@ -1805,18 +1806,19 @@ yyreduce:
     break;
 
   case 25:
-#line 212 "translate.y"
+#line 213 "translate.y"
     {
                                     char *name = getNameInCurScope((yyvsp[(2) - (2)].idrespType)->idEntry);
                                     if(enterNewScope((yyvsp[(2) - (2)].idrespType)) != 0) {
                                         //YYERROR;
                                     }
                                     registerSymbolInCurScope(name);
+                                    cleanCurFuncProcCallParamCounter();
                                    ;}
     break;
 
   case 26:
-#line 220 "translate.y"
+#line 222 "translate.y"
     {
                                     if(MODE_DEBUG == 1){
                                         printf("setting func: %d %s %d\n", (yyvsp[(2) - (9)].idrespType)->idEntry, itoa(funcProcParamCount), (yyvsp[(8) - (9)].typeinfo)->typeEntry);
@@ -1826,7 +1828,7 @@ yyreduce:
     break;
 
   case 27:
-#line 226 "translate.y"
+#line 228 "translate.y"
     {
                           if(MODE_DEBUG == 1){
                               printf("FuncDecl\n");
@@ -1836,29 +1838,29 @@ yyreduce:
     break;
 
   case 28:
-#line 234 "translate.y"
+#line 236 "translate.y"
     {if(MODE_DEBUG == 1){printf("PFDecl_Block\n");};}
     break;
 
   case 29:
-#line 235 "translate.y"
+#line 237 "translate.y"
     {if(MODE_DEBUG == 1){printf("PFDecl_Forward\n");};}
     break;
 
   case 30:
-#line 238 "translate.y"
+#line 240 "translate.y"
     {if(MODE_DEBUG == 1){printf("empty paramlist\n");};}
     break;
 
   case 31:
-#line 240 "translate.y"
+#line 242 "translate.y"
     {
                           if(MODE_DEBUG == 1){printf("FormalPList\n");}
                       ;}
     break;
 
   case 32:
-#line 245 "translate.y"
+#line 247 "translate.y"
     {
                                                         if(MODE_DEBUG == 1){
                                                             printf("Plist_single\n");
@@ -1871,57 +1873,57 @@ yyreduce:
     break;
 
   case 33:
-#line 255 "translate.y"
+#line 257 "translate.y"
     {if(MODE_DEBUG == 1){printf("PList_M\n");};}
     break;
 
   case 35:
-#line 259 "translate.y"
+#line 261 "translate.y"
     {if(MODE_DEBUG == 1){printf("Block_CompState\n");};}
     break;
 
   case 36:
-#line 260 "translate.y"
+#line 262 "translate.y"
     {if(MODE_DEBUG == 1){printf("Block_CompSt_V\n");};}
     break;
 
   case 37:
-#line 263 "translate.y"
+#line 265 "translate.y"
     {if(MODE_DEBUG == 1){printf("CompStBE\n");};}
     break;
 
   case 38:
-#line 266 "translate.y"
+#line 268 "translate.y"
     {if(MODE_DEBUG == 1){printf("SteS\n");};}
     break;
 
   case 39:
-#line 267 "translate.y"
+#line 269 "translate.y"
     {if(MODE_DEBUG == 1){printf("SteSSte\n");};}
     break;
 
   case 40:
-#line 270 "translate.y"
+#line 272 "translate.y"
     {if(MODE_DEBUG == 1){printf("Statement_Simple\n");};}
     break;
 
   case 41:
-#line 271 "translate.y"
+#line 273 "translate.y"
     {if(MODE_DEBUG == 1){printf("Statement_Structured\n");};}
     break;
 
   case 42:
-#line 274 "translate.y"
+#line 276 "translate.y"
     {if(MODE_DEBUG == 1){printf("SimpleS_AssignState\n");};}
     break;
 
   case 43:
-#line 275 "translate.y"
+#line 277 "translate.y"
     {if(MODE_DEBUG == 1){printf("SimpleSS_ProState\n");};}
     break;
 
   case 45:
-#line 279 "translate.y"
+#line 281 "translate.y"
     {
     if(MODE_DEBUG == 1){
         printf("AssiState\n");
@@ -1934,14 +1936,14 @@ yyreduce:
     break;
 
   case 46:
-#line 291 "translate.y"
+#line 293 "translate.y"
     {
                         cleanCurFuncProcCallParamCounter();
                     ;}
     break;
 
   case 47:
-#line 294 "translate.y"
+#line 296 "translate.y"
     {
                         int defined;
                         int preDefEntry;
@@ -1980,16 +1982,17 @@ yyreduce:
                         cleanCurFuncProcCallParamCounter();
                         constructTypeInfoFromIdResp(&(yyval.typeinfo), (yyvsp[(1) - (5)].idrespType));
                         (yyval.typeinfo)->tag = ATTR_VAR;
+                        //put in table, create tmp
                     ;}
     break;
 
   case 48:
-#line 335 "translate.y"
+#line 338 "translate.y"
     {if(MODE_DEBUG == 1){printf("Struc_Comp\n");};}
     break;
 
   case 49:
-#line 336 "translate.y"
+#line 339 "translate.y"
     {
     if(MODE_DEBUG == 1){
         printf("if_else\n");
@@ -2001,7 +2004,7 @@ yyreduce:
     break;
 
   case 50:
-#line 344 "translate.y"
+#line 347 "translate.y"
     {
     if(MODE_DEBUG == 1){printf("if_else_m\n");}
     if(!certainTypeCheck((yyvsp[(2) - (6)].typeinfo), "boolean")) {
@@ -2011,7 +2014,7 @@ yyreduce:
     break;
 
   case 51:
-#line 350 "translate.y"
+#line 353 "translate.y"
     {
     if(MODE_DEBUG == 1){printf("while_do\n");}
     if(!certainTypeCheck((yyvsp[(2) - (4)].typeinfo), "boolean")) {
@@ -2021,7 +2024,7 @@ yyreduce:
     break;
 
   case 52:
-#line 356 "translate.y"
+#line 359 "translate.y"
     {
     if(MODE_DEBUG == 1){printf("for_to\n");}
     struct TypeInfo *idType;
@@ -2034,7 +2037,7 @@ yyreduce:
     break;
 
   case 53:
-#line 367 "translate.y"
+#line 370 "translate.y"
     {
             if(MODE_DEBUG == 1){
                 printf("TypeID %d\n", (yyvsp[(1) - (1)].idrespType)->idEntry);
@@ -2050,7 +2053,7 @@ yyreduce:
     break;
 
   case 54:
-#line 380 "translate.y"
+#line 383 "translate.y"
     {
            if(MODE_DEBUG == 1){
                printf("Type_Array\n");
@@ -2067,7 +2070,7 @@ yyreduce:
     break;
 
   case 55:
-#line 393 "translate.y"
+#line 396 "translate.y"
     {
          if(MODE_DEBUG == 1){
              printf("Type_Record_Init\n");
@@ -2079,7 +2082,7 @@ yyreduce:
     break;
 
   case 56:
-#line 401 "translate.y"
+#line 404 "translate.y"
     {
            if(MODE_DEBUG == 1){
                printf("Type_Record\n");
@@ -2094,7 +2097,7 @@ yyreduce:
     break;
 
   case 57:
-#line 414 "translate.y"
+#line 417 "translate.y"
     {
                     if(MODE_DEBUG == 1){
                         printf("ResultType\n");
@@ -2114,17 +2117,17 @@ yyreduce:
     break;
 
   case 58:
-#line 432 "translate.y"
+#line 435 "translate.y"
     {if(MODE_DEBUG == 1){printf("Constant_SIGN_INT\n");} (yyval.intType) = getConstantInt((yyvsp[(1) - (2)].stringType), (yyvsp[(2) - (2)].intType));;}
     break;
 
   case 59:
-#line 433 "translate.y"
+#line 436 "translate.y"
     {if(MODE_DEBUG == 1){printf("Constant_INT\n");} (yyval.intType) = getConstantInt(NULL, (yyvsp[(1) - (1)].intType));;}
     break;
 
   case 60:
-#line 436 "translate.y"
+#line 439 "translate.y"
     {
                                 (yyval.typeinfo) = (yyvsp[(1) - (1)].typeinfo);
                                 if(MODE_DEBUG == 1){
@@ -2135,7 +2138,7 @@ yyreduce:
     break;
 
   case 61:
-#line 444 "translate.y"
+#line 447 "translate.y"
     {
                                 if(!typeCheck((yyvsp[(1) - (3)].typeinfo), (yyvsp[(3) - (3)].typeinfo))) {
                                     yyerror_unequal_type((yyvsp[(1) - (3)].typeinfo), (yyvsp[(3) - (3)].typeinfo));
@@ -2149,37 +2152,37 @@ yyreduce:
     break;
 
   case 62:
-#line 456 "translate.y"
+#line 459 "translate.y"
     {if(MODE_DEBUG == 1){printf("RelationalOp_EQ\n");};}
     break;
 
   case 63:
-#line 457 "translate.y"
+#line 460 "translate.y"
     {if(MODE_DEBUG == 1){printf("RelationslOp_Less\n");};}
     break;
 
   case 64:
-#line 458 "translate.y"
+#line 461 "translate.y"
     {if(MODE_DEBUG == 1){printf("RelationslOp_LE\n");};}
     break;
 
   case 65:
-#line 459 "translate.y"
+#line 462 "translate.y"
     {if(MODE_DEBUG == 1){printf("RelationslOp_G\n");};}
     break;
 
   case 66:
-#line 460 "translate.y"
+#line 463 "translate.y"
     {if(MODE_DEBUG == 1){printf("RelationslOp_GE\n");};}
     break;
 
   case 67:
-#line 461 "translate.y"
+#line 464 "translate.y"
     {if(MODE_DEBUG == 1){printf("RelationslOp_NE\n");};}
     break;
 
   case 68:
-#line 464 "translate.y"
+#line 467 "translate.y"
     {
                                     if(MODE_DEBUG == 1){
                                         printf("SimpleExp_Sign_AddTerm\n");
@@ -2189,7 +2192,7 @@ yyreduce:
     break;
 
   case 69:
-#line 470 "translate.y"
+#line 473 "translate.y"
     {
                                 (yyval.typeinfo) = (yyvsp[(1) - (1)].typeinfo);
                                 if(MODE_DEBUG == 1){
@@ -2200,7 +2203,7 @@ yyreduce:
     break;
 
   case 70:
-#line 479 "translate.y"
+#line 482 "translate.y"
     {
                                     if(MODE_DEBUG == 1){
                                         printf("AddOpTerm_Mul\n");
@@ -2222,7 +2225,7 @@ yyreduce:
     break;
 
   case 71:
-#line 497 "translate.y"
+#line 500 "translate.y"
     {
                     (yyval.typeinfo) = (yyvsp[(1) - (1)].typeinfo);
                     if(MODE_DEBUG == 1){
@@ -2233,22 +2236,22 @@ yyreduce:
     break;
 
   case 72:
-#line 506 "translate.y"
+#line 509 "translate.y"
     {if(MODE_DEBUG == 1){printf("AddOp_Add\n");};}
     break;
 
   case 73:
-#line 507 "translate.y"
+#line 510 "translate.y"
     {if(MODE_DEBUG == 1){printf("AddOp_Min\n");};}
     break;
 
   case 74:
-#line 508 "translate.y"
+#line 511 "translate.y"
     {if(MODE_DEBUG == 1){printf("AddOp_OR\n");};}
     break;
 
   case 75:
-#line 511 "translate.y"
+#line 514 "translate.y"
     {
                             if(MODE_DEBUG == 1){
                                 printf("Term_Fac_Mul\n");
@@ -2269,7 +2272,7 @@ yyreduce:
     break;
 
   case 76:
-#line 528 "translate.y"
+#line 531 "translate.y"
     {
                 (yyval.typeinfo) = (yyvsp[(1) - (1)].typeinfo);
                 if(MODE_DEBUG == 1){
@@ -2279,7 +2282,7 @@ yyreduce:
     break;
 
   case 77:
-#line 536 "translate.y"
+#line 539 "translate.y"
     {
                             if(MODE_DEBUG == 1){
                                 printf("MulOpTerm\n");
@@ -2289,27 +2292,27 @@ yyreduce:
     break;
 
   case 78:
-#line 544 "translate.y"
+#line 547 "translate.y"
     {if(MODE_DEBUG == 1){printf("MulOp_MUL\n");};}
     break;
 
   case 79:
-#line 545 "translate.y"
+#line 548 "translate.y"
     {if(MODE_DEBUG == 1){printf("MulOp_DIV\n");};}
     break;
 
   case 80:
-#line 546 "translate.y"
+#line 549 "translate.y"
     {if(MODE_DEBUG == 1){printf("MulOp_MOD\n");};}
     break;
 
   case 81:
-#line 547 "translate.y"
+#line 550 "translate.y"
     {if(MODE_DEBUG == 1){printf("MulOp_AND\n");};}
     break;
 
   case 82:
-#line 550 "translate.y"
+#line 553 "translate.y"
     {
                 if(MODE_DEBUG == 1){
                     printf("Factor_INT\n");
@@ -2317,11 +2320,12 @@ yyreduce:
                 (yyval.typeinfo) = (struct TypeInfo*)malloc(sizeof(struct TypeInfo));
                 (yyval.typeinfo)->typeEntry = getPredefType("integer");
                 (yyval.typeinfo)->tag = ATTR_VAR;
+                (yyval.typeinfo)->code = itoa(yylval.intType);
              ;}
     break;
 
   case 83:
-#line 558 "translate.y"
+#line 562 "translate.y"
     {
                     if(MODE_DEBUG == 1){
                         printf("Factor_String\n");
@@ -2329,11 +2333,12 @@ yyreduce:
                     (yyval.typeinfo) = (struct TypeInfo*)malloc(sizeof(struct TypeInfo));
                     (yyval.typeinfo)->typeEntry = getPredefType("string");
                     (yyval.typeinfo)->tag = ATTR_VAR;
+                    (yyval.typeinfo)->code = strcpy2(yylval.stringType);
                 ;}
     break;
 
   case 84:
-#line 566 "translate.y"
+#line 571 "translate.y"
     {
                                 if(MODE_DEBUG == 1){
                                     printf("Factor_FuncRef\n");
@@ -2343,7 +2348,7 @@ yyreduce:
     break;
 
   case 85:
-#line 572 "translate.y"
+#line 577 "translate.y"
     {
                     if(MODE_DEBUG == 1){
                         printf("Factor_Var\n");
@@ -2353,7 +2358,7 @@ yyreduce:
     break;
 
   case 86:
-#line 578 "translate.y"
+#line 583 "translate.y"
     {
                         if(MODE_DEBUG == 1){
                             printf("Factor_N_Fac\n");
@@ -2365,7 +2370,7 @@ yyreduce:
     break;
 
   case 87:
-#line 586 "translate.y"
+#line 591 "translate.y"
     {
                                         if(MODE_DEBUG == 1){
                                             printf("Factor_Exp\n");
@@ -2375,7 +2380,7 @@ yyreduce:
     break;
 
   case 88:
-#line 595 "translate.y"
+#line 600 "translate.y"
     {
                 if(MODE_DEBUG == 1){
                     printf("Var_ID\n");
@@ -2420,7 +2425,7 @@ yyreduce:
     break;
 
   case 89:
-#line 636 "translate.y"
+#line 641 "translate.y"
     {
                 if(MODE_DEBUG == 1){
                     printf("Var_Comp\n");
@@ -2433,6 +2438,7 @@ yyreduce:
                 }
                 else {
                     (yyval.typeinfo) = (yyvsp[(3) - (3)].typeinfo);
+                    (yyval.typeinfo)->code = strcat((yyvsp[(1) - (3)].idrespType)->idStr, (yyval.typeinfo)->code);
                 }
                 if(MODE_DEBUG == 1){
                     printf("var type: %d\n", (yyval.typeinfo)->typeEntry);
@@ -2441,7 +2447,7 @@ yyreduce:
     break;
 
   case 90:
-#line 656 "translate.y"
+#line 662 "translate.y"
     {
                          if(!isTypeConstructor(curVarIdResp, "record")) {
                              fprintf(stderr, "Invalid var: %s is not a record\n", curVarIdResp->idStr);
@@ -2458,12 +2464,13 @@ yyreduce:
     break;
 
   case 91:
-#line 669 "translate.y"
+#line 675 "translate.y"
     {
                          if(MODE_DEBUG == 1){
                              printf("CompSel_Record\n");
                          }
                          (yyval.typeinfo) = (yyvsp[(3) - (3)].typeinfo);
+                         (yyval.typeinfo)->code = strcat2(".", (yyval.typeinfo)->code);
                          curRecordScopeHash = handleRecordEnd();
                          if(curRecordScopeHash != 0) {
                              if(MODE_DEBUG == 1){
@@ -2477,16 +2484,19 @@ yyreduce:
     break;
 
   case 92:
-#line 684 "translate.y"
+#line 691 "translate.y"
     {
                        if(!isTypeConstructor(curVarIdResp, "array")) {
                            fprintf(stderr, "Invalid var: structure is not an array\n", curVarIdResp->idStr);
+                       }
+                       else {
+                            pushArrayIdRespInStack(curVarIdResp);
                        }
                    ;}
     break;
 
   case 93:
-#line 689 "translate.y"
+#line 699 "translate.y"
     {
                          if(!certainTypeCheck((yyvsp[(3) - (3)].typeinfo), "integer")) {
                              fprintf(stderr, "Invalid array index\n");
@@ -2495,16 +2505,19 @@ yyreduce:
     break;
 
   case 94:
-#line 694 "translate.y"
+#line 704 "translate.y"
     {
                          curArrayTypeInfo = NULL;
+                         curVarIdResp = popArrayIdResp();
                          handleArrayVar(&curVarIdResp, &curArrayTypeInfo);
-                         printf("curVarIdResp changed to: %d\n", curVarIdResp->idEntry);
+                         if(MODE_DEBUG) {
+                            printf("curVarIdResp changed to: %d\n", curVarIdResp->idEntry);
+                         }
                      ;}
     break;
 
   case 95:
-#line 699 "translate.y"
+#line 712 "translate.y"
     {
                          if(MODE_DEBUG == 1){
                              printf("CompSel_Array\n");
@@ -2520,11 +2533,14 @@ yyreduce:
                          if(MODE_DEBUG) {
                              printf("reduced as type: %d\n", (yyvsp[(3) - (7)].typeinfo)->typeEntry);
                          }
+                         (yyval.typeinfo)->code = strcat2("[", (yyvsp[(3) - (7)].typeinfo)->code);
+                         (yyval.typeinfo)->code = strcat2((yyval.typeinfo)->code, "]");
+                         (yyval.typeinfo)->code = strcat2((yyval.typeinfo)->code, (yyvsp[(7) - (7)].typeinfo)->code);
                      ;}
     break;
 
   case 96:
-#line 715 "translate.y"
+#line 731 "translate.y"
     {
                        (yyval.typeinfo) = (struct TypeInfo*)malloc(sizeof(struct TypeInfo));
                        (yyval.typeinfo)->typeEntry = -1;
@@ -2532,7 +2548,7 @@ yyreduce:
     break;
 
   case 97:
-#line 721 "translate.y"
+#line 737 "translate.y"
     {
     addCurFuncProcParamCallCounter(1);
     appendToParamTypeList((yyvsp[(1) - (1)].typeinfo));
@@ -2540,17 +2556,17 @@ yyreduce:
     break;
 
   case 98:
-#line 725 "translate.y"
+#line 741 "translate.y"
     {if(MODE_DEBUG == 1){printf("ActualParamL\n");};}
     break;
 
   case 99:
-#line 726 "translate.y"
+#line 742 "translate.y"
     {if(MODE_DEBUG == 1){printf("ActualParamL\n");};}
     break;
 
   case 100:
-#line 729 "translate.y"
+#line 745 "translate.y"
     {
     if(MODE_DEBUG == 1){
         printf("ExpM\n");
@@ -2561,7 +2577,7 @@ yyreduce:
     break;
 
   case 103:
-#line 740 "translate.y"
+#line 756 "translate.y"
     {
                                         if(MODE_DEBUG == 1){
                                             printf("IdList\n");
@@ -2572,23 +2588,23 @@ yyreduce:
     break;
 
   case 104:
-#line 749 "translate.y"
+#line 765 "translate.y"
     {if(MODE_DEBUG == 1){printf("IdListM\n");};}
     break;
 
   case 106:
-#line 753 "translate.y"
+#line 769 "translate.y"
     {if(MODE_DEBUG == 1){printf("Sign_Add\n");} (yyval.stringType) = "+";;}
     break;
 
   case 107:
-#line 754 "translate.y"
+#line 770 "translate.y"
     {if(MODE_DEBUG == 1){printf("Sign_Min\n");} (yyval.stringType) = "-";;}
     break;
 
 
 /* Line 1267 of yacc.c.  */
-#line 2592 "translate.tab.c"
+#line 2608 "translate.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -2802,7 +2818,7 @@ yyreturn:
 }
 
 
-#line 757 "translate.y"
+#line 773 "translate.y"
 
 
 yyerror(char *s)
@@ -2887,6 +2903,7 @@ int setIdListType(struct TypeInfo *retType) {
 
 void handleFuncProcDeclaration(struct IdResp *id, struct TypeInfo *retType, int paramQty, char *funcProc) {
         union SymbolEntryAttr attr;
+        union ARGINFO quadArg1;
         if(strcmp(funcProc, "function") == 0) {
             //set function parameter's type as return type
             setFuncVarInScope(id->idStr, id->idEntry, retType->typeEntry, retType->attrInfo);
@@ -2897,6 +2914,9 @@ void handleFuncProcDeclaration(struct IdResp *id, struct TypeInfo *retType, int 
         }
         cleanCurParamCounter();
         cleanCurFuncProcCallParamCounter();
+
+        quadArg1.strInfo = strcpy2(id->idStr);
+        insertQuadruple(getCurQueadrupleTable(), QUAD_OP_LABEL, buildArg(ARGTYPE_VAR_STR, quadArg1), NULL, NULL);
 }
 
 int enterNewScope(struct IdResp *id) {

@@ -18,6 +18,8 @@ int const MODE_DEBUG = 0;
 #include "uthash.h"
 #include "predefinedids.h"
 #include "symboltable.h"
+#include "quadruple.h"
+#include "intermediatecodegen.h"
 #include "scope.h"
 #include "util.h"
 #include "typecmp.h"

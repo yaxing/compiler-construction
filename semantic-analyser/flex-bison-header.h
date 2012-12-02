@@ -34,7 +34,7 @@
 typedef struct IdResp {
     int idEntry;
     char *idStr;
-    int idRespStatus; //0 is normal, -1 is keyword, -2 is type
+    int idRespStatus; //IDRESP_*
 } idresp;
 
 #endif

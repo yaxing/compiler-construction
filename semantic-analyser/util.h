@@ -13,10 +13,68 @@ void printSymbolTable(symboltable *table, int lineSpaceQty);
 
 int lineNo = 1;
 
+char *strcpy2(char *str) {
+    char *strTarget;
+    if(str == NULL) {
+        return NULL;
+    }
+    strTarget = (char *)malloc(sizeof(str));
+    strcpy(strTarget, str);
+    return strTarget;
+}
+
+char *strcat2(char *str1, char *str2) {
+    char *buf;
+    if(str1 == NULL) {
+        return strcpy2(str2);
+    }
+    if(str2 == NULL) {
+        return strcpy2(str1);
+    }
+    buf = (char *)malloc(sizeof(str1) + sizeof(str2));
+    strcat(buf, str1);
+    strcat(buf, str2);
+    return buf;
+}
+
 char *itoa(int a) {
     char * buf = (char *)malloc(sizeof(a) + 1);
     sprintf(buf, "%d", a);
     return buf;
+}
+
+void printArg(arg *argx) {
+    scope *symbolScope;
+    symboltable *table;
+    char *symbol;
+    if(argx == NULL) {
+        printf("NULL ");
+        return;
+    }
+    if(argx->argType == ARGTYPE_VAR_STR) {
+        printf("%s ", argx->argInfo.strInfo);
+    }
+    else {
+        symbolScope = find_scope(argx->argInfo.idInfo->scopeId);
+        table = symbolScope->symboltable;
+        symbol = getIDName(table, argx->argInfo.idInfo->address);
+        printf("%s ", symbol);
+    }
+}
+
+void printQuadrupleTable(quadrupleTable *table) {
+    int i = 0;
+    for(; i <= table->maxIndex; i ++) {
+        quad tmp = table->quads[i];
+        printf("op: %s ", tmp.op);
+        printf("arg1: ");
+        printArg(tmp.arg1);
+        printf("arg2: ");
+        printArg(tmp.arg2);
+        printf("result: ");
+        printArg(tmp.result);
+        printf("\n");
+    }
 }
 
 void printArrayInfo(struct ArrayInfo array) {

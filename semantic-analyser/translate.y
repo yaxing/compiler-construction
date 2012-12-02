@@ -331,6 +331,7 @@ ProcFuncStatement :
                         cleanCurFuncProcCallParamCounter();
                         constructTypeInfoFromIdResp(&$$, $1);
                         $$->tag = ATTR_VAR;
+                        //put in table, create tmp
                     }
 ;
 
@@ -556,6 +557,7 @@ Factor : INT {
                 $$ = (struct TypeInfo*)malloc(sizeof(struct TypeInfo));
                 $$->typeEntry = getPredefType("integer");
                 $$->tag = ATTR_VAR;
+                $$->code = itoa(yylval.intType);
              }
        | STRING {
                     if(MODE_DEBUG == 1){
@@ -564,6 +566,7 @@ Factor : INT {
                     $$ = (struct TypeInfo*)malloc(sizeof(struct TypeInfo));
                     $$->typeEntry = getPredefType("string");
                     $$->tag = ATTR_VAR;
+                    $$->code = strcpy2(yylval.stringType);
                 }
        | ProcFuncStatement {
                                 if(MODE_DEBUG == 1){
@@ -647,6 +650,7 @@ Variable :
                 }
                 else {
                     $$ = $3;
+                    $$->code = strcat($1->idStr, $$->code);
                 }
                 if(MODE_DEBUG == 1){
                     printf("var type: %d\n", $$->typeEntry);
@@ -673,6 +677,7 @@ ComponentSelection :
                              printf("CompSel_Record\n");
                          }
                          $$ = $3;
+                         $$->code = strcat2(".", $$->code);
                          curRecordScopeHash = handleRecordEnd();
                          if(curRecordScopeHash != 0) {
                              if(MODE_DEBUG == 1){
@@ -687,6 +692,9 @@ ComponentSelection :
                        if(!isTypeConstructor(curVarIdResp, "array")) {
                            fprintf(stderr, "Invalid var: structure is not an array\n", curVarIdResp->idStr);
                        }
+                       else {
+                            pushArrayIdRespInStack(curVarIdResp);
+                       }
                    }
                      Expression {
                          if(!certainTypeCheck($3, "integer")) {
@@ -695,8 +703,11 @@ ComponentSelection :
                      }
                      BRACKET_R {
                          curArrayTypeInfo = NULL;
+                         curVarIdResp = popArrayIdResp();
                          handleArrayVar(&curVarIdResp, &curArrayTypeInfo);
-                         printf("curVarIdResp changed to: %d\n", curVarIdResp->idEntry);
+                         if(MODE_DEBUG) {
+                            printf("curVarIdResp changed to: %d\n", curVarIdResp->idEntry);
+                         }
                      }
                      ComponentSelection {
                          if(MODE_DEBUG == 1){
@@ -713,6 +724,9 @@ ComponentSelection :
                          if(MODE_DEBUG) {
                              printf("reduced as type: %d\n", $3->typeEntry);
                          }
+                         $$->code = strcat2("[", $3->code);
+                         $$->code = strcat2($$->code, "]");
+                         $$->code = strcat2($$->code, $7->code);
                      }
                    | {
                        $$ = (struct TypeInfo*)malloc(sizeof(struct TypeInfo));
@@ -840,6 +854,7 @@ int setIdListType(struct TypeInfo *retType) {
 
 void handleFuncProcDeclaration(struct IdResp *id, struct TypeInfo *retType, int paramQty, char *funcProc) {
         union SymbolEntryAttr attr;
+        union ARGINFO quadArg1;
         if(strcmp(funcProc, "function") == 0) {
             //set function parameter's type as return type
             setFuncVarInScope(id->idStr, id->idEntry, retType->typeEntry, retType->attrInfo);
@@ -850,6 +865,9 @@ void handleFuncProcDeclaration(struct IdResp *id, struct TypeInfo *retType, int 
         }
         cleanCurParamCounter();
         cleanCurFuncProcCallParamCounter();
+
+        quadArg1.strInfo = strcpy2(id->idStr);
+        insertQuadruple(getCurQueadrupleTable(), QUAD_OP_LABEL, buildArg(ARGTYPE_VAR_STR, quadArg1), NULL, NULL);
 }
 
 int enterNewScope(struct IdResp *id) {

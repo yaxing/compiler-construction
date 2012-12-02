@@ -14,6 +14,7 @@ typedef struct TypeInfo {
     int typeEntry;
     int defScopeId;//which scope is this type defined in
     int tag;//VAR or TYPE
+    char *code; //var/func/proc name for reference
     union SymbolEntryAttr attrInfo;
 } typeinfost;
 
@@ -39,6 +40,14 @@ typedef struct ActiveRecordHashStack {
 typedef struct CURArrayType {
     struct ArrayInfo arrayInfo;
 } curArrayType;
+
+typedef struct ActiveArrayStack {
+    idresp *idInfo;
+    struct ActiveArrayStack *prev;
+} arrayStack;
+
+arrayStack *arrayStackHead = NULL;
+arrayStack *arrayStackTail = NULL;
 
 idlist * idlisthead = NULL;
 idlist * idlisttail = NULL;

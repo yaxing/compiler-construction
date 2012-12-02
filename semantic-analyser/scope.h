@@ -36,6 +36,7 @@ void initScope() {
     global = (scope *)malloc(sizeof(scope));
     global->scopeId = -1;
     global->symboltable = createSymbolTable();
+    global->quadrupletable = createQuadrupleTable();
     global->parent = global;
     scopestack.size = 1;
     add_scope(global);
@@ -52,6 +53,7 @@ scope *newScope(int procedureAddress) {
     scope *newScope = (scope *)malloc(sizeof(scope));
     newScope->scopeId = procedureAddress;
     newScope->symboltable = createSymbolTable();
+    newScope->quadrupletable = createQuadrupleTable();
     add_scope(newScope);
     return newScope;
 }
@@ -105,6 +107,10 @@ scope *popScopeStack() {
 symboltable *getCurSymboltable() {
     scope *curScope = getCurScope();
     return curScope->symboltable;
+}
+
+quadrupleTable *getCurQueadrupleTable() {
+    return getCurScope()->quadrupletable;
 }
 
 char *getNameInCurScope(int entry) {

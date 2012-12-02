@@ -1,239 +1,57 @@
-TypeID 4
-handling type: string
-constructed TypeInfo(pred) as 4 from string(4)
-All symboltables: 
-symboltable of scope -1 (sub-scope of -1): 
-Address: 0   ID: errorfree       Type: (null)     
-Address: 1   ID: s               Type: (null)     
-
-TypeDef: id: 1 type: 4 tag: 0
+Constant_INT
+Constant_INT
 TypeID 0
 handling type: integer
 constructed TypeInfo(pred) as 0 from integer(0)
 All symboltables: 
 symboltable of scope -1 (sub-scope of -1): 
-Address: 0   ID: errorfree       Type: (null)     
-Address: 1   ID: s               Type: string     Attr: type 
-Address: 2   ID: in              Type: (null)     
-
-TypeDef: id: 2 type: 0 tag: 0
-Type_Record_Init
-scope changed to: 1001
-push record 1001 in stack
-IdList
-TypeID 1
-handling type: in
-checking type in in cur scope 1001
-checking type in in scope -1
-constructed TypeInfo(normal) as 0 from in(2) integer
-All symboltables: 
-symboltable of scope -1 (sub-scope of -1): 
-Address: 0   ID: errorfree       Type: (null)     
-Address: 1   ID: s               Type: string     Attr: type 
-Address: 2   ID: in              Type: integer    Attr: type 
-Address: 3   ID: r               Type: (null)     
-
-Plist_single
-setting idlist
-setting: 0 0
-set idlist
-IdList
-TypeID 4
-handling type: string
-constructed TypeInfo(pred) as 4 from string(4)
-All symboltables: 
-symboltable of scope -1 (sub-scope of -1): 
-Address: 0   ID: errorfree       Type: (null)     
-Address: 1   ID: s               Type: string     Attr: type 
-Address: 2   ID: in              Type: integer    Attr: type 
-Address: 3   ID: r               Type: (null)     
-
-Plist_single
-setting idlist
-setting: 1 4
-set idlist
-IdList
-Constant_INT
-Constant_INT
-TypeID 3
-handling type: s
-checking type s in cur scope 1001
-checking type s in scope -1
-constructed TypeInfo(normal) as 4 from s(1) string
-All symboltables: 
-symboltable of scope -1 (sub-scope of -1): 
-Address: 0   ID: errorfree       Type: (null)     
-Address: 1   ID: s               Type: string     Attr: type 
-Address: 2   ID: in              Type: integer    Attr: type 
-Address: 3   ID: r               Type: (null)     
+Address: 0   ID: foo             Type: (null)     
+Address: 1   ID: r1              Type: (null)     
 
 Type_Array
-Plist_single
+TypeDef: id: 1 type: 5 tag: 0
+TypeDefList
+TypeDef_Mul
+IdList
+TypeID 1
+handling type: r1
+checking type r1 in cur scope -1
+constructed TypeInfo(normal) as 5 from r1(1) array
+All symboltables: 
+symboltable of scope -1 (sub-scope of -1): 
+Address: 0   ID: foo             Type: (null)     
+Address: 1   ID: r1              Type: array      Attr: type 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 2   ID: a               Type: (null)     
+
+VarDecl
 setting idlist
 setting: 2 5
 set idlist
-empty paramlist
-PList_M
-FormalPList
-PList_M
-FormalPList
-PList_M
-FormalPList
-Type_Record
-pop record 1001 out stack, stack empty
-scope changed to: -1
-TypeDef: id: 3 type: 6 tag: 0
-Type_Record_Init
-scope changed to: 1002
-push record 1002 in stack
 IdList
-TypeID 1
-handling type: r
-checking type r in cur scope 1002
-checking type r in scope -1
-constructed TypeInfo(normal) as 6 from r(3) record
-All symboltables: 
-symboltable of scope -1 (sub-scope of -1): 
-Address: 0   ID: errorfree       Type: (null)     
-Address: 1   ID: s               Type: string     Attr: type 
-Address: 2   ID: in              Type: integer    Attr: type 
-Address: 3   ID: r               Type: record     Attr: type RecordMembers: 
-
-    Address: 0   ID: digit           Type: integer    Attr: var 
-    Address: 1   ID: l               Type: string     Attr: var 
-    Address: 2   ID: x               Type: array      Attr: var 
-    ArrayType: s         (scope -1) BoundLow: 1 BoundUp: 10
-
-
-Address: 4   ID: rr              Type: (null)     
-
-Plist_single
-setting idlist
-setting: 0 6
-set idlist
-empty paramlist
-PList_M
-FormalPList
-Type_Record
-pop record 1002 out stack, stack empty
-scope changed to: -1
-TypeDef: id: 4 type: 6 tag: 0
-Constant_INT
-Constant_INT
-TypeID 4
-handling type: rr
-checking type rr in cur scope -1
-constructed TypeInfo(normal) as 6 from rr(4) record
-All symboltables: 
-symboltable of scope -1 (sub-scope of -1): 
-Address: 0   ID: errorfree       Type: (null)     
-Address: 1   ID: s               Type: string     Attr: type 
-Address: 2   ID: in              Type: integer    Attr: type 
-Address: 3   ID: r               Type: record     Attr: type RecordMembers: 
-
-    Address: 0   ID: digit           Type: integer    Attr: var 
-    Address: 1   ID: l               Type: string     Attr: var 
-    Address: 2   ID: x               Type: array      Attr: var 
-    ArrayType: s         (scope -1) BoundLow: 1 BoundUp: 10
-
-
-Address: 4   ID: rr              Type: record     Attr: type RecordMembers: 
-
-    Address: 0   ID: r1              Type: record     Attr: var RecordMembers: 
-
-        Address: 0   ID: digit           Type: integer    Attr: var 
-        Address: 1   ID: l               Type: string     Attr: var 
-        Address: 2   ID: x               Type: array      Attr: var 
-    ArrayType: s         (scope -1) BoundLow: 1 BoundUp: 10
-
-
-
-
-Address: 5   ID: arr             Type: (null)     
-
-Type_Array
-TypeDef: id: 5 type: 5 tag: 0
-TypeDefList
-TypeDefList_Multi
-TypeDefList_Multi
-TypeDefList_Multi
-TypeDefList_Multi
-TypeDef_Mul
+IdListM
 IdList
-TypeID 4
-handling type: string
-constructed TypeInfo(pred) as 4 from string(4)
+IdListM
+IdList
+TypeID 0
+handling type: integer
+constructed TypeInfo(pred) as 0 from integer(0)
 All symboltables: 
 symboltable of scope -1 (sub-scope of -1): 
-Address: 0   ID: errorfree       Type: (null)     
-Address: 1   ID: s               Type: string     Attr: type 
-Address: 2   ID: in              Type: integer    Attr: type 
-Address: 3   ID: r               Type: record     Attr: type RecordMembers: 
-
-    Address: 0   ID: digit           Type: integer    Attr: var 
-    Address: 1   ID: l               Type: string     Attr: var 
-    Address: 2   ID: x               Type: array      Attr: var 
-    ArrayType: s         (scope -1) BoundLow: 1 BoundUp: 10
-
-
-Address: 4   ID: rr              Type: record     Attr: type RecordMembers: 
-
-    Address: 0   ID: r1              Type: record     Attr: var RecordMembers: 
-
-        Address: 0   ID: digit           Type: integer    Attr: var 
-        Address: 1   ID: l               Type: string     Attr: var 
-        Address: 2   ID: x               Type: array      Attr: var 
-    ArrayType: s         (scope -1) BoundLow: 1 BoundUp: 10
-
-
-
-
-Address: 5   ID: arr             Type: array      Attr: type 
-    ArrayType: rr        (scope -1) BoundLow: 1 BoundUp: 10
-Address: 6   ID: z               Type: (null)     
+Address: 0   ID: foo             Type: (null)     
+Address: 1   ID: r1              Type: array      Attr: type 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 2   ID: a               Type: array      Attr: var 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 3   ID: i               Type: (null)     
+Address: 4   ID: j               Type: (null)     
+Address: 5   ID: s               Type: (null)     
 
 VarDecl
 setting idlist
-setting: 6 4
-set idlist
-IdList
-TypeID 2
-handling type: in
-checking type in in cur scope -1
-constructed TypeInfo(normal) as 0 from in(2) integer
-All symboltables: 
-symboltable of scope -1 (sub-scope of -1): 
-Address: 0   ID: errorfree       Type: (null)     
-Address: 1   ID: s               Type: string     Attr: type 
-Address: 2   ID: in              Type: integer    Attr: type 
-Address: 3   ID: r               Type: record     Attr: type RecordMembers: 
-
-    Address: 0   ID: digit           Type: integer    Attr: var 
-    Address: 1   ID: l               Type: string     Attr: var 
-    Address: 2   ID: x               Type: array      Attr: var 
-    ArrayType: s         (scope -1) BoundLow: 1 BoundUp: 10
-
-
-Address: 4   ID: rr              Type: record     Attr: type RecordMembers: 
-
-    Address: 0   ID: r1              Type: record     Attr: var RecordMembers: 
-
-        Address: 0   ID: digit           Type: integer    Attr: var 
-        Address: 1   ID: l               Type: string     Attr: var 
-        Address: 2   ID: x               Type: array      Attr: var 
-    ArrayType: s         (scope -1) BoundLow: 1 BoundUp: 10
-
-
-
-
-Address: 5   ID: arr             Type: array      Attr: type 
-    ArrayType: rr        (scope -1) BoundLow: 1 BoundUp: 10
-Address: 6   ID: z               Type: string     Attr: var 
-Address: 7   ID: m               Type: (null)     
-
-VarDecl
-setting idlist
-setting: 7 0
+setting: 5 0
+setting: 4 0
+setting: 3 0
 set idlist
 IdList
 TypeID 2
@@ -241,125 +59,41 @@ handling type: boolean
 constructed TypeInfo(pred) as 2 from boolean(2)
 All symboltables: 
 symboltable of scope -1 (sub-scope of -1): 
-Address: 0   ID: errorfree       Type: (null)     
-Address: 1   ID: s               Type: string     Attr: type 
-Address: 2   ID: in              Type: integer    Attr: type 
-Address: 3   ID: r               Type: record     Attr: type RecordMembers: 
-
-    Address: 0   ID: digit           Type: integer    Attr: var 
-    Address: 1   ID: l               Type: string     Attr: var 
-    Address: 2   ID: x               Type: array      Attr: var 
-    ArrayType: s         (scope -1) BoundLow: 1 BoundUp: 10
-
-
-Address: 4   ID: rr              Type: record     Attr: type RecordMembers: 
-
-    Address: 0   ID: r1              Type: record     Attr: var RecordMembers: 
-
-        Address: 0   ID: digit           Type: integer    Attr: var 
-        Address: 1   ID: l               Type: string     Attr: var 
-        Address: 2   ID: x               Type: array      Attr: var 
-    ArrayType: s         (scope -1) BoundLow: 1 BoundUp: 10
-
-
-
-
-Address: 5   ID: arr             Type: array      Attr: type 
-    ArrayType: rr        (scope -1) BoundLow: 1 BoundUp: 10
-Address: 6   ID: z               Type: string     Attr: var 
-Address: 7   ID: m               Type: integer    Attr: var 
-Address: 8   ID: b               Type: (null)     
+Address: 0   ID: foo             Type: (null)     
+Address: 1   ID: r1              Type: array      Attr: type 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 2   ID: a               Type: array      Attr: var 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 3   ID: i               Type: integer    Attr: var 
+Address: 4   ID: j               Type: integer    Attr: var 
+Address: 5   ID: s               Type: integer    Attr: var 
+Address: 6   ID: b               Type: (null)     
 
 VarDecl
 setting idlist
-setting: 8 2
-set idlist
-IdList
-TypeID 5
-handling type: arr
-checking type arr in cur scope -1
-constructed TypeInfo(normal) as 5 from arr(5) array
-All symboltables: 
-symboltable of scope -1 (sub-scope of -1): 
-Address: 0   ID: errorfree       Type: (null)     
-Address: 1   ID: s               Type: string     Attr: type 
-Address: 2   ID: in              Type: integer    Attr: type 
-Address: 3   ID: r               Type: record     Attr: type RecordMembers: 
-
-    Address: 0   ID: digit           Type: integer    Attr: var 
-    Address: 1   ID: l               Type: string     Attr: var 
-    Address: 2   ID: x               Type: array      Attr: var 
-    ArrayType: s         (scope -1) BoundLow: 1 BoundUp: 10
-
-
-Address: 4   ID: rr              Type: record     Attr: type RecordMembers: 
-
-    Address: 0   ID: r1              Type: record     Attr: var RecordMembers: 
-
-        Address: 0   ID: digit           Type: integer    Attr: var 
-        Address: 1   ID: l               Type: string     Attr: var 
-        Address: 2   ID: x               Type: array      Attr: var 
-    ArrayType: s         (scope -1) BoundLow: 1 BoundUp: 10
-
-
-
-
-Address: 5   ID: arr             Type: array      Attr: type 
-    ArrayType: rr        (scope -1) BoundLow: 1 BoundUp: 10
-Address: 6   ID: z               Type: string     Attr: var 
-Address: 7   ID: m               Type: integer    Attr: var 
-Address: 8   ID: b               Type: boolean    Attr: var 
-Address: 9   ID: arr1            Type: (null)     
-
-VarDecl
-setting idlist
-setting: 9 5
+setting: 6 2
 set idlist
 VarDeclList
 VarDeclList_Mul
 VarDeclList_Mul
-VarDeclList_Mul
 VarDecl_Mul
-scope changed to: 10
+scope changed to: 7
 IdList
-TypeID 2
-handling type: in
-checking type in in cur scope 10
-checking type in in scope -1
-constructed TypeInfo(normal) as 0 from in(2) integer
+TypeID 0
+handling type: integer
+constructed TypeInfo(pred) as 0 from integer(0)
 All symboltables: 
 symboltable of scope -1 (sub-scope of -1): 
-Address: 0   ID: errorfree       Type: (null)     
-Address: 1   ID: s               Type: string     Attr: type 
-Address: 2   ID: in              Type: integer    Attr: type 
-Address: 3   ID: r               Type: record     Attr: type RecordMembers: 
-
-    Address: 0   ID: digit           Type: integer    Attr: var 
-    Address: 1   ID: l               Type: string     Attr: var 
-    Address: 2   ID: x               Type: array      Attr: var 
-    ArrayType: s         (scope -1) BoundLow: 1 BoundUp: 10
-
-
-Address: 4   ID: rr              Type: record     Attr: type RecordMembers: 
-
-    Address: 0   ID: r1              Type: record     Attr: var RecordMembers: 
-
-        Address: 0   ID: digit           Type: integer    Attr: var 
-        Address: 1   ID: l               Type: string     Attr: var 
-        Address: 2   ID: x               Type: array      Attr: var 
-    ArrayType: s         (scope -1) BoundLow: 1 BoundUp: 10
-
-
-
-
-Address: 5   ID: arr             Type: array      Attr: type 
-    ArrayType: rr        (scope -1) BoundLow: 1 BoundUp: 10
-Address: 6   ID: z               Type: string     Attr: var 
-Address: 7   ID: m               Type: integer    Attr: var 
-Address: 8   ID: b               Type: boolean    Attr: var 
-Address: 9   ID: arr1            Type: array      Attr: var 
-    ArrayType: rr        (scope -1) BoundLow: 1 BoundUp: 10
-Address: 10  ID: foo             Type: (null)     
+Address: 0   ID: foo             Type: (null)     
+Address: 1   ID: r1              Type: array      Attr: type 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 2   ID: a               Type: array      Attr: var 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 3   ID: i               Type: integer    Attr: var 
+Address: 4   ID: j               Type: integer    Attr: var 
+Address: 5   ID: s               Type: integer    Attr: var 
+Address: 6   ID: b               Type: boolean    Attr: var 
+Address: 7   ID: f               Type: (null)     
 
 Plist_single
 setting idlist
@@ -367,85 +101,101 @@ setting: 1 0
 set idlist
 FormalPList
 ResultType
-handling type: in
-checking type in in cur scope 10
-checking type in in scope -1
-constructed TypeInfo(normal) as 0 from in(2) integer
+handling type: integer
+constructed TypeInfo(pred) as 0 from integer(0)
 return type: 0
-setting func: 10 1 0
+setting func: 7 1 0
 set func var integer
-Address: 0   ID: foo             Type: integer    Attr: var 
-Address: 1   ID: a               Type: integer    Attr: var 
+Address: 0   ID: f               Type: integer    Attr: var 
+Address: 1   ID: i               Type: integer    Attr: var 
 
 scope changed to: -1
-set func: 10 in scope -1
-scope changed to: 10
-Var_ID
-checking var 1 a
-checking 1 in scope 10 (-1)
-Address: 0   ID: foo             Type: integer    Attr: var 
-Address: 1   ID: a               Type: integer    Attr: var 
+set func: 7 in scope -1
+scope changed to: 7
+IdList
+IdListM
+IdList
+TypeID 0
+handling type: integer
+constructed TypeInfo(pred) as 0 from integer(0)
+All symboltables: 
+symboltable of scope -1 (sub-scope of -1): 
+Address: 0   ID: foo             Type: (null)     
+Address: 1   ID: r1              Type: array      Attr: type 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 2   ID: a               Type: array      Attr: var 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 3   ID: i               Type: integer    Attr: var 
+Address: 4   ID: j               Type: integer    Attr: var 
+Address: 5   ID: s               Type: integer    Attr: var 
+Address: 6   ID: b               Type: boolean    Attr: var 
+Address: 7   ID: f               Type: function   ParamQty: 1 ReturnType: integer   
 
-var id: a
+symboltable of scope 7 (sub-scope of -1): 
+Address: 0   ID: f               Type: integer    Attr: var 
+Address: 1   ID: i               Type: integer    Attr: var 
+Address: 2   ID: a               Type: (null)     
+Address: 3   ID: b               Type: (null)     
+
+VarDecl
+setting idlist
+setting: 3 0
+setting: 2 0
+set idlist
+VarDeclList
+VarDecl_Mul
+Var_ID
+checking var 1 i
+checking 1 in scope 7 (-1)
+Address: 0   ID: f               Type: integer    Attr: var 
+Address: 1   ID: i               Type: integer    Attr: var 
+Address: 2   ID: a               Type: integer    Attr: var 
+Address: 3   ID: b               Type: integer    Attr: var 
+
+var id: i
 curVarIdResp changed to: 1
 Var_Comp
-constructed TypeInfo(normal) as 0 from a(1) integer
-var type: 0
-Var_ID
-checking var 1 a
-checking 1 in scope 10 (-1)
-Address: 0   ID: foo             Type: integer    Attr: var 
-Address: 1   ID: a               Type: integer    Attr: var 
-
-var id: a
-curVarIdResp changed to: 1
-Var_Comp
-constructed TypeInfo(normal) as 0 from a(1) integer
+constructed TypeInfo(normal) as 0 from i(1) integer
 var type: 0
 Factor_Var
 type reduced as 0
-AddOp_Add
+AddOpTerm_Single
+type reduced as 0
+SimpleExp_AddTerm
+type reduced as 0
+RelationalOp_EQ
 Factor_INT
 type reduced as 0
 AddOpTerm_Single
 type reduced as 0
-AddOpTerm_Mul
-type checking: 0 0
-reduce as type: 0
-type reduced as 0
 SimpleExp_AddTerm
 type reduced as 0
-Exp_simp
-type reduced as 0
-AssiState
-assign var type: 0
 type checking: 0 0
-SimpleS_AssignState
-Statement_Simple
-SteS
+constructed TypeInfo as 2(tag: 1)
+Exp_Simp_Ro
+type reduced as 2
+Factor_Exp
+type reduced as 2
+AddOpTerm_Single
+type reduced as 2
+SimpleExp_AddTerm
+type reduced as 2
+Exp_simp
+type reduced as 2
 Var_ID
-checking var 0 foo
-checking 0 in scope 10 (-1)
-Address: 0   ID: foo             Type: integer    Attr: var 
-Address: 1   ID: a               Type: integer    Attr: var 
+checking var 0 f
+checking 0 in scope 7 (-1)
+Address: 0   ID: f               Type: integer    Attr: var 
+Address: 1   ID: i               Type: integer    Attr: var 
+Address: 2   ID: a               Type: integer    Attr: var 
+Address: 3   ID: b               Type: integer    Attr: var 
 
-var id: foo
+var id: f
 curVarIdResp changed to: 0
 Var_Comp
-constructed TypeInfo(normal) as 0 from foo(0) integer
+constructed TypeInfo(normal) as 0 from f(0) integer
 var type: 0
-Var_ID
-checking var 1 a
-checking 1 in scope 10 (-1)
-Address: 0   ID: foo             Type: integer    Attr: var 
-Address: 1   ID: a               Type: integer    Attr: var 
-
-var id: a
-curVarIdResp changed to: 1
-Var_Comp
-constructed TypeInfo(normal) as 0 from a(1) integer
-var type: 0
-Factor_Var
+Factor_INT
 type reduced as 0
 AddOpTerm_Single
 type reduced as 0
@@ -458,91 +208,51 @@ assign var type: 0
 type checking: 0 0
 SimpleS_AssignState
 Statement_Simple
-SteSSte
+if_else
+type checking: 2 2
+Statement_Structured
+SteS
 CompStBE
-Block_CompState
+Block_CompSt_V
 PFDecl_Block
 FuncDecl
 scope changed to: -1
 SubDeclF
 SubDecl_Mul
 Var_ID
-checking var 8 b
-checking 8 in scope -1 (-1)
-Address: 0   ID: errorfree       Type: (null)     
-Address: 1   ID: s               Type: string     Attr: type 
-Address: 2   ID: in              Type: integer    Attr: type 
-Address: 3   ID: r               Type: record     Attr: type RecordMembers: 
-
-    Address: 0   ID: digit           Type: integer    Attr: var 
-    Address: 1   ID: l               Type: string     Attr: var 
-    Address: 2   ID: x               Type: array      Attr: var 
-    ArrayType: s         (scope -1) BoundLow: 1 BoundUp: 10
-
-
-Address: 4   ID: rr              Type: record     Attr: type RecordMembers: 
-
-    Address: 0   ID: r1              Type: record     Attr: var RecordMembers: 
-
-        Address: 0   ID: digit           Type: integer    Attr: var 
-        Address: 1   ID: l               Type: string     Attr: var 
-        Address: 2   ID: x               Type: array      Attr: var 
-    ArrayType: s         (scope -1) BoundLow: 1 BoundUp: 10
-
-
-
-
-Address: 5   ID: arr             Type: array      Attr: type 
-    ArrayType: rr        (scope -1) BoundLow: 1 BoundUp: 10
-Address: 6   ID: z               Type: string     Attr: var 
-Address: 7   ID: m               Type: integer    Attr: var 
-Address: 8   ID: b               Type: boolean    Attr: var 
-Address: 9   ID: arr1            Type: array      Attr: var 
-    ArrayType: rr        (scope -1) BoundLow: 1 BoundUp: 10
-Address: 10  ID: foo             Type: function   ParamQty: 1 ReturnType: integer   
+checking var 6 b
+checking 6 in scope -1 (-1)
+Address: 0   ID: foo             Type: (null)     
+Address: 1   ID: r1              Type: array      Attr: type 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 2   ID: a               Type: array      Attr: var 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 3   ID: i               Type: integer    Attr: var 
+Address: 4   ID: j               Type: integer    Attr: var 
+Address: 5   ID: s               Type: integer    Attr: var 
+Address: 6   ID: b               Type: boolean    Attr: var 
+Address: 7   ID: f               Type: function   ParamQty: 1 ReturnType: integer   
 
 var id: b
-curVarIdResp changed to: 8
+curVarIdResp changed to: 6
 Var_Comp
-constructed TypeInfo(normal) as 2 from b(8) boolean
+constructed TypeInfo(normal) as 2 from b(6) boolean
 var type: 2
 Var_ID
 checking var 10 true
 checking 10 in scope -1 (-1)
-Address: 0   ID: errorfree       Type: (null)     
-Address: 1   ID: s               Type: string     Attr: type 
-Address: 2   ID: in              Type: integer    Attr: type 
-Address: 3   ID: r               Type: record     Attr: type RecordMembers: 
+Address: 0   ID: foo             Type: (null)     
+Address: 1   ID: r1              Type: array      Attr: type 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 2   ID: a               Type: array      Attr: var 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 3   ID: i               Type: integer    Attr: var 
+Address: 4   ID: j               Type: integer    Attr: var 
+Address: 5   ID: s               Type: integer    Attr: var 
+Address: 6   ID: b               Type: boolean    Attr: var 
+Address: 7   ID: f               Type: function   ParamQty: 1 ReturnType: integer   
 
-    Address: 0   ID: digit           Type: integer    Attr: var 
-    Address: 1   ID: l               Type: string     Attr: var 
-    Address: 2   ID: x               Type: array      Attr: var 
-    ArrayType: s         (scope -1) BoundLow: 1 BoundUp: 10
-
-
-Address: 4   ID: rr              Type: record     Attr: type RecordMembers: 
-
-    Address: 0   ID: r1              Type: record     Attr: var RecordMembers: 
-
-        Address: 0   ID: digit           Type: integer    Attr: var 
-        Address: 1   ID: l               Type: string     Attr: var 
-        Address: 2   ID: x               Type: array      Attr: var 
-    ArrayType: s         (scope -1) BoundLow: 1 BoundUp: 10
-
-
-
-
-Address: 5   ID: arr             Type: array      Attr: type 
-    ArrayType: rr        (scope -1) BoundLow: 1 BoundUp: 10
-Address: 6   ID: z               Type: string     Attr: var 
-Address: 7   ID: m               Type: integer    Attr: var 
-Address: 8   ID: b               Type: boolean    Attr: var 
-Address: 9   ID: arr1            Type: array      Attr: var 
-    ArrayType: rr        (scope -1) BoundLow: 1 BoundUp: 10
-Address: 10  ID: foo             Type: function   ParamQty: 1 ReturnType: integer   
-
-var id: true
-curVarIdResp changed to: 10
+curVarIdResp changed to: NULL
 Var_Comp
 constructed TypeInfo(pred) as 2 from true(10)
 var type: 2
@@ -560,53 +270,375 @@ type checking: 2 2
 SimpleS_AssignState
 Statement_Simple
 SteS
-Var_ID
-checking var 8 b
-checking 8 in scope -1 (-1)
-Address: 0   ID: errorfree       Type: (null)     
-Address: 1   ID: s               Type: string     Attr: type 
-Address: 2   ID: in              Type: integer    Attr: type 
-Address: 3   ID: r               Type: record     Attr: type RecordMembers: 
-
-    Address: 0   ID: digit           Type: integer    Attr: var 
-    Address: 1   ID: l               Type: string     Attr: var 
-    Address: 2   ID: x               Type: array      Attr: var 
-    ArrayType: s         (scope -1) BoundLow: 1 BoundUp: 10
-
-
-Address: 4   ID: rr              Type: record     Attr: type RecordMembers: 
-
-    Address: 0   ID: r1              Type: record     Attr: var RecordMembers: 
-
-        Address: 0   ID: digit           Type: integer    Attr: var 
-        Address: 1   ID: l               Type: string     Attr: var 
-        Address: 2   ID: x               Type: array      Attr: var 
-    ArrayType: s         (scope -1) BoundLow: 1 BoundUp: 10
-
-
-
-
-Address: 5   ID: arr             Type: array      Attr: type 
-    ArrayType: rr        (scope -1) BoundLow: 1 BoundUp: 10
-Address: 6   ID: z               Type: string     Attr: var 
-Address: 7   ID: m               Type: integer    Attr: var 
-Address: 8   ID: b               Type: boolean    Attr: var 
-Address: 9   ID: arr1            Type: array      Attr: var 
-    ArrayType: rr        (scope -1) BoundLow: 1 BoundUp: 10
-Address: 10  ID: foo             Type: function   ParamQty: 1 ReturnType: integer   
-
-var id: b
-curVarIdResp changed to: 8
-Var_Comp
-constructed TypeInfo(normal) as 2 from b(8) boolean
-var type: 2
-Factor_Var
-type reduced as 2
+Factor_INT
+type reduced as 0
 AddOpTerm_Single
-type reduced as 2
+type reduced as 0
 SimpleExp_AddTerm
-type reduced as 2
+type reduced as 0
 Exp_simp
+type reduced as 0
+Factor_INT
+type reduced as 0
+AddOpTerm_Single
+type reduced as 0
+SimpleExp_AddTerm
+type reduced as 0
+Exp_simp
+type reduced as 0
+Var_ID
+checking var 2 a
+checking 2 in scope -1 (-1)
+Address: 0   ID: foo             Type: (null)     
+Address: 1   ID: r1              Type: array      Attr: type 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 2   ID: a               Type: array      Attr: var 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 3   ID: i               Type: integer    Attr: var 
+Address: 4   ID: j               Type: integer    Attr: var 
+Address: 5   ID: s               Type: integer    Attr: var 
+Address: 6   ID: b               Type: boolean    Attr: var 
+Address: 7   ID: f               Type: function   ParamQty: 1 ReturnType: integer   
+
+var id: a
+curVarIdResp changed to: 2
+pushed array a into active stack
+Var_ID
+checking var 3 i
+checking 3 in scope -1 (-1)
+Address: 0   ID: foo             Type: (null)     
+Address: 1   ID: r1              Type: array      Attr: type 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 2   ID: a               Type: array      Attr: var 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 3   ID: i               Type: integer    Attr: var 
+Address: 4   ID: j               Type: integer    Attr: var 
+Address: 5   ID: s               Type: integer    Attr: var 
+Address: 6   ID: b               Type: boolean    Attr: var 
+Address: 7   ID: f               Type: function   ParamQty: 1 ReturnType: integer   
+
+var id: i
+curVarIdResp changed to: 3
+Var_Comp
+constructed TypeInfo(normal) as 0 from i(3) integer
+var type: 0
+Factor_Var
+type reduced as 0
+AddOpTerm_Single
+type reduced as 0
+SimpleExp_AddTerm
+type reduced as 0
+Exp_simp
+type reduced as 0
+type checking: 0 0
+poped array a out active stack
+handling array: cur idresp changed to integer
+curVarIdResp changed to: 0
+CompSel_Array
+constructed arraytype: 0 0 -2
+reduced as type: 0
+Var_Comp
+a[i]
+var type: 0
+Var_ID
+checking var 3 i
+checking 3 in scope -1 (-1)
+Address: 0   ID: foo             Type: (null)     
+Address: 1   ID: r1              Type: array      Attr: type 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 2   ID: a               Type: array      Attr: var 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 3   ID: i               Type: integer    Attr: var 
+Address: 4   ID: j               Type: integer    Attr: var 
+Address: 5   ID: s               Type: integer    Attr: var 
+Address: 6   ID: b               Type: boolean    Attr: var 
+Address: 7   ID: f               Type: function   ParamQty: 1 ReturnType: integer   
+
+var id: i
+curVarIdResp changed to: 3
+Var_Comp
+constructed TypeInfo(normal) as 0 from i(3) integer
+var type: 0
+Factor_Var
+type reduced as 0
+AddOpTerm_Single
+type reduced as 0
+SimpleExp_AddTerm
+type reduced as 0
+Exp_simp
+type reduced as 0
+ActualParamL
+checking 7 in scope -1 (-1)
+Address: 0   ID: foo             Type: (null)     
+Address: 1   ID: r1              Type: array      Attr: type 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 2   ID: a               Type: array      Attr: var 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 3   ID: i               Type: integer    Attr: var 
+Address: 4   ID: j               Type: integer    Attr: var 
+Address: 5   ID: s               Type: integer    Attr: var 
+Address: 6   ID: b               Type: boolean    Attr: var 
+Address: 7   ID: f               Type: function   ParamQty: 1 ReturnType: integer   
+
+ProFuncStat
+checking func/proc 7 f
+constructed TypeInfo as 0(tag: 1) from entry i(integer)
+type checking: 0 0
+constructed TypeInfo(normal) as 7 from f(7) function
+Factor_FuncRef
+type reduced as 7
+AddOpTerm_Single
+type reduced as 7
+SimpleExp_AddTerm
+type reduced as 7
+Exp_simp
+type reduced as 7
+AssiState
+assign var type: 0
+type checking: 0 7
+actual types: 0 0
+SimpleS_AssignState
+Statement_Simple
+SteS
+Var_ID
+checking var 5 s
+checking 5 in scope -1 (-1)
+Address: 0   ID: foo             Type: (null)     
+Address: 1   ID: r1              Type: array      Attr: type 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 2   ID: a               Type: array      Attr: var 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 3   ID: i               Type: integer    Attr: var 
+Address: 4   ID: j               Type: integer    Attr: var 
+Address: 5   ID: s               Type: integer    Attr: var 
+Address: 6   ID: b               Type: boolean    Attr: var 
+Address: 7   ID: f               Type: function   ParamQty: 1 ReturnType: integer   
+
+var id: s
+curVarIdResp changed to: 5
+Var_Comp
+constructed TypeInfo(normal) as 0 from s(5) integer
+var type: 0
+Factor_INT
+type reduced as 0
+AddOpTerm_Single
+type reduced as 0
+SimpleExp_AddTerm
+type reduced as 0
+Exp_simp
+type reduced as 0
+AssiState
+assign var type: 0
+type checking: 0 0
+SimpleS_AssignState
+Statement_Simple
+SteSSte
+Factor_INT
+type reduced as 0
+AddOpTerm_Single
+type reduced as 0
+SimpleExp_AddTerm
+type reduced as 0
+Exp_simp
+type reduced as 0
+Var_ID
+checking var 3 i
+checking 3 in scope -1 (-1)
+Address: 0   ID: foo             Type: (null)     
+Address: 1   ID: r1              Type: array      Attr: type 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 2   ID: a               Type: array      Attr: var 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 3   ID: i               Type: integer    Attr: var 
+Address: 4   ID: j               Type: integer    Attr: var 
+Address: 5   ID: s               Type: integer    Attr: var 
+Address: 6   ID: b               Type: boolean    Attr: var 
+Address: 7   ID: f               Type: function   ParamQty: 1 ReturnType: integer   
+
+var id: i
+curVarIdResp changed to: 3
+Var_Comp
+constructed TypeInfo(normal) as 0 from i(3) integer
+var type: 0
+Factor_Var
+type reduced as 0
+AddOpTerm_Single
+type reduced as 0
+SimpleExp_AddTerm
+type reduced as 0
+Exp_simp
+type reduced as 0
+Var_ID
+checking var 5 s
+checking 5 in scope -1 (-1)
+Address: 0   ID: foo             Type: (null)     
+Address: 1   ID: r1              Type: array      Attr: type 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 2   ID: a               Type: array      Attr: var 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 3   ID: i               Type: integer    Attr: var 
+Address: 4   ID: j               Type: integer    Attr: var 
+Address: 5   ID: s               Type: integer    Attr: var 
+Address: 6   ID: b               Type: boolean    Attr: var 
+Address: 7   ID: f               Type: function   ParamQty: 1 ReturnType: integer   
+
+var id: s
+curVarIdResp changed to: 5
+Var_Comp
+constructed TypeInfo(normal) as 0 from s(5) integer
+var type: 0
+Var_ID
+checking var 5 s
+checking 5 in scope -1 (-1)
+Address: 0   ID: foo             Type: (null)     
+Address: 1   ID: r1              Type: array      Attr: type 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 2   ID: a               Type: array      Attr: var 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 3   ID: i               Type: integer    Attr: var 
+Address: 4   ID: j               Type: integer    Attr: var 
+Address: 5   ID: s               Type: integer    Attr: var 
+Address: 6   ID: b               Type: boolean    Attr: var 
+Address: 7   ID: f               Type: function   ParamQty: 1 ReturnType: integer   
+
+var id: s
+curVarIdResp changed to: 5
+Var_Comp
+constructed TypeInfo(normal) as 0 from s(5) integer
+var type: 0
+Factor_Var
+MulOp_MUL
+Var_ID
+checking var 4 j
+checking 4 in scope -1 (-1)
+Address: 0   ID: foo             Type: (null)     
+Address: 1   ID: r1              Type: array      Attr: type 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 2   ID: a               Type: array      Attr: var 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 3   ID: i               Type: integer    Attr: var 
+Address: 4   ID: j               Type: integer    Attr: var 
+Address: 5   ID: s               Type: integer    Attr: var 
+Address: 6   ID: b               Type: boolean    Attr: var 
+Address: 7   ID: f               Type: function   ParamQty: 1 ReturnType: integer   
+
+var id: j
+curVarIdResp changed to: 4
+Var_Comp
+constructed TypeInfo(normal) as 0 from j(4) integer
+var type: 0
+Factor_Var
+type reduced as 0
+MulOpTerm
+Term_Fac_Mul
+type checking: 0 0
+reduce as type: 0
+type reduced as 0
+AddOpTerm_Single
+type reduced as 0
+SimpleExp_AddTerm
+type reduced as 0
+Exp_simp
+type reduced as 0
+AssiState
+assign var type: 0
+type checking: 0 0
+SimpleS_AssignState
+Statement_Simple
+for_to
+constructed TypeInfo(normal) as 0 from j(4) integer
+type checking: 0 0
+Statement_Structured
+SteSSte
+Var_ID
+checking var 2 a
+checking 2 in scope -1 (-1)
+Address: 0   ID: foo             Type: (null)     
+Address: 1   ID: r1              Type: array      Attr: type 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 2   ID: a               Type: array      Attr: var 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 3   ID: i               Type: integer    Attr: var 
+Address: 4   ID: j               Type: integer    Attr: var 
+Address: 5   ID: s               Type: integer    Attr: var 
+Address: 6   ID: b               Type: boolean    Attr: var 
+Address: 7   ID: f               Type: function   ParamQty: 1 ReturnType: integer   
+
+var id: a
+curVarIdResp changed to: 2
+pushed array a into active stack
+Var_ID
+checking var 3 i
+checking 3 in scope -1 (-1)
+Address: 0   ID: foo             Type: (null)     
+Address: 1   ID: r1              Type: array      Attr: type 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 2   ID: a               Type: array      Attr: var 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 3   ID: i               Type: integer    Attr: var 
+Address: 4   ID: j               Type: integer    Attr: var 
+Address: 5   ID: s               Type: integer    Attr: var 
+Address: 6   ID: b               Type: boolean    Attr: var 
+Address: 7   ID: f               Type: function   ParamQty: 1 ReturnType: integer   
+
+var id: i
+curVarIdResp changed to: 3
+Var_Comp
+constructed TypeInfo(normal) as 0 from i(3) integer
+var type: 0
+Factor_Var
+type reduced as 0
+AddOpTerm_Single
+type reduced as 0
+SimpleExp_AddTerm
+type reduced as 0
+Exp_simp
+type reduced as 0
+type checking: 0 0
+poped array a out active stack
+handling array: cur idresp changed to integer
+curVarIdResp changed to: 0
+CompSel_Array
+constructed arraytype: 0 0 -2
+reduced as type: 0
+Var_Comp
+a[i]
+var type: 0
+Factor_Var
+type reduced as 0
+AddOpTerm_Single
+type reduced as 0
+SimpleExp_AddTerm
+type reduced as 0
+RelationslOp_G
+Var_ID
+checking var 5 s
+checking 5 in scope -1 (-1)
+Address: 0   ID: foo             Type: (null)     
+Address: 1   ID: r1              Type: array      Attr: type 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 2   ID: a               Type: array      Attr: var 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 3   ID: i               Type: integer    Attr: var 
+Address: 4   ID: j               Type: integer    Attr: var 
+Address: 5   ID: s               Type: integer    Attr: var 
+Address: 6   ID: b               Type: boolean    Attr: var 
+Address: 7   ID: f               Type: function   ParamQty: 1 ReturnType: integer   
+
+var id: s
+curVarIdResp changed to: 5
+Var_Comp
+constructed TypeInfo(normal) as 0 from s(5) integer
+var type: 0
+Factor_Var
+type reduced as 0
+AddOpTerm_Single
+type reduced as 0
+SimpleExp_AddTerm
+type reduced as 0
+type checking: 0 0
+constructed TypeInfo as 2(tag: 1)
+Exp_Simp_Ro
 type reduced as 2
 Factor_Exp
 type reduced as 2
@@ -617,294 +649,41 @@ type reduced as 2
 Exp_simp
 type reduced as 2
 Var_ID
-checking var 7 m
-checking 7 in scope -1 (-1)
-Address: 0   ID: errorfree       Type: (null)     
-Address: 1   ID: s               Type: string     Attr: type 
-Address: 2   ID: in              Type: integer    Attr: type 
-Address: 3   ID: r               Type: record     Attr: type RecordMembers: 
+checking var 6 b
+checking 6 in scope -1 (-1)
+Address: 0   ID: foo             Type: (null)     
+Address: 1   ID: r1              Type: array      Attr: type 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 2   ID: a               Type: array      Attr: var 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 3   ID: i               Type: integer    Attr: var 
+Address: 4   ID: j               Type: integer    Attr: var 
+Address: 5   ID: s               Type: integer    Attr: var 
+Address: 6   ID: b               Type: boolean    Attr: var 
+Address: 7   ID: f               Type: function   ParamQty: 1 ReturnType: integer   
 
-    Address: 0   ID: digit           Type: integer    Attr: var 
-    Address: 1   ID: l               Type: string     Attr: var 
-    Address: 2   ID: x               Type: array      Attr: var 
-    ArrayType: s         (scope -1) BoundLow: 1 BoundUp: 10
-
-
-Address: 4   ID: rr              Type: record     Attr: type RecordMembers: 
-
-    Address: 0   ID: r1              Type: record     Attr: var RecordMembers: 
-
-        Address: 0   ID: digit           Type: integer    Attr: var 
-        Address: 1   ID: l               Type: string     Attr: var 
-        Address: 2   ID: x               Type: array      Attr: var 
-    ArrayType: s         (scope -1) BoundLow: 1 BoundUp: 10
-
-
-
-
-Address: 5   ID: arr             Type: array      Attr: type 
-    ArrayType: rr        (scope -1) BoundLow: 1 BoundUp: 10
-Address: 6   ID: z               Type: string     Attr: var 
-Address: 7   ID: m               Type: integer    Attr: var 
-Address: 8   ID: b               Type: boolean    Attr: var 
-Address: 9   ID: arr1            Type: array      Attr: var 
-    ArrayType: rr        (scope -1) BoundLow: 1 BoundUp: 10
-Address: 10  ID: foo             Type: function   ParamQty: 1 ReturnType: integer   
-
-var id: m
-curVarIdResp changed to: 7
+var id: b
+curVarIdResp changed to: 6
 Var_Comp
-constructed TypeInfo(normal) as 0 from m(7) integer
-var type: 0
-Factor_INT
-type reduced as 0
-AddOpTerm_Single
-type reduced as 0
-SimpleExp_AddTerm
-type reduced as 0
-Exp_simp
-type reduced as 0
-AssiState
-assign var type: 0
-type checking: 0 0
-SimpleS_AssignState
-Statement_Simple
-SteS
+constructed TypeInfo(normal) as 2 from b(6) boolean
+var type: 2
 Var_ID
-checking var 7 m
-checking 7 in scope -1 (-1)
-Address: 0   ID: errorfree       Type: (null)     
-Address: 1   ID: s               Type: string     Attr: type 
-Address: 2   ID: in              Type: integer    Attr: type 
-Address: 3   ID: r               Type: record     Attr: type RecordMembers: 
+checking var 11 false
+checking 11 in scope -1 (-1)
+Address: 0   ID: foo             Type: (null)     
+Address: 1   ID: r1              Type: array      Attr: type 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 2   ID: a               Type: array      Attr: var 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 3   ID: i               Type: integer    Attr: var 
+Address: 4   ID: j               Type: integer    Attr: var 
+Address: 5   ID: s               Type: integer    Attr: var 
+Address: 6   ID: b               Type: boolean    Attr: var 
+Address: 7   ID: f               Type: function   ParamQty: 1 ReturnType: integer   
 
-    Address: 0   ID: digit           Type: integer    Attr: var 
-    Address: 1   ID: l               Type: string     Attr: var 
-    Address: 2   ID: x               Type: array      Attr: var 
-    ArrayType: s         (scope -1) BoundLow: 1 BoundUp: 10
-
-
-Address: 4   ID: rr              Type: record     Attr: type RecordMembers: 
-
-    Address: 0   ID: r1              Type: record     Attr: var RecordMembers: 
-
-        Address: 0   ID: digit           Type: integer    Attr: var 
-        Address: 1   ID: l               Type: string     Attr: var 
-        Address: 2   ID: x               Type: array      Attr: var 
-    ArrayType: s         (scope -1) BoundLow: 1 BoundUp: 10
-
-
-
-
-Address: 5   ID: arr             Type: array      Attr: type 
-    ArrayType: rr        (scope -1) BoundLow: 1 BoundUp: 10
-Address: 6   ID: z               Type: string     Attr: var 
-Address: 7   ID: m               Type: integer    Attr: var 
-Address: 8   ID: b               Type: boolean    Attr: var 
-Address: 9   ID: arr1            Type: array      Attr: var 
-    ArrayType: rr        (scope -1) BoundLow: 1 BoundUp: 10
-Address: 10  ID: foo             Type: function   ParamQty: 1 ReturnType: integer   
-
-var id: m
-curVarIdResp changed to: 7
+curVarIdResp changed to: NULL
 Var_Comp
-constructed TypeInfo(normal) as 0 from m(7) integer
-var type: 0
-Factor_INT
-type reduced as 0
-AddOpTerm_Single
-type reduced as 0
-SimpleExp_AddTerm
-type reduced as 0
-Exp_simp
-type reduced as 0
-AssiState
-assign var type: 0
-type checking: 0 0
-SimpleS_AssignState
-Statement_Simple
-SteSSte
-Statement_Simple
-SteSSte
-CompStBE
-Struc_Comp
-Statement_Structured
-Var_ID
-checking var 7 m
-checking 7 in scope -1 (-1)
-Address: 0   ID: errorfree       Type: (null)     
-Address: 1   ID: s               Type: string     Attr: type 
-Address: 2   ID: in              Type: integer    Attr: type 
-Address: 3   ID: r               Type: record     Attr: type RecordMembers: 
-
-    Address: 0   ID: digit           Type: integer    Attr: var 
-    Address: 1   ID: l               Type: string     Attr: var 
-    Address: 2   ID: x               Type: array      Attr: var 
-    ArrayType: s         (scope -1) BoundLow: 1 BoundUp: 10
-
-
-Address: 4   ID: rr              Type: record     Attr: type RecordMembers: 
-
-    Address: 0   ID: r1              Type: record     Attr: var RecordMembers: 
-
-        Address: 0   ID: digit           Type: integer    Attr: var 
-        Address: 1   ID: l               Type: string     Attr: var 
-        Address: 2   ID: x               Type: array      Attr: var 
-    ArrayType: s         (scope -1) BoundLow: 1 BoundUp: 10
-
-
-
-
-Address: 5   ID: arr             Type: array      Attr: type 
-    ArrayType: rr        (scope -1) BoundLow: 1 BoundUp: 10
-Address: 6   ID: z               Type: string     Attr: var 
-Address: 7   ID: m               Type: integer    Attr: var 
-Address: 8   ID: b               Type: boolean    Attr: var 
-Address: 9   ID: arr1            Type: array      Attr: var 
-    ArrayType: rr        (scope -1) BoundLow: 1 BoundUp: 10
-Address: 10  ID: foo             Type: function   ParamQty: 1 ReturnType: integer   
-
-var id: m
-curVarIdResp changed to: 7
-Var_Comp
-constructed TypeInfo(normal) as 0 from m(7) integer
-var type: 0
-Factor_INT
-type reduced as 0
-AddOpTerm_Single
-type reduced as 0
-SimpleExp_AddTerm
-type reduced as 0
-Exp_simp
-type reduced as 0
-AssiState
-assign var type: 0
-type checking: 0 0
-SimpleS_AssignState
-Statement_Simple
-if_else_m
-type checking: 2 2
-Statement_Structured
-SteSSte
-Factor_INT
-type reduced as 0
-AddOpTerm_Single
-type reduced as 0
-SimpleExp_AddTerm
-type reduced as 0
-Exp_simp
-type reduced as 0
-Factor_INT
-type reduced as 0
-AddOpTerm_Single
-type reduced as 0
-SimpleExp_AddTerm
-type reduced as 0
-Exp_simp
-type reduced as 0
-Var_ID
-checking var 7 m
-checking 7 in scope -1 (-1)
-Address: 0   ID: errorfree       Type: (null)     
-Address: 1   ID: s               Type: string     Attr: type 
-Address: 2   ID: in              Type: integer    Attr: type 
-Address: 3   ID: r               Type: record     Attr: type RecordMembers: 
-
-    Address: 0   ID: digit           Type: integer    Attr: var 
-    Address: 1   ID: l               Type: string     Attr: var 
-    Address: 2   ID: x               Type: array      Attr: var 
-    ArrayType: s         (scope -1) BoundLow: 1 BoundUp: 10
-
-
-Address: 4   ID: rr              Type: record     Attr: type RecordMembers: 
-
-    Address: 0   ID: r1              Type: record     Attr: var RecordMembers: 
-
-        Address: 0   ID: digit           Type: integer    Attr: var 
-        Address: 1   ID: l               Type: string     Attr: var 
-        Address: 2   ID: x               Type: array      Attr: var 
-    ArrayType: s         (scope -1) BoundLow: 1 BoundUp: 10
-
-
-
-
-Address: 5   ID: arr             Type: array      Attr: type 
-    ArrayType: rr        (scope -1) BoundLow: 1 BoundUp: 10
-Address: 6   ID: z               Type: string     Attr: var 
-Address: 7   ID: m               Type: integer    Attr: var 
-Address: 8   ID: b               Type: boolean    Attr: var 
-Address: 9   ID: arr1            Type: array      Attr: var 
-    ArrayType: rr        (scope -1) BoundLow: 1 BoundUp: 10
-Address: 10  ID: foo             Type: function   ParamQty: 1 ReturnType: integer   
-
-var id: m
-curVarIdResp changed to: 7
-Var_Comp
-constructed TypeInfo(normal) as 0 from m(7) integer
-var type: 0
-Factor_INT
-type reduced as 0
-AddOpTerm_Single
-type reduced as 0
-SimpleExp_AddTerm
-type reduced as 0
-Exp_simp
-type reduced as 0
-AssiState
-assign var type: 0
-type checking: 0 0
-SimpleS_AssignState
-Statement_Simple
-SteS
-Statement_Simple
-SteSSte
-CompStBE
-Struc_Comp
-Statement_Structured
-for_to
-constructed TypeInfo(normal) as 0 from m(7) integer
-type checking: 0 0
-Statement_Structured
-SteSSte
-Var_ID
-checking var 10 true
-checking 10 in scope -1 (-1)
-Address: 0   ID: errorfree       Type: (null)     
-Address: 1   ID: s               Type: string     Attr: type 
-Address: 2   ID: in              Type: integer    Attr: type 
-Address: 3   ID: r               Type: record     Attr: type RecordMembers: 
-
-    Address: 0   ID: digit           Type: integer    Attr: var 
-    Address: 1   ID: l               Type: string     Attr: var 
-    Address: 2   ID: x               Type: array      Attr: var 
-    ArrayType: s         (scope -1) BoundLow: 1 BoundUp: 10
-
-
-Address: 4   ID: rr              Type: record     Attr: type RecordMembers: 
-
-    Address: 0   ID: r1              Type: record     Attr: var RecordMembers: 
-
-        Address: 0   ID: digit           Type: integer    Attr: var 
-        Address: 1   ID: l               Type: string     Attr: var 
-        Address: 2   ID: x               Type: array      Attr: var 
-    ArrayType: s         (scope -1) BoundLow: 1 BoundUp: 10
-
-
-
-
-Address: 5   ID: arr             Type: array      Attr: type 
-    ArrayType: rr        (scope -1) BoundLow: 1 BoundUp: 10
-Address: 6   ID: z               Type: string     Attr: var 
-Address: 7   ID: m               Type: integer    Attr: var 
-Address: 8   ID: b               Type: boolean    Attr: var 
-Address: 9   ID: arr1            Type: array      Attr: var 
-    ArrayType: rr        (scope -1) BoundLow: 1 BoundUp: 10
-Address: 10  ID: foo             Type: function   ParamQty: 1 ReturnType: integer   
-
-var id: true
-curVarIdResp changed to: 10
-Var_Comp
-constructed TypeInfo(pred) as 2 from true(10)
+constructed TypeInfo(pred) as 2 from false(11)
 var type: 2
 Factor_Var
 type reduced as 2
@@ -914,379 +693,22 @@ SimpleExp_AddTerm
 type reduced as 2
 Exp_simp
 type reduced as 2
-Var_ID
-checking var 7 m
-checking 7 in scope -1 (-1)
-Address: 0   ID: errorfree       Type: (null)     
-Address: 1   ID: s               Type: string     Attr: type 
-Address: 2   ID: in              Type: integer    Attr: type 
-Address: 3   ID: r               Type: record     Attr: type RecordMembers: 
-
-    Address: 0   ID: digit           Type: integer    Attr: var 
-    Address: 1   ID: l               Type: string     Attr: var 
-    Address: 2   ID: x               Type: array      Attr: var 
-    ArrayType: s         (scope -1) BoundLow: 1 BoundUp: 10
-
-
-Address: 4   ID: rr              Type: record     Attr: type RecordMembers: 
-
-    Address: 0   ID: r1              Type: record     Attr: var RecordMembers: 
-
-        Address: 0   ID: digit           Type: integer    Attr: var 
-        Address: 1   ID: l               Type: string     Attr: var 
-        Address: 2   ID: x               Type: array      Attr: var 
-    ArrayType: s         (scope -1) BoundLow: 1 BoundUp: 10
-
-
-
-
-Address: 5   ID: arr             Type: array      Attr: type 
-    ArrayType: rr        (scope -1) BoundLow: 1 BoundUp: 10
-Address: 6   ID: z               Type: string     Attr: var 
-Address: 7   ID: m               Type: integer    Attr: var 
-Address: 8   ID: b               Type: boolean    Attr: var 
-Address: 9   ID: arr1            Type: array      Attr: var 
-    ArrayType: rr        (scope -1) BoundLow: 1 BoundUp: 10
-Address: 10  ID: foo             Type: function   ParamQty: 1 ReturnType: integer   
-
-var id: m
-curVarIdResp changed to: 7
-Var_Comp
-constructed TypeInfo(normal) as 0 from m(7) integer
-var type: 0
-Factor_INT
-type reduced as 0
-AddOpTerm_Single
-type reduced as 0
-SimpleExp_AddTerm
-type reduced as 0
-Exp_simp
-type reduced as 0
 AssiState
-assign var type: 0
-type checking: 0 0
+assign var type: 2
+type checking: 2 2
 SimpleS_AssignState
 Statement_Simple
-while_do
+if_else
 type checking: 2 2
 Statement_Structured
 SteSSte
-Var_ID
-checking var 6 z
-checking 6 in scope -1 (-1)
-Address: 0   ID: errorfree       Type: (null)     
-Address: 1   ID: s               Type: string     Attr: type 
-Address: 2   ID: in              Type: integer    Attr: type 
-Address: 3   ID: r               Type: record     Attr: type RecordMembers: 
-
-    Address: 0   ID: digit           Type: integer    Attr: var 
-    Address: 1   ID: l               Type: string     Attr: var 
-    Address: 2   ID: x               Type: array      Attr: var 
-    ArrayType: s         (scope -1) BoundLow: 1 BoundUp: 10
-
-
-Address: 4   ID: rr              Type: record     Attr: type RecordMembers: 
-
-    Address: 0   ID: r1              Type: record     Attr: var RecordMembers: 
-
-        Address: 0   ID: digit           Type: integer    Attr: var 
-        Address: 1   ID: l               Type: string     Attr: var 
-        Address: 2   ID: x               Type: array      Attr: var 
-    ArrayType: s         (scope -1) BoundLow: 1 BoundUp: 10
-
-
-
-
-Address: 5   ID: arr             Type: array      Attr: type 
-    ArrayType: rr        (scope -1) BoundLow: 1 BoundUp: 10
-Address: 6   ID: z               Type: string     Attr: var 
-Address: 7   ID: m               Type: integer    Attr: var 
-Address: 8   ID: b               Type: boolean    Attr: var 
-Address: 9   ID: arr1            Type: array      Attr: var 
-    ArrayType: rr        (scope -1) BoundLow: 1 BoundUp: 10
-Address: 10  ID: foo             Type: function   ParamQty: 1 ReturnType: integer   
-
-var id: z
-curVarIdResp changed to: 6
-Var_Comp
-constructed TypeInfo(normal) as 4 from z(6) string
-var type: 4
-Var_ID
-checking var 9 arr1
-checking 9 in scope -1 (-1)
-Address: 0   ID: errorfree       Type: (null)     
-Address: 1   ID: s               Type: string     Attr: type 
-Address: 2   ID: in              Type: integer    Attr: type 
-Address: 3   ID: r               Type: record     Attr: type RecordMembers: 
-
-    Address: 0   ID: digit           Type: integer    Attr: var 
-    Address: 1   ID: l               Type: string     Attr: var 
-    Address: 2   ID: x               Type: array      Attr: var 
-    ArrayType: s         (scope -1) BoundLow: 1 BoundUp: 10
-
-
-Address: 4   ID: rr              Type: record     Attr: type RecordMembers: 
-
-    Address: 0   ID: r1              Type: record     Attr: var RecordMembers: 
-
-        Address: 0   ID: digit           Type: integer    Attr: var 
-        Address: 1   ID: l               Type: string     Attr: var 
-        Address: 2   ID: x               Type: array      Attr: var 
-    ArrayType: s         (scope -1) BoundLow: 1 BoundUp: 10
-
-
-
-
-Address: 5   ID: arr             Type: array      Attr: type 
-    ArrayType: rr        (scope -1) BoundLow: 1 BoundUp: 10
-Address: 6   ID: z               Type: string     Attr: var 
-Address: 7   ID: m               Type: integer    Attr: var 
-Address: 8   ID: b               Type: boolean    Attr: var 
-Address: 9   ID: arr1            Type: array      Attr: var 
-    ArrayType: rr        (scope -1) BoundLow: 1 BoundUp: 10
-Address: 10  ID: foo             Type: function   ParamQty: 1 ReturnType: integer   
-
-var id: arr1
-curVarIdResp changed to: 9
-Factor_INT
-type reduced as 0
-AddOpTerm_Single
-type reduced as 0
-SimpleExp_AddTerm
-type reduced as 0
-Exp_simp
-type reduced as 0
+CompStBE
+Struc_Comp
+Statement_Structured
+for_to
+constructed TypeInfo(normal) as 0 from i(3) integer
 type checking: 0 0
-handling array: cur idresp changed to rr
-curVarIdResp changed to: 4
-pushing record: 1002 into stack
-scope changed to: 1002
-push record 1002 in stack
-enter recordhash: 1002
-Var_ID
-checking var 0 r1
-checking 0 in scope 1002 (-1)
-Address: 0   ID: r1              Type: record     Attr: var RecordMembers: 
-
-    Address: 0   ID: digit           Type: integer    Attr: var 
-    Address: 1   ID: l               Type: string     Attr: var 
-    Address: 2   ID: x               Type: array      Attr: var 
-    ArrayType: s         (scope -1) BoundLow: 1 BoundUp: 10
-
-
-
-var id: r1
-curVarIdResp changed to: 0
-pushing record: 1001 into stack
-scope changed to: 1001
-push record 1001 in stack
-enter recordhash: 1001
-Var_ID
-checking var 2 x
-checking 2 in scope 1001 (1002)
-Address: 0   ID: digit           Type: integer    Attr: var 
-Address: 1   ID: l               Type: string     Attr: var 
-Address: 2   ID: x               Type: array      Attr: var 
-    ArrayType: s         (scope -1) BoundLow: 1 BoundUp: 10
-
-var id: x
-curVarIdResp changed to: 2
-Factor_INT
-type reduced as 0
-AddOpTerm_Single
-type reduced as 0
-SimpleExp_AddTerm
-type reduced as 0
-Exp_simp
-type reduced as 0
-type checking: 0 0
-handling array: cur idresp changed to s
-curVarIdResp changed to: 1
-CompSel_Array
-reduced as type: 0
-Var_Comp
-var type: 4
-CompSel_Record
-pop record 1001 out stack
-scope changed to: 1002
-out recordhash: 1002
-reduced as type: 4
-Var_Comp
-var type: 4
-CompSel_Record
-pop record 1002 out stack, stack empty
-scope changed to: -1
-reduced as type: 4
-CompSel_Array
-reduced as type: 0
-Var_Comp
-var type: 4
-Factor_Var
-type reduced as 4
-AddOpTerm_Single
-type reduced as 4
-SimpleExp_AddTerm
-type reduced as 4
-Exp_simp
-type reduced as 4
-AssiState
-assign var type: 4
-type checking: 4 4
-SimpleS_AssignState
-Statement_Simple
-SteSSte
-Var_ID
-checking var 7 m
-checking 7 in scope -1 (-1)
-Address: 0   ID: errorfree       Type: (null)     
-Address: 1   ID: s               Type: string     Attr: type 
-Address: 2   ID: in              Type: integer    Attr: type 
-Address: 3   ID: r               Type: record     Attr: type RecordMembers: 
-
-    Address: 0   ID: digit           Type: integer    Attr: var 
-    Address: 1   ID: l               Type: string     Attr: var 
-    Address: 2   ID: x               Type: array      Attr: var 
-    ArrayType: s         (scope -1) BoundLow: 1 BoundUp: 10
-
-
-Address: 4   ID: rr              Type: record     Attr: type RecordMembers: 
-
-    Address: 0   ID: r1              Type: record     Attr: var RecordMembers: 
-
-        Address: 0   ID: digit           Type: integer    Attr: var 
-        Address: 1   ID: l               Type: string     Attr: var 
-        Address: 2   ID: x               Type: array      Attr: var 
-    ArrayType: s         (scope -1) BoundLow: 1 BoundUp: 10
-
-
-
-
-Address: 5   ID: arr             Type: array      Attr: type 
-    ArrayType: rr        (scope -1) BoundLow: 1 BoundUp: 10
-Address: 6   ID: z               Type: string     Attr: var 
-Address: 7   ID: m               Type: integer    Attr: var 
-Address: 8   ID: b               Type: boolean    Attr: var 
-Address: 9   ID: arr1            Type: array      Attr: var 
-    ArrayType: rr        (scope -1) BoundLow: 1 BoundUp: 10
-Address: 10  ID: foo             Type: function   ParamQty: 1 ReturnType: integer   
-
-var id: m
-curVarIdResp changed to: 7
-Var_Comp
-constructed TypeInfo(normal) as 0 from m(7) integer
-var type: 0
-Var_ID
-checking var 9 arr1
-checking 9 in scope -1 (-1)
-Address: 0   ID: errorfree       Type: (null)     
-Address: 1   ID: s               Type: string     Attr: type 
-Address: 2   ID: in              Type: integer    Attr: type 
-Address: 3   ID: r               Type: record     Attr: type RecordMembers: 
-
-    Address: 0   ID: digit           Type: integer    Attr: var 
-    Address: 1   ID: l               Type: string     Attr: var 
-    Address: 2   ID: x               Type: array      Attr: var 
-    ArrayType: s         (scope -1) BoundLow: 1 BoundUp: 10
-
-
-Address: 4   ID: rr              Type: record     Attr: type RecordMembers: 
-
-    Address: 0   ID: r1              Type: record     Attr: var RecordMembers: 
-
-        Address: 0   ID: digit           Type: integer    Attr: var 
-        Address: 1   ID: l               Type: string     Attr: var 
-        Address: 2   ID: x               Type: array      Attr: var 
-    ArrayType: s         (scope -1) BoundLow: 1 BoundUp: 10
-
-
-
-
-Address: 5   ID: arr             Type: array      Attr: type 
-    ArrayType: rr        (scope -1) BoundLow: 1 BoundUp: 10
-Address: 6   ID: z               Type: string     Attr: var 
-Address: 7   ID: m               Type: integer    Attr: var 
-Address: 8   ID: b               Type: boolean    Attr: var 
-Address: 9   ID: arr1            Type: array      Attr: var 
-    ArrayType: rr        (scope -1) BoundLow: 1 BoundUp: 10
-Address: 10  ID: foo             Type: function   ParamQty: 1 ReturnType: integer   
-
-var id: arr1
-curVarIdResp changed to: 9
-Factor_INT
-type reduced as 0
-AddOpTerm_Single
-type reduced as 0
-SimpleExp_AddTerm
-type reduced as 0
-Exp_simp
-type reduced as 0
-type checking: 0 0
-handling array: cur idresp changed to rr
-curVarIdResp changed to: 4
-pushing record: 1002 into stack
-scope changed to: 1002
-push record 1002 in stack
-enter recordhash: 1002
-Var_ID
-checking var 0 r1
-checking 0 in scope 1002 (-1)
-Address: 0   ID: r1              Type: record     Attr: var RecordMembers: 
-
-    Address: 0   ID: digit           Type: integer    Attr: var 
-    Address: 1   ID: l               Type: string     Attr: var 
-    Address: 2   ID: x               Type: array      Attr: var 
-    ArrayType: s         (scope -1) BoundLow: 1 BoundUp: 10
-
-
-
-var id: r1
-curVarIdResp changed to: 0
-pushing record: 1001 into stack
-scope changed to: 1001
-push record 1001 in stack
-enter recordhash: 1001
-Var_ID
-checking var 2 x
-checking 2 in scope 1001 (1002)
-Address: 0   ID: digit           Type: integer    Attr: var 
-Address: 1   ID: l               Type: string     Attr: var 
-Address: 2   ID: x               Type: array      Attr: var 
-    ArrayType: s         (scope -1) BoundLow: 1 BoundUp: 10
-
-var id: x
-curVarIdResp changed to: 2
-Var_Comp
-constructed TypeInfo(normal) as 5 from x(2) array
-var type: 5
-CompSel_Record
-pop record 1001 out stack
-scope changed to: 1002
-out recordhash: 1002
-reduced as type: 5
-Var_Comp
-var type: 5
-CompSel_Record
-pop record 1002 out stack, stack empty
-scope changed to: -1
-reduced as type: 5
-CompSel_Array
-reduced as type: 0
-Var_Comp
-var type: 5
-Factor_Var
-type reduced as 5
-AddOpTerm_Single
-type reduced as 5
-SimpleExp_AddTerm
-type reduced as 5
-Exp_simp
-type reduced as 5
-AssiState
-assign var type: 0
-type checking: 0 5
-actual types: 0 5
-SimpleS_AssignState
-Statement_Simple
+Statement_Structured
 SteSSte
 Statement_Simple
 SteSSte
