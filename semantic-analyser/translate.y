@@ -193,6 +193,7 @@ ProcedureDeclaration : PROCEDURE ID {
                                         if(enterNewScope($2) != 0) {
                                             //YYERROR;
                                         }
+                                        cleanCurFuncProcCallParamCounter();
                                     }
                         BRACE_L FormalParameterList BRACE_R 
                         SEMICOLON {
@@ -215,6 +216,7 @@ FunctionDeclaration : FUNCTION ID {
                                         //YYERROR;
                                     }
                                     registerSymbolInCurScope(name);
+                                    cleanCurFuncProcCallParamCounter();
                                    } 
                       BRACE_L FormalParameterList BRACE_R COLON ResultType 
                       SEMICOLON {
