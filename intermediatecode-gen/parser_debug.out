@@ -1,0 +1,294 @@
+Constant_INT
+Constant_INT
+TypeID 0
+handling type: integer
+constructed TypeInfo(pred) as 0 from integer(0)
+All symboltables: 
+symboltable of scope -1 (sub-scope of -1): 
+Address: 0   ID: moresophisticate Type: (null)     
+Address: 1   ID: r1              Type: (null)     
+
+Type_Array
+TypeDef: id: 1 type: 5 tag: 0
+TypeDefList
+TypeDef_Mul
+IdList
+TypeID 1
+handling type: r1
+checking type r1 in cur scope -1
+constructed TypeInfo(normal) as 5 from r1(1) array
+All symboltables: 
+symboltable of scope -1 (sub-scope of -1): 
+Address: 0   ID: moresophisticate Type: (null)     
+Address: 1   ID: r1              Type: array      Attr: type 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 2   ID: a               Type: (null)     
+
+VarDecl
+setting idlist
+setting: 2 5
+set idlist
+IdList
+IdListM
+IdList
+IdListM
+IdList
+TypeID 0
+handling type: integer
+constructed TypeInfo(pred) as 0 from integer(0)
+All symboltables: 
+symboltable of scope -1 (sub-scope of -1): 
+Address: 0   ID: moresophisticate Type: (null)     
+Address: 1   ID: r1              Type: array      Attr: type 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 2   ID: a               Type: array      Attr: var 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 3   ID: i               Type: (null)     
+Address: 4   ID: j               Type: (null)     
+Address: 5   ID: s               Type: (null)     
+
+VarDecl
+setting idlist
+setting: 5 0
+setting: 4 0
+setting: 3 0
+set idlist
+IdList
+TypeID 2
+handling type: boolean
+constructed TypeInfo(pred) as 2 from boolean(2)
+All symboltables: 
+symboltable of scope -1 (sub-scope of -1): 
+Address: 0   ID: moresophisticate Type: (null)     
+Address: 1   ID: r1              Type: array      Attr: type 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 2   ID: a               Type: array      Attr: var 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 3   ID: i               Type: integer    Attr: var 
+Address: 4   ID: j               Type: integer    Attr: var 
+Address: 5   ID: s               Type: integer    Attr: var 
+Address: 6   ID: b               Type: (null)     
+
+VarDecl
+setting idlist
+setting: 6 2
+set idlist
+VarDeclList
+VarDeclList_Mul
+VarDeclList_Mul
+VarDecl_Mul
+scope changed to: 7
+IdList
+TypeID 0
+handling type: integer
+constructed TypeInfo(pred) as 0 from integer(0)
+All symboltables: 
+symboltable of scope -1 (sub-scope of -1): 
+Address: 0   ID: moresophisticate Type: (null)     
+Address: 1   ID: r1              Type: array      Attr: type 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 2   ID: a               Type: array      Attr: var 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 3   ID: i               Type: integer    Attr: var 
+Address: 4   ID: j               Type: integer    Attr: var 
+Address: 5   ID: s               Type: integer    Attr: var 
+Address: 6   ID: b               Type: boolean    Attr: var 
+Address: 7   ID: f               Type: (null)     
+
+Plist_single
+setting idlist
+setting: 1 0
+set idlist
+FormalPList
+ResultType
+handling type: integer
+constructed TypeInfo(pred) as 0 from integer(0)
+return type: 0
+setting func: 7 1 0
+set func var integer
+Address: 0   ID: f               Type: integer    Attr: var 
+Address: 1   ID: i               Type: integer    Attr: var 
+
+scope changed to: -1
+set func: 7 in scope -1
+scope changed to: 7
+IdList
+IdListM
+IdList
+TypeID 0
+handling type: integer
+constructed TypeInfo(pred) as 0 from integer(0)
+All symboltables: 
+symboltable of scope -1 (sub-scope of -1): 
+Address: 0   ID: moresophisticate Type: (null)     
+Address: 1   ID: r1              Type: array      Attr: type 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 2   ID: a               Type: array      Attr: var 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 3   ID: i               Type: integer    Attr: var 
+Address: 4   ID: j               Type: integer    Attr: var 
+Address: 5   ID: s               Type: integer    Attr: var 
+Address: 6   ID: b               Type: boolean    Attr: var 
+Address: 7   ID: f               Type: function   ParamQty: 1 ReturnType: integer   
+
+symboltable of scope 7 (sub-scope of -1): 
+Address: 0   ID: f               Type: integer    Attr: var 
+Address: 1   ID: i               Type: integer    Attr: var 
+Address: 2   ID: a               Type: (null)     
+Address: 3   ID: b               Type: (null)     
+
+VarDecl
+setting idlist
+setting: 3 0
+setting: 2 0
+set idlist
+VarDeclList
+VarDecl_Mul
+Var_ID
+checking var 1 i
+checking 1 in scope 7 (-1)
+Address: 0   ID: f               Type: integer    Attr: var 
+Address: 1   ID: i               Type: integer    Attr: var 
+Address: 2   ID: a               Type: integer    Attr: var 
+Address: 3   ID: b               Type: integer    Attr: var 
+
+var id: i
+curVarIdResp changed to: 1
+Var_Comp
+constructed TypeInfo(normal) as 0 from i(1) integer
+var type: 0
+Factor_Var
+Term_Factor
+type reduced as 0
+AddOpTerm_Single
+type reduced as 0
+SimpleExp_AddTerm
+type reduced as 0
+RelationalOp_EQ
+Factor_INT
+int: 0 0
+
+Term_Factor
+type reduced as 0
+AddOpTerm_Single
+type reduced as 0
+SimpleExp_AddTerm
+type reduced as 0
+type checking: 0 0
+constructed TypeInfo as 2(tag: 1)
+Exp_Simp_Ro
+type reduced as 2
+Factor_Exp
+Term_Factor
+type reduced as 2
+AddOpTerm_Single
+type reduced as 2
+SimpleExp_AddTerm
+type reduced as 2
+Exp_simp
+type reduced as 2
+type checking: 2 2
+Var_ID
+checking var 0 f
+checking 0 in scope 7 (-1)
+Address: 0   ID: f               Type: integer    Attr: var 
+Address: 1   ID: i               Type: integer    Attr: var 
+Address: 2   ID: a               Type: integer    Attr: var 
+Address: 3   ID: b               Type: integer    Attr: var 
+
+var id: f
+curVarIdResp changed to: 0
+Var_Comp
+constructed TypeInfo(normal) as 0 from f(0) integer
+var type: 0
+Factor_INT
+int: 0 1
+
+Term_Factor
+type reduced as 0
+AddOpTerm_Single
+type reduced as 0
+SimpleExp_AddTerm
+type reduced as 0
+Exp_simp
+type reduced as 0
+AssiState
+assign var type: 0
+type checking: 0 0
+SimpleS_AssignState
+Statement_Simple
+if_else
+Statement_Structured
+SteS
+CompStBE
+Block_CompSt_V
+PFDecl_Block
+FuncDecl
+scope changed to: -1
+SubDeclF
+SubDecl_Mul
+Var_ID
+checking var 6 b
+checking 6 in scope -1 (-1)
+Address: 0   ID: moresophisticate Type: (null)     
+Address: 1   ID: r1              Type: array      Attr: type 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 2   ID: a               Type: array      Attr: var 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 3   ID: i               Type: integer    Attr: var 
+Address: 4   ID: j               Type: integer    Attr: var 
+Address: 5   ID: s               Type: integer    Attr: var 
+Address: 6   ID: b               Type: boolean    Attr: var 
+Address: 7   ID: f               Type: function   ParamQty: 1 ReturnType: integer   
+
+var id: b
+curVarIdResp changed to: 6
+Var_Comp
+constructed TypeInfo(normal) as 2 from b(6) boolean
+var type: 2
+Var_ID
+checking var 10 true
+checking 10 in scope -1 (-1)
+Address: 0   ID: moresophisticate Type: (null)     
+Address: 1   ID: r1              Type: array      Attr: type 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 2   ID: a               Type: array      Attr: var 
+    ArrayType: integer   (scope -2) BoundLow: 1 BoundUp: 10
+Address: 3   ID: i               Type: integer    Attr: var 
+Address: 4   ID: j               Type: integer    Attr: var 
+Address: 5   ID: s               Type: integer    Attr: var 
+Address: 6   ID: b               Type: boolean    Attr: var 
+Address: 7   ID: f               Type: function   ParamQty: 1 ReturnType: integer   
+
+curVarIdResp changed to: NULL
+Var_Comp
+constructed TypeInfo(pred) as 2 from true(10)
+var type: 2
+Factor_Var
+Term_Factor
+type reduced as 2
+AddOpTerm_Single
+type reduced as 2
+SimpleExp_AddTerm
+type reduced as 2
+Exp_simp
+type reduced as 2
+AssiState
+assign var type: 2
+type checking: 2 2
+SimpleS_AssignState
+Statement_Simple
+SteS
+Factor_INT
+int: 0 1
+
+Term_Factor
+type reduced as 0
+AddOpTerm_Single
+type reduced as 0
+SimpleExp_AddTerm
+type reduced as 0
+Exp_simp
+type reduced as 0
+Factor_INT
+int: 0 1

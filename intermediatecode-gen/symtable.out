@@ -1,0 +1,15 @@
+All symboltables: 
+symboltable of scope -1 (sub-scope of -1): 
+Address: 0   ID: moresophisticate Type: (null)     
+Address: 1   ID: i               Type: integer    Attr: var 
+Address: 2   ID: j               Type: integer    Attr: var 
+Address: 3   ID: s               Type: integer    Attr: var 
+Address: 4   ID: b               Type: boolean    Attr: var 
+Address: 5   ID: c               Type: boolean    Attr: var 
+Address: 6   ID: f               Type: function   ParamQty: 1 ReturnType: integer   
+
+symboltable of scope 6 (sub-scope of -1): 
+Address: 0   ID: f               Type: integer    Attr: var 
+Address: 1   ID: i               Type: integer    Attr: var 
+Address: 2   ID: a               Type: integer    Attr: var 
+

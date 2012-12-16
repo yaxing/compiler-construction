@@ -1,0 +1,53 @@
+intermediate code: 
+L moresophisticate 
+  b := true 
+  tmp1 := not false 
+  b := tmp1 
+  tmp2 := - 10 
+  i := tmp2 
+  i := 1 
+L LABEL_4 
+  if i > 10 goto LABEL_6 
+  param i 
+  tmp4 := funcall f 
+  a[i] := tmp4 
+  tmp5 := ab[i] 
+  tmp6 := j + i 
+  tmp5[tmp6] := 1 
+  tmp8 := arec.ar1 
+  tmp8[i] := a[i] 
+  tmp11 := arec1.ar 
+  tmp12 := i + j 
+  tmp13 := tmp11[tmp12] 
+  tmp14 := tmp13.ar 
+  tmp15 := tmp14[i] 
+  tmp15[j] := a[i] 
+  s := 1 
+  j := 1 
+L LABEL_7 
+  if j > i goto LABEL_9 
+  tmp18 := s * j 
+  s := tmp18 
+  j := j + 1 
+  goto LABEL_7 
+L LABEL_9 
+  if a[i] > s goto LABEL_10 
+  goto LABEL_11 
+L LABEL_10 
+  b := false 
+L LABEL_11 
+  i := i + 1 
+  goto LABEL_4 
+L LABEL_6 
+  return 
+
+L f 
+  if i = 0 goto LABEL_1 
+  goto LABEL_2 
+L LABEL_1 
+  f := 1 
+  goto LABEL_3 
+L LABEL_2 
+  f := 2 
+L LABEL_3 
+  funreturn f 

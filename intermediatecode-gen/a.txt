@@ -1,0 +1,17 @@
+L f 
+  arr[i] := arr[j] 
+  tmp3 := i > 1 
+  b := tmp3 
+  tmp4 := i < 1 
+  c := tmp4 
+  tmp5 := a < 2 
+  tmp6 := a > 1 
+  tmp7 := tmp5 and tmp6 
+  if tmp7 = TRUE goto LABEL_1 
+  goto LABEL_2 
+L LABEL_1 
+  f := 1 
+L LABEL_2 
+  funreturn f 
+
+L moresophisticate 
